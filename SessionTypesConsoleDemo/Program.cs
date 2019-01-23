@@ -24,7 +24,7 @@ namespace SessionTypesConsoleDemo
 				var server1 = await Task.Run(() => server.Receive());
 
 				// 関数の形でも書ける
-				// var server1 = await BinarySession.Receive(server);
+				// var server1 = await Task.Run(() => BinarySession.Receive(server));
 
 				var server2 = server1.Send("ok");
 
@@ -37,7 +37,7 @@ namespace SessionTypesConsoleDemo
 			Thread.Sleep(1000);
 
 			// これは拒否
-			// var client1 = await client.Receive();
+			// var client1 = await Task.Run(() => client.Receive());
 
 			var client1 = client.Send(2);
 
