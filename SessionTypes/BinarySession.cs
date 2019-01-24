@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace SessionTypes.Binary
 {
@@ -47,9 +48,19 @@ namespace SessionTypes.Binary
 			return new Server<S>();
 		}
 
+		public static async Task<Server<S>> ReceiveAsync<T, S>(this Server<Request<T, S>> request) where S : SessionType
+		{
+			return await Task.Run(() => request.Receive());
+		}
+
 		public static Client<S> Receive<T, S>(this Client<Respond<T, S>> respond) where S : SessionType
 		{
 			return new Client<S>();
+		}
+
+		public static async Task<Client<S>> ReceiveAsync<T, S>(this Client<Respond<T, S>> respond) where S : SessionType
+		{
+			return await Task.Run(() => respond.Receive());
 		}
 	}
 
