@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using SessionTypes.Binary;
+using SessionTypes.Common;
 
 namespace SessionTypesConsoleDemo
 {
@@ -47,6 +48,29 @@ namespace SessionTypesConsoleDemo
 			var client2 = await Task.Run(() => client1.Receive());
 
 			Console.WriteLine("Client End");
+
+
+
+
+
+			BinarySession<Block<Request<int, Request<int, Respond<int, Jump<Zero>>>>, EndBlock>>.Fork(async s =>
+			{
+				var s0 = s.Enter();
+				var s1 = s0.Receive();
+				var s2 = s1.Receive();
+				var s3 = s2.Send(2);
+
+				// s4 = Server<Request<int, Request<int, Respond<int, Jump<Zero>>>>>
+				var s4 = s3.Zero();
+
+				var s5 = s4.Receive();
+				var s6 = s5.Receive();
+				var s7 = s6.Send(1);
+
+				s4 = s7.Zero();
+				//...
+			}
+			);
 		}
 	}
 }
