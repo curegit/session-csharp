@@ -1,102 +1,159 @@
 ﻿using System;
 using System.Threading;
-using SessionTypes.Common;
+using System.Threading.Tasks;
 
 namespace SessionTypes.Binary
 {
-	public static class BinarySession<P> where P : SessionType
-	{
-		private static (Client<P, P> client, Server<P, P> server) New()
-		{
-			return (NewClient(), NewServer());
-		}
-
-		private static Client<P, P> NewClient()
-		{
-			return new Client<P, P>();
-		}
-
-		private static Server<P, P> NewServer()
-		{
-			return new Server<P, P>();
-		}
-
-		public static Client<P, P> Fork(Action<Server<P, P>> threadFunction)
-		{
-			var (client, server) = New();
-			var threadStart = new ThreadStart(() => threadFunction(server));
-			var serverThread = new Thread(threadStart);
-			serverThread.Start();
-			return client;
-		}
-	}
-
 	public static class BinarySession
 	{
 		public static Server<S, FS> Send<T, S, FS>(this Server<Respond<T, S>, FS> respond, T value) where S : SessionType where FS : SessionType
 		{
-			return new Server<S, FS>();
+			var c = respond.GetInternalCommunication();
+			c.Send(value);
+			return new Server<S, FS>(c);
 		}
 
 		public static Client<S, FS> Send<T, S, FS>(this Client<Request<T, S>, FS> request, T value) where S : SessionType where FS : SessionType
 		{
-			return new Client<S, FS>();
+			var c = request.GetInternalCommunication();
+			c.Send(value);
+			return new Client<S, FS>(c);
 		}
 
-		public static Server<S, FS> Receive<T, S, FS>(this Server<Request<T, S>, FS> request) where S : SessionType where FS : SessionType
+		public static async Task<(Server<S, FS>, T)> Receive<T, S, FS>(this Server<Request<T, S>, FS> request) where S : SessionType where FS : SessionType
 		{
-			return new Server<S, FS>();
+			var c = request.GetInternalCommunication();
+			return await Task.Run(async () =>
+			 {
+				 var v = await c.ReceiveAsync<T>();
+				 return (new Server<S, FS>(c), v);
+			 }
+			);
+			//return new Task<Server<S, FS>>(() =>);
 		}
 
-		public static Client<S, FS> Receive<T, S, FS>(this Client<Respond<T, S>, FS> respond) where S : SessionType where FS : SessionType
+		public static async Task<(Client<S, FS>, T)> Receive<T, S, FS>(this Client<Respond<T, S>, FS> respond) where S : SessionType where FS : SessionType
 		{
-			return new Client<S, FS>();
+			var c = respond.GetInternalCommunication();
+			return await Task.Run(async () =>
+			{
+				T v = await c.ReceiveAsync<T>();
+				return (new Client<S, FS>(c), v);
+			}
+			);
 		}
 
 		public static Server<S, FS> Enter<S, B, FS>(this Server<Block<S, B>, FS> label) where S : SessionType where B : IBlock where FS : SessionType
 		{
-			return new Server<S, FS>();
+			return new Server<S, FS>(label.GetInternalCommunication());
 		}
 
 		public static Server<S, Block<S, B>> Zero<S, B>(this Server<Jump<Zero>, Block<S, B>> jump) where S : SessionType where B : IBlock
 		{
-			return new Server<S, Block<S, B>>();
+			return new Server<S, Block<S, B>>(jump.GetInternalCommunication());
 		}
 
-		public static Server<SL> ChooseLeft<SL, SR>(this Server<RespondChoice<SL, SR>> respondChoice) where SL : SessionType where SR : SessionType
+		public static Server<SL, FS> ChooseLeft<SL, SR, FS>(this Server<RespondChoice<SL, SR>, FS> respondChoice) where SL : SessionType where SR : SessionType where FS : SessionType
 		{
-			return new Server<SL>();
+			var c = respondChoice.GetInternalCommunication();
+			c.Send(1);
+			return new Server<SL, FS>(c);
 		}
 
-		public static Server<SR> ChooseRight<SL, SR>(this Server<RespondChoice<SL, SR>> respondChoice) where SL : SessionType where SR : SessionType
+		public static Server<SR, FS> ChooseRight<SL, SR, FS>(this Server<RespondChoice<SL, SR>, FS> respondChoice) where SL : SessionType where SR : SessionType where FS : SessionType
 		{
-			return new Server<SR>();
+			var c = respondChoice.GetInternalCommunication();
+			c.Send(2);
+			return new Server<SR, FS>(c);
 		}
 
-		public static Client<SL> ChooseLeft<SL, SR>(this Client<RequestChoice<SL, SR>> requestChoice) where SL : SessionType where SR : SessionType
+		public static Client<SL, FS> ChooseLeft<SL, SR, FS>(this Client<RequestChoice<SL, SR>, FS> requestChoice) where SL : SessionType where SR : SessionType where FS : SessionType
 		{
-			return new Client<SL>();
+			var c = requestChoice.GetInternalCommunication();
+			c.Send(1);
+			return new Client<SL, FS>(c);
 		}
 
-		public static Client<SR> ChooseRight<SL, SR>(this Client<RequestChoice<SL, SR>> requestChoice) where SL : SessionType where SR : SessionType
+		public static Client<SR, FS> ChooseRight<SL, SR, FS>(this Client<RequestChoice<SL, SR>, FS> requestChoice) where SL : SessionType where SR : SessionType where FS : SessionType
 		{
-			return new Client<SR>();
+			var c = requestChoice.GetInternalCommunication();
+			c.Send(2);
+			return new Client<SR, FS>(c);
 		}
 
-		public static void Follow<SL, SR>(this Server<RequestChoice<SL, SR>> requestChoice, Action<Server<SL>> leftAction, Action<Server<SR>> rightAction) where SL : SessionType where SR : SessionType
+		public static async void Follow<SL, SR, FS>(this Server<RequestChoice<SL, SR>, FS> requestChoice, Action<Server<SL, FS>> leftAction, Action<Server<SR, FS>> rightAction) where SL : SessionType where SR : SessionType where FS : SessionType
 		{
+			var c = requestChoice.GetInternalCommunication();
+			var v = await Task.Run(async () => await c.ReceiveAsync<int>());
 
+			if (v == 1)
+			{
+				leftAction(new Server<SL, FS>(c));
+			}
+			else if(v == 2)
+			{
+				rightAction(new Server<SR, FS>(c));
+			}
+			else
+			{
+
+			}
 		}
 
-		public static void Follow<SL, SR>(this Client<RespondChoice<SL, SR>> respondChoice, Action<Client<SL>> leftAction, Action<Client<SR>> rightAction) where SL : SessionType where SR : SessionType
+		public static async void Follow<SL, SR, FS>(this Client<RespondChoice<SL, SR>, FS> respondChoice, Action<Client<SL, FS>> leftAction, Action<Client<SR, FS>> rightAction) where SL : SessionType where SR : SessionType where FS : SessionType
+		{
+			var c = respondChoice.GetInternalCommunication();
+			var v = await Task.Run(async () => await c.ReceiveAsync<int>());
+
+			if (v == 1)
+			{
+				leftAction(new Client<SL, FS>(c));
+			}
+			else if (v == 2)
+			{
+				rightAction(new Client<SR, FS>(c));
+			}
+			else
+			{
+
+			}
+		}
+	}
+
+	/*
+	public interface ICommunicator
+	{
+		BinaryCommunication __GetInternalCommunication();
+	}
+	*/
+
+	public abstract class Communicator
+	{
+		private BinaryCommunication binaryCommunication;
+
+		public Communicator(BinaryCommunication communication)
+		{
+			binaryCommunication = communication;
+		}
+
+		public BinaryCommunication GetInternalCommunication() => binaryCommunication;
+	}
+
+	public sealed class Server<S, FS> : Communicator where S : SessionType where FS : SessionType
+	{
+		public Server(BinaryCommunication communication) : base(communication)
+		{
+			
+		}
+	}
+
+	public sealed class Client<S, FS> : Communicator where S : SessionType where FS : SessionType
+	{
+		public Client(BinaryCommunication communication) : base(communication)
 		{
 
 		}
 	}
-
-	public sealed class Server<S, FS> where S : SessionType where FS : SessionType { }
-
-	public sealed class Client<S, FS> where S : SessionType where FS : SessionType { }
 
 	public abstract class IBlock : SessionType { }
 

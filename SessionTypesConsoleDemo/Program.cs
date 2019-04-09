@@ -18,6 +18,11 @@ namespace SessionTypesConsoleDemo
 			{
 				Console.WriteLine("Server Start");
 
+
+
+				s.Loop(x => x);
+
+
 				// 拒否できる
 				// var server1 = await server.Send("ng");
 
