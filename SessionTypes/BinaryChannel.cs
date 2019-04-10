@@ -9,17 +9,21 @@ namespace SessionTypes.Binary.Threading
 	{
 		private static (Client<P, P> client, Server<P, P> server) New()
 		{
-			return (NewClient(), NewServer());
+			var up = Channel.CreateUnbounded<object>();
+			var down = Channel.CreateUnbounded<object>();
+			return (NewClient(up, down), NewServer(up, down));
 		}
 
-		private static Client<P, P> NewClient()
+		private static Client<P, P> NewClient(Channel<object> up, Channel<object> down)
 		{
-			return new Client<P, P>();
+			var c = new BinaryChannelCommunication(down.Reader, up.Writer);
+			return new Client<P, P>(c);
 		}
 
-		private static Server<P, P> NewServer()
+		private static Server<P, P> NewServer(Channel<object> up, Channel<object> down)
 		{
-			return new Server<P, P>();
+			var c = new BinaryChannelCommunication(up.Reader, down.Writer);
+			return new Server<P, P>(c);
 		}
 
 		public static Client<P, P> Fork(Action<Server<P, P>> threadFunction)
@@ -35,7 +39,7 @@ namespace SessionTypes.Binary.Threading
 
 	public class BinaryChannelCommunication : BinaryCommunication
 	{
-		public BinaryChannelCommunication()
+		public BinaryChannelCommunication(ChannelReader<object> reader, ChannelWriter<object> writer)
 		{
 
 		}
