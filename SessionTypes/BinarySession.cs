@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using System.Threading.Tasks;
 
 namespace SessionTypes.Binary
@@ -24,12 +23,10 @@ namespace SessionTypes.Binary
 		{
 			var c = request.GetInternalCommunication();
 			return await Task.Run(async () =>
-			 {
-				 var v = await c.ReceiveAsync<T>();
-				 return (new Server<S, FS>(c), v);
-			 }
-			);
-			//return new Task<Server<S, FS>>(() =>);
+			{
+				var v = await c.ReceiveAsync<T>();
+				return (new Server<S, FS>(c), v);
+			});
 		}
 
 		public static async Task<(Client<S, FS>, T)> Receive<T, S, FS>(this Client<Respond<T, S>, FS> respond) where S : SessionType where FS : SessionType
@@ -39,8 +36,7 @@ namespace SessionTypes.Binary
 			{
 				T v = await c.ReceiveAsync<T>();
 				return (new Client<S, FS>(c), v);
-			}
-			);
+			});
 		}
 
 		public static Server<S, FS> Enter<S, B, FS>(this Server<Block<S, B>, FS> label) where S : SessionType where B : IBlock where FS : SessionType
@@ -81,18 +77,18 @@ namespace SessionTypes.Binary
 			return new Client<SR, FS>(c);
 		}
 
-		public static async void Follow<SL, SR, FS>(this Server<RequestChoice<SL, SR>, FS> requestChoice, Action<Server<SL, FS>> leftAction, Action<Server<SR, FS>> rightAction) where SL : SessionType where SR : SessionType where FS : SessionType
+		public static async Task Follow<SL, SR, FS>(this Server<RequestChoice<SL, SR>, FS> requestChoice, Func<Server<SL, FS>, Task> leftAction, Func<Server<SR, FS>, Task> rightAction) where SL : SessionType where SR : SessionType where FS : SessionType
 		{
 			var c = requestChoice.GetInternalCommunication();
 			var v = await Task.Run(async () => await c.ReceiveAsync<int>());
 
 			if (v == 1)
 			{
-				leftAction(new Server<SL, FS>(c));
+				await leftAction(new Server<SL, FS>(c));
 			}
-			else if(v == 2)
+			else if (v == 2)
 			{
-				rightAction(new Server<SR, FS>(c));
+				await rightAction(new Server<SR, FS>(c));
 			}
 			else
 			{
@@ -100,18 +96,18 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async void Follow<SL, SR, FS>(this Client<RespondChoice<SL, SR>, FS> respondChoice, Action<Client<SL, FS>> leftAction, Action<Client<SR, FS>> rightAction) where SL : SessionType where SR : SessionType where FS : SessionType
+		public static async Task Follow<SL, SR, FS>(this Client<RespondChoice<SL, SR>, FS> respondChoice, Func<Client<SL, FS>, Task> leftAction, Func<Client<SR, FS>, Task> rightAction) where SL : SessionType where SR : SessionType where FS : SessionType
 		{
 			var c = respondChoice.GetInternalCommunication();
 			var v = await Task.Run(async () => await c.ReceiveAsync<int>());
 
 			if (v == 1)
 			{
-				leftAction(new Client<SL, FS>(c));
+				await leftAction(new Client<SL, FS>(c));
 			}
 			else if (v == 2)
 			{
-				rightAction(new Client<SR, FS>(c));
+				await rightAction(new Client<SR, FS>(c));
 			}
 			else
 			{
@@ -119,13 +115,6 @@ namespace SessionTypes.Binary
 			}
 		}
 	}
-
-	/*
-	public interface ICommunicator
-	{
-		BinaryCommunication __GetInternalCommunication();
-	}
-	*/
 
 	public abstract class Communicator
 	{
@@ -143,7 +132,7 @@ namespace SessionTypes.Binary
 	{
 		public Server(BinaryCommunication communication) : base(communication)
 		{
-			
+
 		}
 	}
 

@@ -5,7 +5,7 @@ using System.Threading.Channels;
 
 namespace SessionTypes.Binary.Threading
 {
-	public static class BinarySession<P> where P : SessionType
+	public static class BinarySessionChannel<P> where P : SessionType
 	{
 		private static (Client<P, P> client, Server<P, P> server) New()
 		{
@@ -36,23 +36,27 @@ namespace SessionTypes.Binary.Threading
 		}
 	}
 
-
 	public class BinaryChannelCommunication : BinaryCommunication
 	{
+		private ChannelReader<object> reader;
+		private ChannelWriter<object> writer;
+
 		public BinaryChannelCommunication(ChannelReader<object> reader, ChannelWriter<object> writer)
 		{
-
+			this.reader = reader;
+			this.writer = writer;
 		}
 
-		public override void Send<T>(T value)
+		public override async void Send<T>(T value)
 		{
-			throw new NotImplementedException();
+			await writer.WriteAsync(value);
 		}
 
-		public override Task<T> ReceiveAsync<T>()
+		public override async Task<T> ReceiveAsync<T>()
 		{
-			throw new NotImplementedException();
+			await reader.WaitToReadAsync();
+			reader.TryRead(out var obj);
+			return (T)obj;
 		}
 	}
 }
-
