@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using SessionTypes;
 using SessionTypes.Binary;
 using SessionTypes.Binary.Threading;
 
@@ -37,6 +38,12 @@ namespace SessionTypesConsoleDemo
 			Console.WriteLine();
 			Console.WriteLine();
 			Console.WriteLine();
+
+			// 例3
+			int n = r.Next() % 151;
+			Console.WriteLine($"例3: FizzBuzz（{n} まで）");
+			Console.WriteLine();
+			await Example3(n);
 		}
 
 		/// <summary>
@@ -120,6 +127,59 @@ namespace SessionTypesConsoleDemo
 					Console.WriteLine($"Client Received: {str}");
 				});
 			Console.WriteLine("Client End");
+		}
+
+		/// <summary>
+		/// 分岐・再帰のある通信
+		/// サーバーはクライアントから整数を受け取り対応するFizzBuzzゲームの回答を返す
+		/// クライアントが満足するまで繰り返す
+		/// </summary>
+		private static async Task Example3(int n)
+		{
+			var client = BinarySessionChannel<Block<Request<int, Respond<string, RequestChoice<Jump<Zero>, Close>>>, EndBlock>>.Fork(async server =>
+			{
+				// サーバースレッドの処理
+				var s1 = server.Enter();
+				while (true)
+				{
+					var (s2, i) = await s1.Receive();
+					var str = Mod(i, 3) == 0 ? (Mod(i, 5) == 0 ? "FizzBuzz" : "Fizz") : (Mod(i, 5) == 0 ? "Buzz" : $"{i}");
+					var s3 = s2.Send(str);
+					bool l = false;
+					await s3.Follow(
+						async left =>
+						{
+							l = true;
+							s1 = left.Zero();
+							// TODO 本当はここからループはじめに飛びたい
+						},
+						async right =>
+						{
+							
+						});
+					// TODO
+					if (!l)
+					{
+						break;
+					}
+				}
+			});
+			// クライアント側の処理
+			int j = 1;
+			var c1 = client.Enter();
+			while (true)
+			{
+				var c2 = c1.Send(j);
+				var (c3, s) = await c2.Receive();
+				Console.WriteLine(s);
+				if (j == n)
+				{
+					c3.ChooseRight();
+					break;
+				}
+				c1 = c3.ChooseLeft().Zero();
+				j++;
+			}
 		}
 
 		private static int Mod(int dividend, int divisor)
