@@ -49,6 +49,16 @@ namespace SessionTypes.Binary
 			return new Server<S, Block<S, B>>(jump.GetInternalCommunication());
 		}
 
+		public static Client<S, FS> Enter<S, B, FS>(this Client<Block<S, B>, FS> label) where S : SessionType where B : IBlock where FS : SessionType
+		{
+			return new Client<S, FS>(label.GetInternalCommunication());
+		}
+
+		public static Client<S, Block<S, B>> Zero<S, B>(this Client<Jump<Zero>, Block<S, B>> jump) where S : SessionType where B : IBlock
+		{
+			return new Client<S, Block<S, B>>(jump.GetInternalCommunication());
+		}
+
 		public static Server<SL, FS> ChooseLeft<SL, SR, FS>(this Server<RespondChoice<SL, SR>, FS> respondChoice) where SL : SessionType where SR : SessionType where FS : SessionType
 		{
 			var c = respondChoice.GetInternalCommunication();
