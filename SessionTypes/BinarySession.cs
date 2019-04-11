@@ -128,6 +128,8 @@ namespace SessionTypes.Binary
 
 	public abstract class Communicator
 	{
+		private int used = 0;
+
 		private BinaryCommunication binaryCommunication;
 
 		public Communicator(BinaryCommunication communication)
@@ -135,7 +137,15 @@ namespace SessionTypes.Binary
 			binaryCommunication = communication;
 		}
 
-		public BinaryCommunication GetInternalCommunication() => binaryCommunication;
+		public BinaryCommunication GetInternalCommunication()
+		{
+			if (used != 0)
+			{
+				throw new InvalidOperationException();
+			}
+			used++;
+			return binaryCommunication;
+		}
 	}
 
 	public sealed class Server<S, FS> : Communicator where S : SessionType where FS : SessionType
