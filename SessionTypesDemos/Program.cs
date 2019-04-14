@@ -5,7 +5,7 @@ using SessionTypes;
 using SessionTypes.Binary;
 using SessionTypes.Binary.Threading;
 
-namespace SessionTypesConsoleDemo
+namespace SessionTypesDemos
 {
 	public class Program
 	{
