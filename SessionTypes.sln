@@ -7,9 +7,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SessionTypes", "SessionType
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SessionTypesTest", "SessionTypesTest\SessionTypesTest.csproj", "{9558104D-AA94-47BD-85CD-C74F18C271CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SessionTypesConsoleDemo", "SessionTypesConsoleDemo\SessionTypesConsoleDemo.csproj", "{A672A627-045A-4787-910E-4AEB13668159}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SessionTypesDemos", "SessionTypesDemos\SessionTypesDemos.csproj", "{A672A627-045A-4787-910E-4AEB13668159}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PolygonClippingPipeline", "PolygonClippingPipeline\PolygonClippingPipeline.csproj", "{68A7E128-9A7C-441E-AEC6-67A635C60C15}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SessionTypesApplications\PolygonClippingPipeline", "SessionTypesApplications\PolygonClippingPipeline\PolygonClippingPipeline.csproj", "{68A7E128-9A7C-441E-AEC6-67A635C60C15}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
