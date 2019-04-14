@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SessionTypesDemos", "Sessio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolygonClippingPipeline", "SessionTypesApplications\PolygonClippingPipeline\PolygonClippingPipeline.csproj", "{68A7E128-9A7C-441E-AEC6-67A635C60C15}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParallelHttpDownloader", "SessionTypesApplications\ParallelHttpDownloader\ParallelHttpDownloader.csproj", "{7DB12895-6C1E-4D1E-BAA1-9119A9F82BBA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParallelHttpDownloader", "SessionTypesApplications\ParallelHttpDownloader\ParallelHttpDownloader.csproj", "{7DB12895-6C1E-4D1E-BAA1-9119A9F82BBA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
