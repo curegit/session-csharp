@@ -10,9 +10,9 @@ namespace SessionTypesTest
 		{
 			var zero = new Zero();
 			Assert.Equal(0, zero.Evaluate());
-			var one = new Successor<Zero>();
+			var one = new Succ<Zero>();
 			Assert.Equal(1, one.Evaluate());
-			var five = new Successor<Successor<Successor<Successor<Successor<Zero>>>>>();
+			var five = new Succ<Succ<Succ<Succ<Succ<Zero>>>>>();
 			Assert.Equal(5, five.Evaluate());
 		}
 
@@ -21,10 +21,10 @@ namespace SessionTypesTest
 		{
 			var rei = new Zero();
 			var zero = new Zero();
-			var san = new Successor<Successor<Successor<Zero>>>();
-			var three = new Successor<Successor<Successor<Zero>>>();
-			var yon = new Successor<Successor<Successor<Successor<Zero>>>>();
-			var four = new Successor<Successor<Successor<Successor<Zero>>>>();
+			var san = new Succ<Succ<Succ<Zero>>>();
+			var three = new Succ<Succ<Succ<Zero>>>();
+			var yon = new Succ<Succ<Succ<Succ<Zero>>>>();
+			var four = new Succ<Succ<Succ<Succ<Zero>>>>();
 			Assert.True(rei.Equals(zero));
 			Assert.True(rei == zero);
 			Assert.True(san.Equals(three));
@@ -44,10 +44,10 @@ namespace SessionTypesTest
 		{
 			var rei = new Zero();
 			var zero = new Zero();
-			var ichi = new Successor<Zero>();
-			var one = new Successor<Zero>();
-			var ni = new Successor<Successor<Zero>>();
-			var two = new Successor<Successor<Zero>>();
+			var ichi = new Succ<Zero>();
+			var one = new Succ<Zero>();
+			var ni = new Succ<Succ<Zero>>();
+			var two = new Succ<Succ<Zero>>();
 			Assert.True(zero != one);
 			Assert.True(one != two);
 			Assert.True(two != zero);
@@ -61,10 +61,10 @@ namespace SessionTypesTest
 		{
 			var rei = new Zero();
 			var zero = new Zero();
-			var ichi = new Successor<Zero>();
-			var one = new Successor<Zero>();
-			var ni = new Successor<Successor<Zero>>();
-			var two = new Successor<Successor<Zero>>();
+			var ichi = new Succ<Zero>();
+			var one = new Succ<Zero>();
+			var ni = new Succ<Succ<Zero>>();
+			var two = new Succ<Succ<Zero>>();
 			Assert.True(zero < one);
 			Assert.True(one < two);
 			Assert.True(zero < two);
