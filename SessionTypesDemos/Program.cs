@@ -136,7 +136,7 @@ namespace SessionTypesDemos
 		/// </summary>
 		private static async Task Example3(int n)
 		{
-			var client = BinarySessionChannel<Block<Request<int, Respond<string, RequestChoice<Jump<Zero>, Close>>>, EndBlock>>.Fork(async server =>
+			var client = BinarySessionChannel<Cons<Request<int, Respond<string, RequestChoice<Jump<Zero>, Close>>>, Nil>>.Fork(async server =>
 			{
 				// サーバースレッドの処理
 				var s1 = server.Enter();

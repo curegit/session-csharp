@@ -2,7 +2,7 @@
 
 namespace SessionTypes.Binary
 {
-	public abstract class BinaryCommunication
+	internal abstract class BinaryCommunicator
 	{
 		public abstract void Send<T>(T value);
 

@@ -57,7 +57,7 @@ namespace SessionTypes.Binary.Threading
 		}
 	}
 
-	public class BinaryChannelCommunication : BinaryCommunication
+	internal class BinaryChannelCommunication : BinaryCommunicator
 	{
 		private ChannelReader<object> reader;
 		private ChannelWriter<object> writer;
