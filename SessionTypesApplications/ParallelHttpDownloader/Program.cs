@@ -1,4 +1,6 @@
 ﻿using System;
+using SessionTypes;
+using SessionTypes.Binary;
 
 namespace ParallelHttpDownloader
 {
@@ -6,6 +8,7 @@ namespace ParallelHttpDownloader
 	{
 		static void Main(string[] args)
 		{
+			
 			Console.WriteLine("Hello World!");
 		}
 	}
