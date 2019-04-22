@@ -55,22 +55,14 @@ namespace SessionTypesDemos
 			var client = BinarySessionChannel<Request<int, Respond<string, Close>>>.Fork(async server =>
 			{
 				// サーバースレッドの処理
-				Console.WriteLine("Server Start");
-				var (server1, v) = await server.Receive();
-				Console.WriteLine($"Server Received: {v}");
-				string ord = ToOrdinal(v, false);
-				Console.WriteLine($"Server Sent: {ord}");
-				var server2 = server1.Send(ord);
-				Console.WriteLine("Server End");
+				server.Receive(out var num).Send(ToOrdinal(num, false));
+				await Task.Yield(); // ダミー await
 			});
 			// クライアント側の処理
-			Console.WriteLine("Client Start");
 			Thread.Sleep(1000);
-			Console.WriteLine($"Client Sent: {n}");
-			var client1 = client.Send(n);
-			var (client2, s) = await client1.Receive();
-			Console.WriteLine($"Client Received: {s}");
-			Console.WriteLine("Client End");
+			client.Send(n).Receive(out var str);
+			Console.WriteLine(str);
+			await Task.Yield(); // ダミー await
 		}
 
 		/// <summary>
