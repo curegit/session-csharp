@@ -22,9 +22,21 @@ namespace SessionTypes.Binary
 			return (new Server<S, P>(request), await request.ReceiveAsync<T>());
 		}
 
+		public static Server<S, P> Receive<S, P, T>(this Server<Request<T, S>, P> request, out T value) where S : SessionType where P : SessionType
+		{
+			value = request.ReceiveAsync<T>().Result;
+			return new Server<S, P>(request);
+		}
+
 		public static async Task<(Client<S, P>, T)> Receive<T, S, P>(this Client<Respond<T, S>, P> respond) where S : SessionType where P : SessionType
 		{
 			return (new Client<S, P>(respond), await respond.ReceiveAsync<T>());
+		}
+
+		public static Client<S, P> Receive<S, P, T>(this Client<Respond<T, S>, P> respond, out T value) where S : SessionType where P : SessionType
+		{
+			value = respond.ReceiveAsync<T>().Result;
+			return new Client<S, P>(respond);
 		}
 
 		public static Server<L, P> ChooseLeft<L, R, P>(this Server<RespondChoice<L, R>, P> respondChoice) where L : SessionType where R : SessionType where P : SessionType
