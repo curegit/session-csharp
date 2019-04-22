@@ -94,7 +94,7 @@ namespace PolygonClippingPipeline
 								}
 								prev1 = prev2.Zero();
 							},
-							async right =>
+							right =>
 							{
 								var clipped = Clip((to, first.Value), edge);
 								foreach (var v in clipped)
@@ -140,7 +140,7 @@ namespace PolygonClippingPipeline
 						result.Add(vertex);
 						retc1 = retc2.Zero();
 					},
-					async right =>
+					right =>
 					{
 						breakFlag = true;
 					}

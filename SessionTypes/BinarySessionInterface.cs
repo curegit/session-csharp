@@ -80,6 +80,57 @@ namespace SessionTypes.Binary
 			}
 		}
 
+		public static async Task Follow<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Action<Server<L, P>> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		{
+			var choice = await requestChoice.ReceiveAsync<int>();
+			if (choice == 1)
+			{
+				leftAction(new Server<L, P>(requestChoice));
+			}
+			else if (choice == 2)
+			{
+				await rightAction(new Server<R, P>(requestChoice));
+			}
+			else
+			{
+
+			}
+		}
+
+		public static async Task Follow<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Func<Server<L, P>, Task> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		{
+			var choice = await requestChoice.ReceiveAsync<int>();
+			if (choice == 1)
+			{
+				await leftAction(new Server<L, P>(requestChoice));
+			}
+			else if (choice == 2)
+			{
+				rightAction(new Server<R, P>(requestChoice));
+			}
+			else
+			{
+
+			}
+		}
+
+		public static async Task Follow<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Action<Server<L, P>> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		{
+			var choice = await requestChoice.ReceiveAsync<int>();
+			if (choice == 1)
+			{
+				leftAction(new Server<L, P>(requestChoice));
+			}
+			else if (choice == 2)
+			{
+				rightAction(new Server<R, P>(requestChoice));
+			}
+			else
+			{
+
+			}
+		}
+
 		public static async Task Follow<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Func<Client<L, P>, Task> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
 			var choice = await respondChoice.ReceiveAsync<int>();
@@ -90,6 +141,57 @@ namespace SessionTypes.Binary
 			else if (choice == 2)
 			{
 				await rightAction(new Client<R, P>(respondChoice));
+			}
+			else
+			{
+
+			}
+		}
+		
+		public static async Task Follow<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Action<Client<L, P>> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		{
+			var choice = await respondChoice.ReceiveAsync<int>();
+			if (choice == 1)
+			{
+				leftAction(new Client<L, P>(respondChoice));
+			}
+			else if (choice == 2)
+			{
+				await rightAction(new Client<R, P>(respondChoice));
+			}
+			else
+			{
+
+			}
+		}
+
+		public static async Task Follow<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Func<Client<L, P>, Task> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		{
+			var choice = await respondChoice.ReceiveAsync<int>();
+			if (choice == 1)
+			{
+				await leftAction(new Client<L, P>(respondChoice));
+			}
+			else if (choice == 2)
+			{
+				rightAction(new Client<R, P>(respondChoice));
+			}
+			else
+			{
+
+			}
+		}
+
+		public static async Task Follow<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Action<Client<L, P>> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		{
+			var choice = await respondChoice.ReceiveAsync<int>();
+			if (choice == 1)
+			{
+				leftAction(new Client<L, P>(respondChoice));
+			}
+			else if (choice == 2)
+			{
+				rightAction(new Client<R, P>(respondChoice));
 			}
 			else
 			{

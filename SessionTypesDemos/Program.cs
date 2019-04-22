@@ -139,13 +139,13 @@ namespace SessionTypesDemos
 					var s3 = s2.Send(str);
 					bool l = false;
 					await s3.Follow(
-						async left =>
+						left =>
 						{
 							l = true;
 							s1 = left.Zero();
 							// TODO 本当はここからループはじめに飛びたい
 						},
-						async right =>
+						right =>
 						{
 							
 						});
