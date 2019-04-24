@@ -18,11 +18,6 @@ namespace SessionTypes.Binary
 			this.communicator = communicator;
 		}
 
-		private protected BinaryCommunicator GetCommunicator()
-		{
-			return communicator;
-		}
-
 		internal void Send<T>(T value)
 		{
 			if (used)
