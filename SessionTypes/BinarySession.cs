@@ -45,17 +45,17 @@ namespace SessionTypes.Binary
 		}
 	}
 
-	public sealed class Server<S, P> : BinarySession where S : SessionType where P : SessionType
-	{
-		internal Server(BinarySession session) : base(session) { }
-
-		internal Server(BinaryCommunicator communicator) : base(communicator) { }
-	}
-
 	public sealed class Client<S, P> : BinarySession where S : SessionType where P : SessionType
 	{
 		internal Client(BinarySession session) : base(session) { }
 
 		internal Client(BinaryCommunicator communicator) : base(communicator) { }
+	}
+
+	public sealed class Server<S, P> : BinarySession where S : SessionType where P : SessionType
+	{
+		internal Server(BinarySession session) : base(session) { }
+
+		internal Server(BinaryCommunicator communicator) : base(communicator) { }
 	}
 }

@@ -7,17 +7,11 @@ namespace SessionTypes.Binary.Threading
 {
 	public static class BinarySessionChannel<P> where P : SessionType
 	{
-		private static (Server<P, P> server, Client<P, P> client) NewChannel()
+		private static (Client<P, P> client, Server<P, P> server) NewChannel()
 		{
 			var up = Channel.CreateUnbounded<object>();
 			var down = Channel.CreateUnbounded<object>();
-			return (NewServer(up, down), NewClient(up, down));
-		}
-
-		private static Server<P, P> NewServer(Channel<object> up, Channel<object> down)
-		{
-			var c = new BinaryChannelCommunication(up.Reader, down.Writer);
-			return new Server<P, P>(c);
+			return (NewClient(up, down), NewServer(up, down));
 		}
 
 		private static Client<P, P> NewClient(Channel<object> up, Channel<object> down)
@@ -26,23 +20,29 @@ namespace SessionTypes.Binary.Threading
 			return new Client<P, P>(c);
 		}
 
+		private static Server<P, P> NewServer(Channel<object> up, Channel<object> down)
+		{
+			var c = new BinaryChannelCommunication(up.Reader, down.Writer);
+			return new Server<P, P>(c);
+		}
+
 		public static Client<P, P> Fork(Action<Server<P, P>> threadFunction)
 		{
-			var (server, client) = NewChannel();
+			var (client, server) = NewChannel();
 			var threadStart = new ThreadStart(() => threadFunction(server));
 			var serverThread = new Thread(threadStart);
 			serverThread.Start();
 			return client;
 		}
 
-		public static (Server<P, P>, Client<P, P>) Pipeline<A>(Action<Server<P, P>, Client<P, P>, A> threadFunction, A[] args)
+		public static (Client<P, P>, Server<P, P>) Pipeline<A>(Action<Server<P, P>, Client<P, P>, A> threadFunction, A[] args)
 		{
 			int n = args.Length + 1;
-			Server<P, P>[] servers = new Server<P, P>[n];
 			Client<P, P>[] clients = new Client<P, P>[n];
+			Server<P, P>[] servers = new Server<P, P>[n];
 			for (int i = 0; i < n; i++)
 			{
-				var (s, c) = NewChannel();
+				var (c, s) = NewChannel();
 				clients[i] = c;
 				servers[(i + 1) % n] = s;
 			}
@@ -53,7 +53,7 @@ namespace SessionTypes.Binary.Threading
 				var thread = new Thread(threadStart);
 				thread.Start();
 			}
-			return (servers[0], clients[0]);
+			return (clients[0], servers[0]);
 		}
 	}
 
