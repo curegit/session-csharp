@@ -5,13 +5,13 @@ namespace SessionTypes.Binary
 {
 	public static class BinarySessionInterface
 	{
-		public static Client<S, P> Send<T, S, P>(this Client<Request<T, S>, P> request, T value) where S : SessionType where P : SessionType
+		public static Client<S, P> Send<S, P, T>(this Client<Request<T, S>, P> request, T value) where S : SessionType where P : SessionType
 		{
 			request.Send(value);
 			return new Client<S, P>(request);
 		}
 
-		public static Server<S, P> Send<T, S, P>(this Server<Respond<T, S>, P> respond, T value) where S : SessionType where P : SessionType
+		public static Server<S, P> Send<S, P, T>(this Server<Respond<T, S>, P> respond, T value) where S : SessionType where P : SessionType
 		{
 			respond.Send(value);
 			return new Server<S, P>(respond);
@@ -23,7 +23,7 @@ namespace SessionTypes.Binary
 			return new Client<S, P>(respond);
 		}
 
-		public static async Task<(Client<S, P>, T)> Receive<T, S, P>(this Client<Respond<T, S>, P> respond) where S : SessionType where P : SessionType
+		public static async Task<(Client<S, P>, T)> Receive<S, P, T>(this Client<Respond<T, S>, P> respond) where S : SessionType where P : SessionType
 		{
 			return (new Client<S, P>(respond), await respond.ReceiveAsync<T>());
 		}
@@ -34,7 +34,7 @@ namespace SessionTypes.Binary
 			return new Server<S, P>(request);
 		}
 
-		public static async Task<(Server<S, P>, T)> Receive<T, S, P>(this Server<Request<T, S>, P> request) where S : SessionType where P : SessionType
+		public static async Task<(Server<S, P>, T)> Receive<S, P, T>(this Server<Request<T, S>, P> request) where S : SessionType where P : SessionType
 		{
 			return (new Server<S, P>(request), await request.ReceiveAsync<T>());
 		}
