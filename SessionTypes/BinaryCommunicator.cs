@@ -6,6 +6,10 @@ namespace SessionTypes.Binary
 	{
 		public abstract void Send<T>(T value);
 
+		public abstract Task SendAsync<T>(T value);
+
+		public abstract T Receive<T>();
+
 		public abstract Task<T> ReceiveAsync<T>();
 	}
 }

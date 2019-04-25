@@ -68,16 +68,24 @@ namespace SessionTypes.Binary.Threading
 			this.writer = writer;
 		}
 
-		public override async void Send<T>(T value)
+		public override void Send<T>(T value)
 		{
-			await writer.WriteAsync(value);
+			Task.Run(async () => await writer.WriteAsync(value)).Wait();
+		}
+
+		public override Task SendAsync<T>(T value)
+		{
+			return writer.WriteAsync(value).AsTask();
+		}
+
+		public override T Receive<T>()
+		{
+			return (T)Task.Run(async () => await reader.ReadAsync()).Result;
 		}
 
 		public override async Task<T> ReceiveAsync<T>()
 		{
-			await reader.WaitToReadAsync();
-			reader.TryRead(out var obj);
-			return (T)obj;
+			return (T)await reader.ReadAsync();
 		}
 	}
 }

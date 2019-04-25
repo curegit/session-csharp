@@ -31,6 +31,32 @@ namespace SessionTypes.Binary
 			}
 		}
 
+		internal Task SendAsync<T>(T value)
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				return communicator.SendAsync(value);
+			}
+		}
+
+		internal T Receive<T>()
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				return communicator.Receive<T>();
+			}
+		}
+
 		internal Task<T> ReceiveAsync<T>()
 		{
 			if (used)
