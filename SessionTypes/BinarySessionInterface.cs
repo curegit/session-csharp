@@ -11,9 +11,21 @@ namespace SessionTypes.Binary
 			return new Client<S, P>(request);
 		}
 
+		public static async Task<Client<S, P>> SendAsync<S, P, T>(this Client<Request<T, S>, P> request, T value) where S : SessionType where P : SessionType
+		{
+			await request.SendAsync(value);
+			return new Client<S, P>(request);
+		}
+
 		public static Server<S, P> Send<S, P, T>(this Server<Respond<T, S>, P> respond, T value) where S : SessionType where P : SessionType
 		{
 			respond.Send(value);
+			return new Server<S, P>(respond);
+		}
+
+		public static async Task<Server<S, P>> SendAsync<S, P, T>(this Server<Respond<T, S>, P> respond, T value) where S : SessionType where P : SessionType
+		{
+			await respond.SendAsync(value);
 			return new Server<S, P>(respond);
 		}
 
