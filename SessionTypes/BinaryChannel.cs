@@ -87,5 +87,10 @@ namespace SessionTypes.Binary.Threading
 		{
 			return (T)await reader.ReadAsync();
 		}
+
+		public override void Close()
+		{
+			writer.Complete();
+		}
 	}
 }
