@@ -69,6 +69,11 @@ namespace SessionTypes.Binary
 				return communicator.ReceiveAsync<T>();
 			}	
 		}
+
+		internal void Close()
+		{
+			communicator.Close();
+		}
 	}
 
 	public sealed class Client<S, P> : BinarySession where S : SessionType where P : SessionType

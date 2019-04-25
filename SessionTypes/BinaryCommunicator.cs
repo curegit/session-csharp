@@ -11,5 +11,7 @@ namespace SessionTypes.Binary
 		public abstract T Receive<T>();
 
 		public abstract Task<T> ReceiveAsync<T>();
+
+		public virtual void Close() { }
 	}
 }
