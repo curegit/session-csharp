@@ -76,9 +76,9 @@ namespace SessionTypesDemos
 			{
 				// サーバースレッドの処理
 				Console.WriteLine("Server Start");
-				var (s1, n) = await server.Receive();
+				var (s1, n) = await server.ReceiveAsync();
 				Console.WriteLine($"Server Received: {n}");
-				var (s2, m) = await s1.Receive();
+				var (s2, m) = await s1.ReceiveAsync();
 				Console.WriteLine($"Server Received: {m}");
 				if (m == 0)
 				{
@@ -105,17 +105,17 @@ namespace SessionTypesDemos
 			var c1 = client.Send(dividend);
 			Console.WriteLine($"Client Sent: {divisor}");
 			var c2 = c1.Send(divisor);
-			await c2.Follow(
+			await c2.FollowAsync(
 				async left =>
 				{
 					Console.WriteLine("Client Followed: Left");
-					var (c3, div) = await left.Receive();
+					var (c3, div) = await left.ReceiveAsync();
 					Console.WriteLine($"Client Received: {div}");
 				},
 				async right =>
 				{
 					Console.WriteLine("Client Followed: Right");
-					var (c3, str) = await right.Receive();
+					var (c3, str) = await right.ReceiveAsync();
 					Console.WriteLine($"Client Received: {str}");
 				});
 			Console.WriteLine("Client End");
@@ -134,11 +134,11 @@ namespace SessionTypesDemos
 				var s1 = server.Enter();
 				while (true)
 				{
-					var (s2, i) = await s1.Receive();
+					var (s2, i) = await s1.ReceiveAsync();
 					var str = Mod(i, 3) == 0 ? (Mod(i, 5) == 0 ? "FizzBuzz" : "Fizz") : (Mod(i, 5) == 0 ? "Buzz" : $"{i}");
 					var s3 = s2.Send(str);
 					bool l = false;
-					await s3.Follow(
+					await s3.FollowAsync(
 						left =>
 						{
 							l = true;
@@ -162,7 +162,7 @@ namespace SessionTypesDemos
 			while (true)
 			{
 				var c2 = c1.Send(j);
-				var (c3, s) = await c2.Receive();
+				var (c3, s) = await c2.ReceiveAsync();
 				Console.WriteLine(s);
 				if (j == n)
 				{

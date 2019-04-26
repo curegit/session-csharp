@@ -71,11 +71,11 @@ namespace PolygonClippingPipeline
 					while (true)
 					{
 						bool breakFlag = false;
-						await prev1.Follow
+						await prev1.FollowAsync
 						(
 							async left =>
 							{
-								var (prev2, vertex) = await left.Receive();
+								var (prev2, vertex) = await left.ReceiveAsync();
 								from = to;
 								to = vertex;
 								if (first == null)
@@ -132,11 +132,11 @@ namespace PolygonClippingPipeline
 			while (true)
 			{
 				bool breakFlag = false;
-				await retc1.Follow
+				await retc1.FollowAsync
 				(
 					async left =>
 					{
-						var (retc2, vertex) = await left.Receive();
+						var (retc2, vertex) = await left.ReceiveAsync();
 						result.Add(vertex);
 						retc1 = retc2.Zero();
 					},
