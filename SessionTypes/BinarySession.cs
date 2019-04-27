@@ -18,11 +18,6 @@ namespace SessionTypes.Binary
 			this.communicator = communicator;
 		}
 
-		private protected BinaryCommunicator GetCommunicator()
-		{
-			return communicator;
-		}
-
 		internal void Send<T>(T value)
 		{
 			if (used)
@@ -33,6 +28,32 @@ namespace SessionTypes.Binary
 			{
 				used = true;
 				communicator.Send(value);
+			}
+		}
+
+		internal Task SendAsync<T>(T value)
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				return communicator.SendAsync(value);
+			}
+		}
+
+		internal T Receive<T>()
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				return communicator.Receive<T>();
 			}
 		}
 
@@ -48,13 +69,11 @@ namespace SessionTypes.Binary
 				return communicator.ReceiveAsync<T>();
 			}	
 		}
-	}
 
-	public sealed class Server<S, P> : BinarySession where S : SessionType where P : SessionType
-	{
-		internal Server(BinarySession session) : base(session) { }
-
-		internal Server(BinaryCommunicator communicator) : base(communicator) { }
+		internal void Close()
+		{
+			communicator.Close();
+		}
 	}
 
 	public sealed class Client<S, P> : BinarySession where S : SessionType where P : SessionType
@@ -62,5 +81,12 @@ namespace SessionTypes.Binary
 		internal Client(BinarySession session) : base(session) { }
 
 		internal Client(BinaryCommunicator communicator) : base(communicator) { }
+	}
+
+	public sealed class Server<S, P> : BinarySession where S : SessionType where P : SessionType
+	{
+		internal Server(BinarySession session) : base(session) { }
+
+		internal Server(BinaryCommunicator communicator) : base(communicator) { }
 	}
 }

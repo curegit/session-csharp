@@ -55,22 +55,14 @@ namespace SessionTypesDemos
 			var client = BinarySessionChannel<Request<int, Respond<string, Close>>>.Fork(async server =>
 			{
 				// サーバースレッドの処理
-				Console.WriteLine("Server Start");
-				var (server1, v) = await server.Receive();
-				Console.WriteLine($"Server Received: {v}");
-				string ord = ToOrdinal(v, false);
-				Console.WriteLine($"Server Sent: {ord}");
-				var server2 = server1.Send(ord);
-				Console.WriteLine("Server End");
+				server.Receive(out var num).Send(ToOrdinal(num, false));
+				await Task.Yield(); // ダミー await
 			});
 			// クライアント側の処理
-			Console.WriteLine("Client Start");
 			Thread.Sleep(1000);
-			Console.WriteLine($"Client Sent: {n}");
-			var client1 = client.Send(n);
-			var (client2, s) = await client1.Receive();
-			Console.WriteLine($"Client Received: {s}");
-			Console.WriteLine("Client End");
+			client.Send(n).Receive(out var str);
+			Console.WriteLine(str);
+			await Task.Yield(); // ダミー await
 		}
 
 		/// <summary>
@@ -84,9 +76,9 @@ namespace SessionTypesDemos
 			{
 				// サーバースレッドの処理
 				Console.WriteLine("Server Start");
-				var (s1, n) = await server.Receive();
+				var (s1, n) = await server.ReceiveAsync();
 				Console.WriteLine($"Server Received: {n}");
-				var (s2, m) = await s1.Receive();
+				var (s2, m) = await s1.ReceiveAsync();
 				Console.WriteLine($"Server Received: {m}");
 				if (m == 0)
 				{
@@ -113,17 +105,17 @@ namespace SessionTypesDemos
 			var c1 = client.Send(dividend);
 			Console.WriteLine($"Client Sent: {divisor}");
 			var c2 = c1.Send(divisor);
-			await c2.Follow(
+			await c2.FollowAsync(
 				async left =>
 				{
 					Console.WriteLine("Client Followed: Left");
-					var (c3, div) = await left.Receive();
+					var (c3, div) = await left.ReceiveAsync();
 					Console.WriteLine($"Client Received: {div}");
 				},
 				async right =>
 				{
 					Console.WriteLine("Client Followed: Right");
-					var (c3, str) = await right.Receive();
+					var (c3, str) = await right.ReceiveAsync();
 					Console.WriteLine($"Client Received: {str}");
 				});
 			Console.WriteLine("Client End");
@@ -142,18 +134,18 @@ namespace SessionTypesDemos
 				var s1 = server.Enter();
 				while (true)
 				{
-					var (s2, i) = await s1.Receive();
+					var (s2, i) = await s1.ReceiveAsync();
 					var str = Mod(i, 3) == 0 ? (Mod(i, 5) == 0 ? "FizzBuzz" : "Fizz") : (Mod(i, 5) == 0 ? "Buzz" : $"{i}");
 					var s3 = s2.Send(str);
 					bool l = false;
-					await s3.Follow(
-						async left =>
+					await s3.FollowAsync(
+						left =>
 						{
 							l = true;
 							s1 = left.Zero();
 							// TODO 本当はここからループはじめに飛びたい
 						},
-						async right =>
+						right =>
 						{
 							
 						});
@@ -170,7 +162,7 @@ namespace SessionTypesDemos
 			while (true)
 			{
 				var c2 = c1.Send(j);
-				var (c3, s) = await c2.Receive();
+				var (c3, s) = await c2.ReceiveAsync();
 				Console.WriteLine(s);
 				if (j == n)
 				{

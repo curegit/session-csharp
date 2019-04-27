@@ -2,51 +2,51 @@
 {
 	public abstract class SessionType
 	{
-		internal SessionType() { }
+		private protected SessionType() { }
 	}
 
 	public sealed class Request<T, S> : SessionType where S : SessionType
 	{
-		internal Request() { }
+		private Request() { }
 	}
 
 	public sealed class Respond<T, S> : SessionType where S : SessionType
 	{
-		internal Respond() { }
+		private Respond() { }
 	}
 
 	public sealed class RequestChoice<L, R> : SessionType where L : SessionType where R : SessionType
 	{
-		internal RequestChoice() { }
+		private RequestChoice() { }
 	}
 
 	public sealed class RespondChoice<L, R> : SessionType where L : SessionType where R : SessionType
 	{
-		internal RespondChoice() { }
+		private RespondChoice() { }
 	}
 
 	public sealed class Jump<N> : SessionType where N : TypeLevelNatural
 	{
-		internal Jump() { }
+		private Jump() { }
 	}
 
 	public sealed class Close : SessionType
 	{
-		internal Close() { }
+		private Close() { }
 	}
 
 	public abstract class SessionList : SessionType
 	{
-		internal SessionList() { }
+		private protected SessionList() { }
 	}
 
 	public sealed class Cons<S, L> : SessionList where S : SessionType where L : SessionList
 	{
-		internal Cons() { }
+		private Cons() { }
 	}
 
 	public sealed class Nil : SessionList
 	{
-		internal Nil() { }
+		private Nil() { }
 	}
 }
