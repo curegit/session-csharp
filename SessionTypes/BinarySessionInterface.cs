@@ -312,5 +312,15 @@ namespace SessionTypes.Binary
 		{
 			return new Client<S, Cons<S, B>>(jump);
 		}
+
+		public static void Close<P>(this Client<Close, P> client) where P : SessionType
+		{
+			client.Close();
+		}
+
+		public static void Close<P>(this Server<Close, P> server) where P : SessionType
+		{
+			server.Close();
+		}
 	}
 }
