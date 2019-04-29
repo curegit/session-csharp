@@ -11,22 +11,58 @@ namespace SessionTypes.Binary
 			return new Client<S, P>(request);
 		}
 
-		public static async Task<Client<S, P>> SendAsync<S, P, T>(this Client<Request<T, S>, P> request, T value) where S : SessionType where P : SessionType
-		{
-			await request.SendAsync(value);
-			return new Client<S, P>(request);
-		}
-
 		public static Server<S, P> Send<S, P, T>(this Server<Respond<T, S>, P> respond, T value) where S : SessionType where P : SessionType
 		{
 			respond.Send(value);
 			return new Server<S, P>(respond);
 		}
 
+		public static void Send<S, P, T>(this Client<Request<T, S>, P> request, T value, Action<Client<S, P>> action) where S : SessionType where P : SessionType
+		{
+			request.Send(value);
+			action(new Client<S, P>(request));
+		}
+
+		public static void Send<S, P, T>(this Server<Respond<T, S>, P> respond, T value, Action<Server<S, P>> action) where S : SessionType where P : SessionType
+		{
+			respond.Send(value);
+			action(new Server<S, P>(respond));
+		}
+
+		public static async Task<Client<S, P>> SendAsync<S, P, T>(this Client<Request<T, S>, P> request, T value) where S : SessionType where P : SessionType
+		{
+			await request.SendAsync(value);
+			return new Client<S, P>(request);
+		}
+
 		public static async Task<Server<S, P>> SendAsync<S, P, T>(this Server<Respond<T, S>, P> respond, T value) where S : SessionType where P : SessionType
 		{
 			await respond.SendAsync(value);
 			return new Server<S, P>(respond);
+		}
+
+		public static async Task SendAsync<S, P, T>(this Client<Request<T, S>, P> request, T value, Action<Client<S, P>> action) where S : SessionType where P : SessionType
+		{
+			await request.SendAsync(value);
+			action(new Client<S, P>(request));
+		}
+
+		public static async Task SendAsync<S, P, T>(this Server<Respond<T, S>, P> respond, T value, Action<Server<S, P>> action) where S : SessionType where P : SessionType
+		{
+			await respond.SendAsync(value);
+			action(new Server<S, P>(respond));
+		}
+
+		public static async Task SendAsync<S, P, T>(this Client<Request<T, S>, P> request, T value, Func<Client<S, P>, Task> action) where S : SessionType where P : SessionType
+		{
+			await request.SendAsync(value);
+			await action(new Client<S, P>(request));
+		}
+
+		public static async Task SendAsync<S, P, T>(this Server<Respond<T, S>, P> respond, T value, Func<Server<S, P>, Task> action) where S : SessionType where P : SessionType
+		{
+			await respond.SendAsync(value);
+			await action(new Server<S, P>(respond));
 		}
 
 		public static Client<S, P> Receive<S, P, T>(this Client<Respond<T, S>, P> respond, out T value) where S : SessionType where P : SessionType
