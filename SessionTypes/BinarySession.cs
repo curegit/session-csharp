@@ -124,7 +124,15 @@ namespace SessionTypes.Binary
 
 		internal void Close()
 		{
-			communicator.Close();
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				communicator.Close();
+			}
 		}
 	}
 
