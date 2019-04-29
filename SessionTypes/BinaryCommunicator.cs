@@ -12,6 +12,26 @@ namespace SessionTypes.Binary
 
 		public abstract Task<T> ReceiveAsync<T>();
 
+		public virtual void Choose(BinaryChoice choice)
+		{
+			Send(choice);
+		}
+
+		public virtual Task ChooseAsync(BinaryChoice choice)
+		{
+			return SendAsync(choice);
+		}
+
+		public virtual BinaryChoice Follow()
+		{
+			return Receive<BinaryChoice>();
+		}
+
+		public virtual Task<BinaryChoice> FollowAsync()
+		{
+			return ReceiveAsync<BinaryChoice>();
+		}
+
 		public virtual void Close() { }
 	}
 }

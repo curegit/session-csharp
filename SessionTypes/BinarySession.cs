@@ -70,6 +70,58 @@ namespace SessionTypes.Binary
 			}	
 		}
 
+		internal void Choose(BinaryChoice choice)
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				communicator.Choose(choice);
+			}
+		}
+
+		internal Task ChooseAsync(BinaryChoice choice)
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				return communicator.ChooseAsync(choice);
+			}
+		}
+
+		internal BinaryChoice Follow()
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				return communicator.Follow();
+			}
+		}
+
+		internal Task<BinaryChoice> FollowAsync()
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				return communicator.FollowAsync();
+			}
+		}
+
 		internal void Close()
 		{
 			communicator.Close();
