@@ -65,15 +65,20 @@ namespace SessionTypes.Binary
 			await action(new Server<S, P>(respond));
 		}
 
+		public static (Client<S, P>, T) Receive<S, P, T>(this Client<Respond<T, S>, P> respond) where S : SessionType where P : SessionType
+		{
+			return (new Client<S, P>(respond), respond.ReceiveAsync<T>().Result);
+		}
+
+		public static (Server<S, P>, T) Receive<S, P, T>(this Server<Request<T, S>, P> request) where S : SessionType where P : SessionType
+		{
+			return (new Server<S, P>(request), request.ReceiveAsync<T>().Result);
+		}
+
 		public static Client<S, P> Receive<S, P, T>(this Client<Respond<T, S>, P> respond, out T value) where S : SessionType where P : SessionType
 		{
 			value = respond.ReceiveAsync<T>().Result;
 			return new Client<S, P>(respond);
-		}
-
-		public static async Task<(Client<S, P>, T)> ReceiveAsync<S, P, T>(this Client<Respond<T, S>, P> respond) where S : SessionType where P : SessionType
-		{
-			return (new Client<S, P>(respond), await respond.ReceiveAsync<T>());
 		}
 
 		public static Server<S, P> Receive<S, P, T>(this Server<Request<T, S>, P> request, out T value) where S : SessionType where P : SessionType
@@ -82,9 +87,50 @@ namespace SessionTypes.Binary
 			return new Server<S, P>(request);
 		}
 
+		public static void Receive<S, P, T>(this Client<Respond<T, S>, P> respond, Action<Client<S, P>, T> action) where S : SessionType where P : SessionType
+		{
+			var value = respond.Receive<T>();
+			action(new Client<S, P>(respond), value);
+		}
+
+		public static void Receive<S, P, T>(this Server<Request<T, S>, P> request, Action<Server<S, P>, T> action) where S : SessionType where P : SessionType
+		{
+			var value = request.Receive<T>();
+			action(new Server<S, P>(request), value);
+		}
+
+		public static async Task<(Client<S, P>, T)> ReceiveAsync<S, P, T>(this Client<Respond<T, S>, P> respond) where S : SessionType where P : SessionType
+		{
+			return (new Client<S, P>(respond), await respond.ReceiveAsync<T>());
+		}
+
 		public static async Task<(Server<S, P>, T)> ReceiveAsync<S, P, T>(this Server<Request<T, S>, P> request) where S : SessionType where P : SessionType
 		{
 			return (new Server<S, P>(request), await request.ReceiveAsync<T>());
+		}
+
+		public static async Task ReceiveAsync<S, P, T>(this Client<Respond<T, S>, P> respond, Action<Client<S, P>, T> action) where S : SessionType where P : SessionType
+		{
+			var value = await respond.ReceiveAsync<T>();
+			action(new Client<S, P>(respond), value);
+		}
+
+		public static async Task ReceiveAsync<S, P, T>(this Server<Request<T, S>, P> request, Action<Server<S, P>, T> action) where S : SessionType where P : SessionType
+		{
+			var value = await request.ReceiveAsync<T>();
+			action(new Server<S, P>(request), value);
+		}
+
+		public static async Task ReceiveAsync<S, P, T>(this Client<Respond<T, S>, P> respond, Func<Client<S, P>, T, Task> action) where S : SessionType where P : SessionType
+		{
+			var value = await respond.ReceiveAsync<T>();
+			await action(new Client<S, P>(respond), value);
+		}
+
+		public static async Task ReceiveAsync<S, P, T>(this Server<Request<T, S>, P> request, Func<Server<S, P>, T, Task> action) where S : SessionType where P : SessionType
+		{
+			var value = await request.ReceiveAsync<T>();
+			await action(new Server<S, P>(request), value);
 		}
 
 		public static Client<L, P> ChooseLeft<L, R, P>(this Client<RequestChoice<L, R>, P> requestChoice) where L : SessionType where R : SessionType where P : SessionType
