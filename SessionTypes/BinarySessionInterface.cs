@@ -57,10 +57,10 @@ namespace SessionTypes.Binary
 			return new Client<L, P>(requestChoice);
 		}
 
-		public static Client<SR, P> ChooseRight<SL, SR, P>(this Client<RequestChoice<SL, SR>, P> requestChoice) where SL : SessionType where SR : SessionType where P : SessionType
+		public static Client<R, P> ChooseRight<L, R, P>(this Client<RequestChoice<L, R>, P> requestChoice) where L : SessionType where R : SessionType where P : SessionType
 		{
 			requestChoice.Send(2);
-			return new Client<SR, P>(requestChoice);
+			return new Client<R, P>(requestChoice);
 		}
 
 		public static Server<L, P> ChooseLeft<L, R, P>(this Server<RespondChoice<L, R>, P> respondChoice) where L : SessionType where R : SessionType where P : SessionType
