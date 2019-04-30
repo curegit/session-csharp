@@ -79,23 +79,23 @@ namespace SessionTypes.Binary
 
 		public static (Client<S, P>, T) Receive<S, P, T>(this Client<Respond<T, S>, P> respond) where S : SessionType where P : SessionType
 		{
-			return (new Client<S, P>(respond), respond.ReceiveAsync<T>().Result);
+			return (new Client<S, P>(respond), respond.Receive<T>());
 		}
 
 		public static (Server<S, P>, T) Receive<S, P, T>(this Server<Request<T, S>, P> request) where S : SessionType where P : SessionType
 		{
-			return (new Server<S, P>(request), request.ReceiveAsync<T>().Result);
+			return (new Server<S, P>(request), request.Receive<T>());
 		}
 
 		public static Client<S, P> Receive<S, P, T>(this Client<Respond<T, S>, P> respond, out T value) where S : SessionType where P : SessionType
 		{
-			value = respond.ReceiveAsync<T>().Result;
+			value = respond.Receive<T>();
 			return new Client<S, P>(respond);
 		}
 
 		public static Server<S, P> Receive<S, P, T>(this Server<Request<T, S>, P> request, out T value) where S : SessionType where P : SessionType
 		{
-			value = request.ReceiveAsync<T>().Result;
+			value = request.Receive<T>();
 			return new Server<S, P>(request);
 		}
 
