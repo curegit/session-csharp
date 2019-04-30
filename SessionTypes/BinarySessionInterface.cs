@@ -111,6 +111,18 @@ namespace SessionTypes.Binary
 			action(new Server<S, P>(request), value);
 		}
 
+		public static Task Receive<S, P, T>(this Client<Respond<T, S>, P> respond, Func<Client<S, P>, T, Task> action) where S : SessionType where P : SessionType
+		{
+			var value = respond.Receive<T>();
+			return action(new Client<S, P>(respond), value);
+		}
+
+		public static Task Receive<S, P, T>(this Server<Request<T, S>, P> request, Func<Server<S, P>, T, Task> action) where S : SessionType where P : SessionType
+		{
+			var value = request.Receive<T>();
+			return action(new Server<S, P>(request), value);
+		}
+
 		public static async Task<(Client<S, P>, T)> ReceiveAsync<S, P, T>(this Client<Respond<T, S>, P> respond) where S : SessionType where P : SessionType
 		{
 			return (new Client<S, P>(respond), await respond.ReceiveAsync<T>());
