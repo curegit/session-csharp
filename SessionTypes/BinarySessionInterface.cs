@@ -151,161 +151,145 @@ namespace SessionTypes.Binary
 
 		public static Client<L, P> ChooseLeft<L, R, P>(this Client<RequestChoice<L, R>, P> requestChoice) where L : SessionType where R : SessionType where P : SessionType
 		{
-			requestChoice.Send(1);
+			requestChoice.Choose(BinaryChoice.Left);
 			return new Client<L, P>(requestChoice);
 		}
 
 		public static Client<R, P> ChooseRight<L, R, P>(this Client<RequestChoice<L, R>, P> requestChoice) where L : SessionType where R : SessionType where P : SessionType
 		{
-			requestChoice.Send(2);
+			requestChoice.Choose(BinaryChoice.Right);
 			return new Client<R, P>(requestChoice);
 		}
 
 		public static Server<L, P> ChooseLeft<L, R, P>(this Server<RespondChoice<L, R>, P> respondChoice) where L : SessionType where R : SessionType where P : SessionType
 		{
-			respondChoice.Send(1);
+			respondChoice.Choose(BinaryChoice.Left);
 			return new Server<L, P>(respondChoice);
 		}
 
 		public static Server<R, P> ChooseRight<L, R, P>(this Server<RespondChoice<L, R>, P> respondChoice) where L : SessionType where R : SessionType where P : SessionType
 		{
-			respondChoice.Send(2);
+			respondChoice.Choose(BinaryChoice.Right);
 			return new Server<R, P>(respondChoice);
 		}
 
 		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Action<Client<L, P>> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			var choice = await respondChoice.ReceiveAsync<int>();
-			if (choice == 1)
+			switch (await respondChoice.FollowAsync())
 			{
-				leftAction(new Client<L, P>(respondChoice));
-			}
-			else if (choice == 2)
-			{
-				rightAction(new Client<R, P>(respondChoice));
-			}
-			else
-			{
-
+				case BinaryChoice.Left:
+					leftAction(new Client<L, P>(respondChoice));
+					break;
+				case BinaryChoice.Right:
+					rightAction(new Client<R, P>(respondChoice));
+					break;
+				default:
+					break;
 			}
 		}
 
 		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Func<Client<L, P>, Task> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			var choice = await respondChoice.ReceiveAsync<int>();
-			if (choice == 1)
+			switch (await respondChoice.FollowAsync())
 			{
-				await leftAction(new Client<L, P>(respondChoice));
-			}
-			else if (choice == 2)
-			{
-				rightAction(new Client<R, P>(respondChoice));
-			}
-			else
-			{
-
+				case BinaryChoice.Left:
+					await leftAction(new Client<L, P>(respondChoice));
+					break;
+				case BinaryChoice.Right:
+					rightAction(new Client<R, P>(respondChoice));
+					break;
+				default:
+					break;
 			}
 		}
 
 		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Action<Client<L, P>> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			var choice = await respondChoice.ReceiveAsync<int>();
-			if (choice == 1)
+			switch (await respondChoice.FollowAsync())
 			{
-				leftAction(new Client<L, P>(respondChoice));
-			}
-			else if (choice == 2)
-			{
-				await rightAction(new Client<R, P>(respondChoice));
-			}
-			else
-			{
-
+				case BinaryChoice.Left:
+					leftAction(new Client<L, P>(respondChoice));
+					break;
+				case BinaryChoice.Right:
+					await rightAction(new Client<R, P>(respondChoice));
+					break;
+				default:
+					break;
 			}
 		}
 
 		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Func<Client<L, P>, Task> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			var choice = await respondChoice.ReceiveAsync<int>();
-			if (choice == 1)
+			switch (await respondChoice.FollowAsync())
 			{
-				await leftAction(new Client<L, P>(respondChoice));
-			}
-			else if (choice == 2)
-			{
-				await rightAction(new Client<R, P>(respondChoice));
-			}
-			else
-			{
-
+				case BinaryChoice.Left:
+					await leftAction(new Client<L, P>(respondChoice));
+					break;
+				case BinaryChoice.Right:
+					await rightAction(new Client<R, P>(respondChoice));
+					break;
+				default:
+					break;
 			}
 		}
 
 		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Action<Server<L, P>> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			var choice = await requestChoice.ReceiveAsync<int>();
-			if (choice == 1)
+			switch (await requestChoice.FollowAsync())
 			{
-				leftAction(new Server<L, P>(requestChoice));
-			}
-			else if (choice == 2)
-			{
-				rightAction(new Server<R, P>(requestChoice));
-			}
-			else
-			{
-
+				case BinaryChoice.Left:
+					leftAction(new Server<L, P>(requestChoice));
+					break;
+				case BinaryChoice.Right:
+					rightAction(new Server<R, P>(requestChoice));
+					break;
+				default:
+					break;
 			}
 		}
 
 		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Func<Server<L, P>, Task> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			var choice = await requestChoice.ReceiveAsync<int>();
-			if (choice == 1)
+			switch (await requestChoice.FollowAsync())
 			{
-				await leftAction(new Server<L, P>(requestChoice));
-			}
-			else if (choice == 2)
-			{
-				rightAction(new Server<R, P>(requestChoice));
-			}
-			else
-			{
-
+				case BinaryChoice.Left:
+					await leftAction(new Server<L, P>(requestChoice));
+					break;
+				case BinaryChoice.Right:
+					rightAction(new Server<R, P>(requestChoice));
+					break;
+				default:
+					break;
 			}
 		}
 
 		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Action<Server<L, P>> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			var choice = await requestChoice.ReceiveAsync<int>();
-			if (choice == 1)
+			switch (await requestChoice.FollowAsync())
 			{
-				leftAction(new Server<L, P>(requestChoice));
-			}
-			else if (choice == 2)
-			{
-				await rightAction(new Server<R, P>(requestChoice));
-			}
-			else
-			{
-
+				case BinaryChoice.Left:
+					leftAction(new Server<L, P>(requestChoice));
+					break;
+				case BinaryChoice.Right:
+					await rightAction(new Server<R, P>(requestChoice));
+					break;
+				default:
+					break;
 			}
 		}
 
 		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Func<Server<L, P>, Task> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			var choice = await requestChoice.ReceiveAsync<int>();
-			if (choice == 1)
+			switch (await requestChoice.FollowAsync())
 			{
-				await leftAction(new Server<L, P>(requestChoice));
-			}
-			else if (choice == 2)
-			{
-				await rightAction(new Server<R, P>(requestChoice));
-			}
-			else
-			{
-
+				case BinaryChoice.Left:
+					await leftAction(new Server<L, P>(requestChoice));
+					break;
+				case BinaryChoice.Right:
+					await rightAction(new Server<R, P>(requestChoice));
+					break;
+				default:
+					break;
 			}
 		}
 
