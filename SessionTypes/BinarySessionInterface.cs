@@ -437,24 +437,24 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static Server<S, P> Enter<S, B, P>(this Server<Cons<S, B>, P> label) where S : SessionType where B : SessionList where P : SessionType
-		{
-			return new Server<S, P>(label);
-		}
-
-		public static Server<S, Cons<S, B>> Zero<S, B>(this Server<Jump<Zero>, Cons<S, B>> jump) where S : SessionType where B : SessionList
-		{
-			return new Server<S, Cons<S, B>>(jump);
-		}
-
 		public static Client<S, P> Enter<S, B, P>(this Client<Cons<S, B>, P> label) where S : SessionType where B : SessionList where P : SessionType
 		{
 			return new Client<S, P>(label);
 		}
 
+		public static Server<S, P> Enter<S, B, P>(this Server<Cons<S, B>, P> label) where S : SessionType where B : SessionList where P : SessionType
+		{
+			return new Server<S, P>(label);
+		}
+
 		public static Client<S, Cons<S, B>> Zero<S, B>(this Client<Jump<Zero>, Cons<S, B>> jump) where S : SessionType where B : SessionList
 		{
 			return new Client<S, Cons<S, B>>(jump);
+		}
+
+		public static Server<S, Cons<S, B>> Zero<S, B>(this Server<Jump<Zero>, Cons<S, B>> jump) where S : SessionType where B : SessionList
+		{
+			return new Server<S, Cons<S, B>>(jump);
 		}
 
 		public static void Close<P>(this Client<Close, P> client) where P : SessionType
