@@ -173,6 +173,30 @@ namespace SessionTypes.Binary
 			return new Server<R, P>(respondChoice);
 		}
 
+		public static async Task<Client<L, P>> ChooseLeftAsync<L, R, P>(this Client<RequestChoice<L, R>, P> requestChoice) where L : SessionType where R : SessionType where P : SessionType
+		{
+			await requestChoice.ChooseAsync(BinaryChoice.Left);
+			return new Client<L, P>(requestChoice);
+		}
+
+		public static async Task<Client<R, P>> ChooseRightAsync<L, R, P>(this Client<RequestChoice<L, R>, P> requestChoice) where L : SessionType where R : SessionType where P : SessionType
+		{
+			await requestChoice.ChooseAsync(BinaryChoice.Right);
+			return new Client<R, P>(requestChoice);
+		}
+
+		public static async Task<Server<L, P>> ChooseLeftAsync<L, R, P>(this Server<RespondChoice<L, R>, P> respondChoice) where L : SessionType where R : SessionType where P : SessionType
+		{
+			await respondChoice.ChooseAsync(BinaryChoice.Left);
+			return new Server<L, P>(respondChoice);
+		}
+
+		public static async Task<Server<R, P>> ChooseRightAsync<L, R, P>(this Server<RespondChoice<L, R>, P> respondChoice) where L : SessionType where R : SessionType where P : SessionType
+		{
+			await respondChoice.ChooseAsync(BinaryChoice.Right);
+			return new Server<R, P>(respondChoice);
+		}
+
 		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Action<Client<L, P>> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
 			switch (await respondChoice.FollowAsync())
