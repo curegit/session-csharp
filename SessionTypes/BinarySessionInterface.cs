@@ -5,456 +5,456 @@ namespace SessionTypes.Binary
 {
 	public static class BinarySessionInterface
 	{
-		public static Client<S, P> Send<S, P, T>(this Client<Request<T, S>, P> request, T value) where S : SessionType where P : SessionType
+		public static Client<S, P> Send<S, P, T>(this Client<Request<T, S>, P> client, T value) where S : SessionType where P : SessionType
 		{
-			request.Send(value);
-			return new Client<S, P>(request);
+			client.Send(value);
+			return new Client<S, P>(client);
 		}
 
-		public static Server<S, P> Send<S, P, T>(this Server<Respond<T, S>, P> respond, T value) where S : SessionType where P : SessionType
+		public static Server<S, P> Send<S, P, T>(this Server<Respond<T, S>, P> server, T value) where S : SessionType where P : SessionType
 		{
-			respond.Send(value);
-			return new Server<S, P>(respond);
+			server.Send(value);
+			return new Server<S, P>(server);
 		}
 
-		public static void Send<S, P, T>(this Client<Request<T, S>, P> request, T value, Action<Client<S, P>> action) where S : SessionType where P : SessionType
+		public static void Send<S, P, T>(this Client<Request<T, S>, P> client, T value, Action<Client<S, P>> action) where S : SessionType where P : SessionType
 		{
-			request.Send(value);
-			action(new Client<S, P>(request));
+			client.Send(value);
+			action(new Client<S, P>(client));
 		}
 
-		public static Task Send<S, P, T>(this Client<Request<T, S>, P> request, T value, Func<Client<S, P>, Task> action) where S : SessionType where P : SessionType
+		public static Task Send<S, P, T>(this Client<Request<T, S>, P> client, T value, Func<Client<S, P>, Task> action) where S : SessionType where P : SessionType
 		{
-			request.Send(value);
-			return action(new Client<S, P>(request));
+			client.Send(value);
+			return action(new Client<S, P>(client));
 		}
 
-		public static void Send<S, P, T>(this Server<Respond<T, S>, P> respond, T value, Action<Server<S, P>> action) where S : SessionType where P : SessionType
+		public static void Send<S, P, T>(this Server<Respond<T, S>, P> server, T value, Action<Server<S, P>> action) where S : SessionType where P : SessionType
 		{
-			respond.Send(value);
-			action(new Server<S, P>(respond));
+			server.Send(value);
+			action(new Server<S, P>(server));
 		}
 
-		public static Task Send<S, P, T>(this Server<Respond<T, S>, P> respond, T value, Func<Server<S, P>, Task> action) where S : SessionType where P : SessionType
+		public static Task Send<S, P, T>(this Server<Respond<T, S>, P> server, T value, Func<Server<S, P>, Task> action) where S : SessionType where P : SessionType
 		{
-			respond.Send(value);
-			return action(new Server<S, P>(respond));
+			server.Send(value);
+			return action(new Server<S, P>(server));
 		}
 
-		public static async Task<Client<S, P>> SendAsync<S, P, T>(this Client<Request<T, S>, P> request, T value) where S : SessionType where P : SessionType
+		public static async Task<Client<S, P>> SendAsync<S, P, T>(this Client<Request<T, S>, P> client, T value) where S : SessionType where P : SessionType
 		{
-			await request.SendAsync(value);
-			return new Client<S, P>(request);
+			await client.SendAsync(value);
+			return new Client<S, P>(client);
 		}
 
-		public static async Task<Server<S, P>> SendAsync<S, P, T>(this Server<Respond<T, S>, P> respond, T value) where S : SessionType where P : SessionType
+		public static async Task<Server<S, P>> SendAsync<S, P, T>(this Server<Respond<T, S>, P> server, T value) where S : SessionType where P : SessionType
 		{
-			await respond.SendAsync(value);
-			return new Server<S, P>(respond);
+			await server.SendAsync(value);
+			return new Server<S, P>(server);
 		}
 
-		public static async Task SendAsync<S, P, T>(this Client<Request<T, S>, P> request, T value, Action<Client<S, P>> action) where S : SessionType where P : SessionType
+		public static async Task SendAsync<S, P, T>(this Client<Request<T, S>, P> client, T value, Action<Client<S, P>> action) where S : SessionType where P : SessionType
 		{
-			await request.SendAsync(value);
-			action(new Client<S, P>(request));
+			await client.SendAsync(value);
+			action(new Client<S, P>(client));
 		}
 
-		public static async Task SendAsync<S, P, T>(this Client<Request<T, S>, P> request, T value, Func<Client<S, P>, Task> action) where S : SessionType where P : SessionType
+		public static async Task SendAsync<S, P, T>(this Client<Request<T, S>, P> client, T value, Func<Client<S, P>, Task> action) where S : SessionType where P : SessionType
 		{
-			await request.SendAsync(value);
-			await action(new Client<S, P>(request));
+			await client.SendAsync(value);
+			await action(new Client<S, P>(client));
 		}
 
-		public static async Task SendAsync<S, P, T>(this Server<Respond<T, S>, P> respond, T value, Action<Server<S, P>> action) where S : SessionType where P : SessionType
+		public static async Task SendAsync<S, P, T>(this Server<Respond<T, S>, P> server, T value, Action<Server<S, P>> action) where S : SessionType where P : SessionType
 		{
-			await respond.SendAsync(value);
-			action(new Server<S, P>(respond));
+			await server.SendAsync(value);
+			action(new Server<S, P>(server));
 		}
 
-		public static async Task SendAsync<S, P, T>(this Server<Respond<T, S>, P> respond, T value, Func<Server<S, P>, Task> action) where S : SessionType where P : SessionType
+		public static async Task SendAsync<S, P, T>(this Server<Respond<T, S>, P> server, T value, Func<Server<S, P>, Task> action) where S : SessionType where P : SessionType
 		{
-			await respond.SendAsync(value);
-			await action(new Server<S, P>(respond));
+			await server.SendAsync(value);
+			await action(new Server<S, P>(server));
 		}
 
-		public static (Client<S, P>, T) Receive<S, P, T>(this Client<Respond<T, S>, P> respond) where S : SessionType where P : SessionType
+		public static (Client<S, P>, T) Receive<S, P, T>(this Client<Respond<T, S>, P> client) where S : SessionType where P : SessionType
 		{
-			return (new Client<S, P>(respond), respond.Receive<T>());
+			return (new Client<S, P>(client), client.Receive<T>());
 		}
 
-		public static (Server<S, P>, T) Receive<S, P, T>(this Server<Request<T, S>, P> request) where S : SessionType where P : SessionType
+		public static (Server<S, P>, T) Receive<S, P, T>(this Server<Request<T, S>, P> server) where S : SessionType where P : SessionType
 		{
-			return (new Server<S, P>(request), request.Receive<T>());
+			return (new Server<S, P>(server), server.Receive<T>());
 		}
 
-		public static Client<S, P> Receive<S, P, T>(this Client<Respond<T, S>, P> respond, out T value) where S : SessionType where P : SessionType
+		public static Client<S, P> Receive<S, P, T>(this Client<Respond<T, S>, P> client, out T value) where S : SessionType where P : SessionType
 		{
-			value = respond.Receive<T>();
-			return new Client<S, P>(respond);
+			value = client.Receive<T>();
+			return new Client<S, P>(client);
 		}
 
-		public static Server<S, P> Receive<S, P, T>(this Server<Request<T, S>, P> request, out T value) where S : SessionType where P : SessionType
+		public static Server<S, P> Receive<S, P, T>(this Server<Request<T, S>, P> server, out T value) where S : SessionType where P : SessionType
 		{
-			value = request.Receive<T>();
-			return new Server<S, P>(request);
+			value = server.Receive<T>();
+			return new Server<S, P>(server);
 		}
 
-		public static void Receive<S, P, T>(this Client<Respond<T, S>, P> respond, Action<Client<S, P>, T> action) where S : SessionType where P : SessionType
+		public static void Receive<S, P, T>(this Client<Respond<T, S>, P> client, Action<Client<S, P>, T> action) where S : SessionType where P : SessionType
 		{
-			action(new Client<S, P>(respond), respond.Receive<T>());
+			action(new Client<S, P>(client), client.Receive<T>());
 		}
 
-		public static Task Receive<S, P, T>(this Client<Respond<T, S>, P> respond, Func<Client<S, P>, T, Task> action) where S : SessionType where P : SessionType
+		public static Task Receive<S, P, T>(this Client<Respond<T, S>, P> client, Func<Client<S, P>, T, Task> action) where S : SessionType where P : SessionType
 		{
-			return action(new Client<S, P>(respond), respond.Receive<T>());
+			return action(new Client<S, P>(client), client.Receive<T>());
 		}
 
-		public static void Receive<S, P, T>(this Server<Request<T, S>, P> request, Action<Server<S, P>, T> action) where S : SessionType where P : SessionType
+		public static void Receive<S, P, T>(this Server<Request<T, S>, P> server, Action<Server<S, P>, T> action) where S : SessionType where P : SessionType
 		{
-			action(new Server<S, P>(request), request.Receive<T>());
+			action(new Server<S, P>(server), server.Receive<T>());
 		}
 
-		public static Task Receive<S, P, T>(this Server<Request<T, S>, P> request, Func<Server<S, P>, T, Task> action) where S : SessionType where P : SessionType
+		public static Task Receive<S, P, T>(this Server<Request<T, S>, P> server, Func<Server<S, P>, T, Task> action) where S : SessionType where P : SessionType
 		{
-			return action(new Server<S, P>(request), request.Receive<T>());
+			return action(new Server<S, P>(server), server.Receive<T>());
 		}
 
-		public static async Task<(Client<S, P>, T)> ReceiveAsync<S, P, T>(this Client<Respond<T, S>, P> respond) where S : SessionType where P : SessionType
+		public static async Task<(Client<S, P>, T)> ReceiveAsync<S, P, T>(this Client<Respond<T, S>, P> client) where S : SessionType where P : SessionType
 		{
-			return (new Client<S, P>(respond), await respond.ReceiveAsync<T>());
+			return (new Client<S, P>(client), await client.ReceiveAsync<T>());
 		}
 
-		public static async Task<(Server<S, P>, T)> ReceiveAsync<S, P, T>(this Server<Request<T, S>, P> request) where S : SessionType where P : SessionType
+		public static async Task<(Server<S, P>, T)> ReceiveAsync<S, P, T>(this Server<Request<T, S>, P> server) where S : SessionType where P : SessionType
 		{
-			return (new Server<S, P>(request), await request.ReceiveAsync<T>());
+			return (new Server<S, P>(server), await server.ReceiveAsync<T>());
 		}
 
-		public static async Task ReceiveAsync<S, P, T>(this Client<Respond<T, S>, P> respond, Action<Client<S, P>, T> action) where S : SessionType where P : SessionType
+		public static async Task ReceiveAsync<S, P, T>(this Client<Respond<T, S>, P> client, Action<Client<S, P>, T> action) where S : SessionType where P : SessionType
 		{
-			action(new Client<S, P>(respond), await respond.ReceiveAsync<T>());
+			action(new Client<S, P>(client), await client.ReceiveAsync<T>());
 		}
 
-		public static async Task ReceiveAsync<S, P, T>(this Client<Respond<T, S>, P> respond, Func<Client<S, P>, T, Task> action) where S : SessionType where P : SessionType
+		public static async Task ReceiveAsync<S, P, T>(this Client<Respond<T, S>, P> client, Func<Client<S, P>, T, Task> action) where S : SessionType where P : SessionType
 		{
-			await action(new Client<S, P>(respond), await respond.ReceiveAsync<T>());
+			await action(new Client<S, P>(client), await client.ReceiveAsync<T>());
 		}
 
-		public static async Task ReceiveAsync<S, P, T>(this Server<Request<T, S>, P> request, Action<Server<S, P>, T> action) where S : SessionType where P : SessionType
+		public static async Task ReceiveAsync<S, P, T>(this Server<Request<T, S>, P> server, Action<Server<S, P>, T> action) where S : SessionType where P : SessionType
 		{
-			action(new Server<S, P>(request), await request.ReceiveAsync<T>());
+			action(new Server<S, P>(server), await server.ReceiveAsync<T>());
 		}
 
-		public static async Task ReceiveAsync<S, P, T>(this Server<Request<T, S>, P> request, Func<Server<S, P>, T, Task> action) where S : SessionType where P : SessionType
+		public static async Task ReceiveAsync<S, P, T>(this Server<Request<T, S>, P> server, Func<Server<S, P>, T, Task> action) where S : SessionType where P : SessionType
 		{
-			await action(new Server<S, P>(request), await request.ReceiveAsync<T>());
+			await action(new Server<S, P>(server), await server.ReceiveAsync<T>());
 		}
 
-		public static Client<L, P> ChooseLeft<L, R, P>(this Client<RequestChoice<L, R>, P> requestChoice) where L : SessionType where R : SessionType where P : SessionType
+		public static Client<L, P> ChooseLeft<L, R, P>(this Client<RequestChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : SessionType
 		{
-			requestChoice.Choose(BinaryChoice.Left);
-			return new Client<L, P>(requestChoice);
+			client.Choose(BinaryChoice.Left);
+			return new Client<L, P>(client);
 		}
 
-		public static Client<R, P> ChooseRight<L, R, P>(this Client<RequestChoice<L, R>, P> requestChoice) where L : SessionType where R : SessionType where P : SessionType
+		public static Client<R, P> ChooseRight<L, R, P>(this Client<RequestChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : SessionType
 		{
-			requestChoice.Choose(BinaryChoice.Right);
-			return new Client<R, P>(requestChoice);
+			client.Choose(BinaryChoice.Right);
+			return new Client<R, P>(client);
 		}
 
-		public static Server<L, P> ChooseLeft<L, R, P>(this Server<RespondChoice<L, R>, P> respondChoice) where L : SessionType where R : SessionType where P : SessionType
+		public static Server<L, P> ChooseLeft<L, R, P>(this Server<RespondChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : SessionType
 		{
-			respondChoice.Choose(BinaryChoice.Left);
-			return new Server<L, P>(respondChoice);
+			server.Choose(BinaryChoice.Left);
+			return new Server<L, P>(server);
 		}
 
-		public static Server<R, P> ChooseRight<L, R, P>(this Server<RespondChoice<L, R>, P> respondChoice) where L : SessionType where R : SessionType where P : SessionType
+		public static Server<R, P> ChooseRight<L, R, P>(this Server<RespondChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : SessionType
 		{
-			respondChoice.Choose(BinaryChoice.Right);
-			return new Server<R, P>(respondChoice);
+			server.Choose(BinaryChoice.Right);
+			return new Server<R, P>(server);
 		}
 
-		public static async Task<Client<L, P>> ChooseLeftAsync<L, R, P>(this Client<RequestChoice<L, R>, P> requestChoice) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task<Client<L, P>> ChooseLeftAsync<L, R, P>(this Client<RequestChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : SessionType
 		{
-			await requestChoice.ChooseAsync(BinaryChoice.Left);
-			return new Client<L, P>(requestChoice);
+			await client.ChooseAsync(BinaryChoice.Left);
+			return new Client<L, P>(client);
 		}
 
-		public static async Task<Client<R, P>> ChooseRightAsync<L, R, P>(this Client<RequestChoice<L, R>, P> requestChoice) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task<Client<R, P>> ChooseRightAsync<L, R, P>(this Client<RequestChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : SessionType
 		{
-			await requestChoice.ChooseAsync(BinaryChoice.Right);
-			return new Client<R, P>(requestChoice);
+			await client.ChooseAsync(BinaryChoice.Right);
+			return new Client<R, P>(client);
 		}
 
-		public static async Task<Server<L, P>> ChooseLeftAsync<L, R, P>(this Server<RespondChoice<L, R>, P> respondChoice) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task<Server<L, P>> ChooseLeftAsync<L, R, P>(this Server<RespondChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : SessionType
 		{
-			await respondChoice.ChooseAsync(BinaryChoice.Left);
-			return new Server<L, P>(respondChoice);
+			await server.ChooseAsync(BinaryChoice.Left);
+			return new Server<L, P>(server);
 		}
 
-		public static async Task<Server<R, P>> ChooseRightAsync<L, R, P>(this Server<RespondChoice<L, R>, P> respondChoice) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task<Server<R, P>> ChooseRightAsync<L, R, P>(this Server<RespondChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : SessionType
 		{
-			await respondChoice.ChooseAsync(BinaryChoice.Right);
-			return new Server<R, P>(respondChoice);
+			await server.ChooseAsync(BinaryChoice.Right);
+			return new Server<R, P>(server);
 		}
 
-		public static void Follow<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Action<Client<L, P>> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static void Follow<L, R, P>(this Client<RespondChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (respondChoice.Follow())
+			switch (client.Follow())
 			{
 				case BinaryChoice.Left:
-					leftAction(new Client<L, P>(respondChoice));
+					leftAction(new Client<L, P>(client));
 					break;
 				case BinaryChoice.Right:
-					rightAction(new Client<R, P>(respondChoice));
+					rightAction(new Client<R, P>(client));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Func<Client<L, P>, Task> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task Follow<L, R, P>(this Client<RespondChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (respondChoice.Follow())
+			switch (client.Follow())
 			{
 				case BinaryChoice.Left:
-					await leftAction(new Client<L, P>(respondChoice));
+					await leftAction(new Client<L, P>(client));
 					break;
 				case BinaryChoice.Right:
-					rightAction(new Client<R, P>(respondChoice));
+					rightAction(new Client<R, P>(client));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Action<Client<L, P>> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task Follow<L, R, P>(this Client<RespondChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (respondChoice.Follow())
+			switch (client.Follow())
 			{
 				case BinaryChoice.Left:
-					leftAction(new Client<L, P>(respondChoice));
+					leftAction(new Client<L, P>(client));
 					break;
 				case BinaryChoice.Right:
-					await rightAction(new Client<R, P>(respondChoice));
+					await rightAction(new Client<R, P>(client));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Func<Client<L, P>, Task> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task Follow<L, R, P>(this Client<RespondChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (respondChoice.Follow())
+			switch (client.Follow())
 			{
 				case BinaryChoice.Left:
-					await leftAction(new Client<L, P>(respondChoice));
+					await leftAction(new Client<L, P>(client));
 					break;
 				case BinaryChoice.Right:
-					await rightAction(new Client<R, P>(respondChoice));
+					await rightAction(new Client<R, P>(client));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static void Follow<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Action<Server<L, P>> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static void Follow<L, R, P>(this Server<RequestChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (requestChoice.Follow())
+			switch (server.Follow())
 			{
 				case BinaryChoice.Left:
-					leftAction(new Server<L, P>(requestChoice));
+					leftAction(new Server<L, P>(server));
 					break;
 				case BinaryChoice.Right:
-					rightAction(new Server<R, P>(requestChoice));
+					rightAction(new Server<R, P>(server));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Func<Server<L, P>, Task> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task Follow<L, R, P>(this Server<RequestChoice<L, R>, P> server, Func<Server<L, P>, Task> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (requestChoice.Follow())
+			switch (server.Follow())
 			{
 				case BinaryChoice.Left:
-					await leftAction(new Server<L, P>(requestChoice));
+					await leftAction(new Server<L, P>(server));
 					break;
 				case BinaryChoice.Right:
-					rightAction(new Server<R, P>(requestChoice));
+					rightAction(new Server<R, P>(server));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Action<Server<L, P>> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task Follow<L, R, P>(this Server<RequestChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (requestChoice.Follow())
+			switch (server.Follow())
 			{
 				case BinaryChoice.Left:
-					leftAction(new Server<L, P>(requestChoice));
+					leftAction(new Server<L, P>(server));
 					break;
 				case BinaryChoice.Right:
-					await rightAction(new Server<R, P>(requestChoice));
+					await rightAction(new Server<R, P>(server));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Func<Server<L, P>, Task> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task Follow<L, R, P>(this Server<RequestChoice<L, R>, P> server, Func<Server<L, P>, Task> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (requestChoice.Follow())
+			switch (server.Follow())
 			{
 				case BinaryChoice.Left:
-					await leftAction(new Server<L, P>(requestChoice));
+					await leftAction(new Server<L, P>(server));
 					break;
 				case BinaryChoice.Right:
-					await rightAction(new Server<R, P>(requestChoice));
+					await rightAction(new Server<R, P>(server));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Action<Client<L, P>> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (await respondChoice.FollowAsync())
+			switch (await client.FollowAsync())
 			{
 				case BinaryChoice.Left:
-					leftAction(new Client<L, P>(respondChoice));
+					leftAction(new Client<L, P>(client));
 					break;
 				case BinaryChoice.Right:
-					rightAction(new Client<R, P>(respondChoice));
+					rightAction(new Client<R, P>(client));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Func<Client<L, P>, Task> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (await respondChoice.FollowAsync())
+			switch (await client.FollowAsync())
 			{
 				case BinaryChoice.Left:
-					await leftAction(new Client<L, P>(respondChoice));
+					await leftAction(new Client<L, P>(client));
 					break;
 				case BinaryChoice.Right:
-					rightAction(new Client<R, P>(respondChoice));
+					rightAction(new Client<R, P>(client));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Action<Client<L, P>> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (await respondChoice.FollowAsync())
+			switch (await client.FollowAsync())
 			{
 				case BinaryChoice.Left:
-					leftAction(new Client<L, P>(respondChoice));
+					leftAction(new Client<L, P>(client));
 					break;
 				case BinaryChoice.Right:
-					await rightAction(new Client<R, P>(respondChoice));
+					await rightAction(new Client<R, P>(client));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> respondChoice, Func<Client<L, P>, Task> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (await respondChoice.FollowAsync())
+			switch (await client.FollowAsync())
 			{
 				case BinaryChoice.Left:
-					await leftAction(new Client<L, P>(respondChoice));
+					await leftAction(new Client<L, P>(client));
 					break;
 				case BinaryChoice.Right:
-					await rightAction(new Client<R, P>(respondChoice));
+					await rightAction(new Client<R, P>(client));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Action<Server<L, P>> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (await requestChoice.FollowAsync())
+			switch (await server.FollowAsync())
 			{
 				case BinaryChoice.Left:
-					leftAction(new Server<L, P>(requestChoice));
+					leftAction(new Server<L, P>(server));
 					break;
 				case BinaryChoice.Right:
-					rightAction(new Server<R, P>(requestChoice));
+					rightAction(new Server<R, P>(server));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Func<Server<L, P>, Task> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> server, Func<Server<L, P>, Task> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (await requestChoice.FollowAsync())
+			switch (await server.FollowAsync())
 			{
 				case BinaryChoice.Left:
-					await leftAction(new Server<L, P>(requestChoice));
+					await leftAction(new Server<L, P>(server));
 					break;
 				case BinaryChoice.Right:
-					rightAction(new Server<R, P>(requestChoice));
+					rightAction(new Server<R, P>(server));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Action<Server<L, P>> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (await requestChoice.FollowAsync())
+			switch (await server.FollowAsync())
 			{
 				case BinaryChoice.Left:
-					leftAction(new Server<L, P>(requestChoice));
+					leftAction(new Server<L, P>(server));
 					break;
 				case BinaryChoice.Right:
-					await rightAction(new Server<R, P>(requestChoice));
+					await rightAction(new Server<R, P>(server));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> requestChoice, Func<Server<L, P>, Task> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
+		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> server, Func<Server<L, P>, Task> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : SessionType
 		{
-			switch (await requestChoice.FollowAsync())
+			switch (await server.FollowAsync())
 			{
 				case BinaryChoice.Left:
-					await leftAction(new Server<L, P>(requestChoice));
+					await leftAction(new Server<L, P>(server));
 					break;
 				case BinaryChoice.Right:
-					await rightAction(new Server<R, P>(requestChoice));
+					await rightAction(new Server<R, P>(server));
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static Client<S, P> Enter<S, L, P>(this Client<Cons<S, L>, P> label) where S : SessionType where L : SessionList where P : SessionType
+		public static Client<S, P> Enter<S, L, P>(this Client<Cons<S, L>, P> client) where S : SessionType where L : SessionList where P : SessionType
 		{
-			return new Client<S, P>(label);
+			return new Client<S, P>(client);
 		}
 
-		public static Server<S, P> Enter<S, L, P>(this Server<Cons<S, L>, P> label) where S : SessionType where L : SessionList where P : SessionType
+		public static Server<S, P> Enter<S, L, P>(this Server<Cons<S, L>, P> server) where S : SessionType where L : SessionList where P : SessionType
 		{
-			return new Server<S, P>(label);
+			return new Server<S, P>(server);
 		}
 
-		public static Client<S, Cons<S, L>> Zero<S, L>(this Client<Jump<Zero>, Cons<S, L>> jump) where S : SessionType where L : SessionList
+		public static Client<S, Cons<S, L>> Zero<S, L>(this Client<Jump<Zero>, Cons<S, L>> client) where S : SessionType where L : SessionList
 		{
-			return new Client<S, Cons<S, L>>(jump);
+			return new Client<S, Cons<S, L>>(client);
 		}
 
-		public static Server<S, Cons<S, L>> Zero<S, L>(this Server<Jump<Zero>, Cons<S, L>> jump) where S : SessionType where L : SessionList
+		public static Server<S, Cons<S, L>> Zero<S, L>(this Server<Jump<Zero>, Cons<S, L>> server) where S : SessionType where L : SessionList
 		{
-			return new Server<S, Cons<S, L>>(jump);
+			return new Server<S, Cons<S, L>>(server);
 		}
 
 		public static void Close<P>(this Client<Close, P> client) where P : SessionType
