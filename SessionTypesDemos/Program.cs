@@ -55,7 +55,7 @@ namespace SessionTypesDemos
 			var client = BinarySessionChannel<Request<int, Respond<string, Close>>>.Fork(async server =>
 			{
 				// サーバースレッドの処理
-				server.Receive(out var num).Send(ToOrdinal(num, false));
+				server.Receive(out var num).Let(out var ord, ToOrdinal(num, false)).Send(ord);
 				await Task.Yield(); // ダミー await
 			});
 			// クライアント側の処理
@@ -76,7 +76,8 @@ namespace SessionTypesDemos
 			{
 				// サーバースレッドの処理
 				Console.WriteLine("Server Start");
-				var (s1, n) = await server.ReceiveAsync();
+				//var (s1, n) = await server.ReceiveAsync(); # Bindの導入
+				var s1 = (await server.ReceiveAsync()).Bind(out var n);
 				Console.WriteLine($"Server Received: {n}");
 				var (s2, m) = await s1.ReceiveAsync();
 				Console.WriteLine($"Server Received: {m}");
