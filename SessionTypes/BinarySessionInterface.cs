@@ -447,6 +447,26 @@ namespace SessionTypes.Binary
 			return new Server<S, P>(server);
 		}
 
+		public static void Enter<S, L, P>(this Client<Cons<S, L>, P> client, Action<Client<S, P>> action) where S : SessionType where L : SessionList where P : SessionType
+		{
+			action(new Client<S, P>(client));
+		}
+
+		public static Task Enter<S, L, P>(this Client<Cons<S, L>, P> client, Func<Client<S, P>, Task> action) where S : SessionType where L : SessionList where P : SessionType
+		{
+			return action(new Client<S, P>(client));
+		}
+
+		public static void Enter<S, L, P>(this Server<Cons<S, L>, P> server, Action<Server<S, P>> action) where S : SessionType where L : SessionList where P : SessionType
+		{
+			action(new Server<S, P>(server));
+		}
+
+		public static Task Enter<S, L, P>(this Server<Cons<S, L>, P> server, Func<Server<S, P>, Task> action) where S : SessionType where L : SessionList where P : SessionType
+		{
+			return action(new Server<S, P>(server));
+		}
+
 		public static Client<S, Cons<S, L>> Zero<S, L>(this Client<Jump<Zero>, Cons<S, L>> client) where S : SessionType where L : SessionList
 		{
 			return new Client<S, Cons<S, L>>(client);
