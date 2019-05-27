@@ -35,6 +35,23 @@ namespace SessionTypes.Binary.Threading
 			return client;
 		}
 
+		public static Client<P, P>[] Distribute<A>(Action<Server<P, P>, A> threadFunction, A[] args)
+		{
+			int n = args.Length;
+			var clients = new Client<P, P>[n];
+			var servers = new Server<P, P>[n];
+			for (int i = 0; i < n; i++)
+			{
+				var (c, s) = NewChannel();
+				clients[i] = c;
+				servers[i] = s;
+				var threadStart = new ThreadStart(() => threadFunction(servers[i], args[i]));
+				var thread = new Thread(threadStart);
+				thread.Start();
+			}
+			return clients;
+		}
+
 		public static (Client<P, P>, Server<P, P>) Pipeline<A>(Action<Server<P, P>, Client<P, P>, A> threadFunction, A[] args)
 		{
 			int n = args.Length + 1;
