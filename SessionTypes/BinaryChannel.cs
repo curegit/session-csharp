@@ -42,10 +42,11 @@ namespace SessionTypes.Binary.Threading
 			var servers = new Server<P, P>[n];
 			for (int i = 0; i < n; i++)
 			{
+				var threadNumber = i;
 				var (c, s) = NewChannel();
-				clients[i] = c;
-				servers[i] = s;
-				var threadStart = new ThreadStart(() => threadFunction(servers[i], args[i]));
+				clients[threadNumber] = c;
+				servers[threadNumber] = s;
+				var threadStart = new ThreadStart(() => threadFunction(servers[threadNumber], args[threadNumber]));
 				var thread = new Thread(threadStart);
 				thread.Start();
 			}
