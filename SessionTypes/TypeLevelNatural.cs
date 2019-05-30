@@ -62,7 +62,7 @@ namespace SessionTypes
 		}
 	}
 
-	public sealed class Successor<N> : TypeLevelNatural where N : TypeLevelNatural, new()
+	public sealed class Succ<N> : TypeLevelNatural where N : TypeLevelNatural, new()
 	{
 		public override int Evaluate()
 		{

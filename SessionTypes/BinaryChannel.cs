@@ -7,17 +7,11 @@ namespace SessionTypes.Binary.Threading
 {
 	public static class BinarySessionChannel<P> where P : SessionType
 	{
-		private static (Server<P, P> server, Client<P, P> client) NewChannel()
+		private static (Client<P, P> client, Server<P, P> server) NewChannel()
 		{
 			var up = Channel.CreateUnbounded<object>();
 			var down = Channel.CreateUnbounded<object>();
-			return (NewServer(up, down), NewClient(up, down));
-		}
-
-		private static Server<P, P> NewServer(Channel<object> up, Channel<object> down)
-		{
-			var c = new BinaryChannelCommunication(up.Reader, down.Writer);
-			return new Server<P, P>(c);
+			return (NewClient(up, down), NewServer(up, down));
 		}
 
 		private static Client<P, P> NewClient(Channel<object> up, Channel<object> down)
@@ -26,23 +20,47 @@ namespace SessionTypes.Binary.Threading
 			return new Client<P, P>(c);
 		}
 
+		private static Server<P, P> NewServer(Channel<object> up, Channel<object> down)
+		{
+			var c = new BinaryChannelCommunication(up.Reader, down.Writer);
+			return new Server<P, P>(c);
+		}
+
 		public static Client<P, P> Fork(Action<Server<P, P>> threadFunction)
 		{
-			var (server, client) = NewChannel();
+			var (client, server) = NewChannel();
 			var threadStart = new ThreadStart(() => threadFunction(server));
 			var serverThread = new Thread(threadStart);
 			serverThread.Start();
 			return client;
 		}
 
-		public static (Server<P, P>, Client<P, P>) Pipeline<A>(Action<Server<P, P>, Client<P, P>, A> threadFunction, A[] args)
+		public static Client<P, P>[] Distribute<A>(Action<Server<P, P>, A> threadFunction, A[] args)
 		{
-			int n = args.Length + 1;
-			Server<P, P>[] servers = new Server<P, P>[n];
-			Client<P, P>[] clients = new Client<P, P>[n];
+			int n = args.Length;
+			var clients = new Client<P, P>[n];
+			var servers = new Server<P, P>[n];
 			for (int i = 0; i < n; i++)
 			{
-				var (s, c) = NewChannel();
+				var threadNumber = i;
+				var (c, s) = NewChannel();
+				clients[threadNumber] = c;
+				servers[threadNumber] = s;
+				var threadStart = new ThreadStart(() => threadFunction(servers[threadNumber], args[threadNumber]));
+				var thread = new Thread(threadStart);
+				thread.Start();
+			}
+			return clients;
+		}
+
+		public static (Client<P, P>, Server<P, P>) Pipeline<A>(Action<Server<P, P>, Client<P, P>, A> threadFunction, A[] args)
+		{
+			int n = args.Length + 1;
+			Client<P, P>[] clients = new Client<P, P>[n];
+			Server<P, P>[] servers = new Server<P, P>[n];
+			for (int i = 0; i < n; i++)
+			{
+				var (c, s) = NewChannel();
 				clients[i] = c;
 				servers[(i + 1) % n] = s;
 			}
@@ -53,11 +71,11 @@ namespace SessionTypes.Binary.Threading
 				var thread = new Thread(threadStart);
 				thread.Start();
 			}
-			return (servers[0], clients[0]);
+			return (clients[0], servers[0]);
 		}
 	}
 
-	public class BinaryChannelCommunication : BinaryCommunication
+	internal class BinaryChannelCommunication : BinaryCommunicator
 	{
 		private ChannelReader<object> reader;
 		private ChannelWriter<object> writer;
@@ -68,16 +86,29 @@ namespace SessionTypes.Binary.Threading
 			this.writer = writer;
 		}
 
-		public override async void Send<T>(T value)
+		public override void Send<T>(T value)
 		{
-			await writer.WriteAsync(value);
+			Task.Run(async () => await writer.WriteAsync(value)).Wait();
+		}
+
+		public override Task SendAsync<T>(T value)
+		{
+			return writer.WriteAsync(value).AsTask();
+		}
+
+		public override T Receive<T>()
+		{
+			return (T)Task.Run(async () => await reader.ReadAsync()).Result;
 		}
 
 		public override async Task<T> ReceiveAsync<T>()
 		{
-			await reader.WaitToReadAsync();
-			reader.TryRead(out var obj);
-			return (T)obj;
+			return (T)await reader.ReadAsync();
+		}
+
+		public override void Close()
+		{
+			writer.Complete();
 		}
 	}
 }

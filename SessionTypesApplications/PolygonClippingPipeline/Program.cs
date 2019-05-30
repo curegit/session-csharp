@@ -58,7 +58,7 @@ namespace PolygonClippingPipeline
 			}
 
 			// 本命のパイプライン処理
-			var (retc, argc) = BinarySessionChannel<Block<RequestChoice<Request<Vector, Jump<Zero>>, Close>, EndBlock>>.Pipeline
+			var (argc, retc) = BinarySessionChannel<Cons<RequestChoice<Request<Vector, Jump<Zero>>, Close>, Nil>>.Pipeline
 			(
 				// それぞれのパイプラインスレッドの処理
 				async (prev, next, edge) =>
@@ -71,11 +71,11 @@ namespace PolygonClippingPipeline
 					while (true)
 					{
 						bool breakFlag = false;
-						await prev1.Follow
+						await prev1.FollowAsync
 						(
 							async left =>
 							{
-								var (prev2, vertex) = await left.Receive();
+								var (prev2, vertex) = await left.ReceiveAsync();
 								from = to;
 								to = vertex;
 								if (first == null)
@@ -94,7 +94,7 @@ namespace PolygonClippingPipeline
 								}
 								prev1 = prev2.Zero();
 							},
-							async right =>
+							right =>
 							{
 								var clipped = Clip((to, first.Value), edge);
 								foreach (var v in clipped)
@@ -132,15 +132,15 @@ namespace PolygonClippingPipeline
 			while (true)
 			{
 				bool breakFlag = false;
-				await retc1.Follow
+				await retc1.FollowAsync
 				(
 					async left =>
 					{
-						var (retc2, vertex) = await left.Receive();
+						var (retc2, vertex) = await left.ReceiveAsync();
 						result.Add(vertex);
 						retc1 = retc2.Zero();
 					},
-					async right =>
+					right =>
 					{
 						breakFlag = true;
 					}

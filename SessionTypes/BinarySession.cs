@@ -1,186 +1,152 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace SessionTypes.Binary
 {
-	public static class BinarySession
+	public abstract class BinarySession
 	{
-		public static Server<S, FS> Send<T, S, FS>(this Server<Respond<T, S>, FS> respond, T value) where S : SessionType where FS : SessionType
+		private bool used;
+
+		private readonly BinaryCommunicator communicator;
+
+		internal BinarySession(BinarySession session)
 		{
-			var c = respond.GetInternalCommunication();
-			c.Send(value);
-			return new Server<S, FS>(c);
+			communicator = session.communicator;
 		}
 
-		public static Client<S, FS> Send<T, S, FS>(this Client<Request<T, S>, FS> request, T value) where S : SessionType where FS : SessionType
+		private protected BinarySession(BinaryCommunicator communicator)
 		{
-			var c = request.GetInternalCommunication();
-			c.Send(value);
-			return new Client<S, FS>(c);
+			this.communicator = communicator;
 		}
 
-		public static async Task<(Server<S, FS>, T)> Receive<T, S, FS>(this Server<Request<T, S>, FS> request) where S : SessionType where FS : SessionType
+		internal void Send<T>(T value)
 		{
-			var c = request.GetInternalCommunication();
-			return await Task.Run(async () =>
+			if (used)
 			{
-				var v = await c.ReceiveAsync<T>();
-				return (new Server<S, FS>(c), v);
-			});
-		}
-
-		public static async Task<(Client<S, FS>, T)> Receive<T, S, FS>(this Client<Respond<T, S>, FS> respond) where S : SessionType where FS : SessionType
-		{
-			var c = respond.GetInternalCommunication();
-			return await Task.Run(async () =>
-			{
-				T v = await c.ReceiveAsync<T>();
-				return (new Client<S, FS>(c), v);
-			});
-		}
-
-		public static Server<S, FS> Enter<S, B, FS>(this Server<Block<S, B>, FS> label) where S : SessionType where B : IBlock where FS : SessionType
-		{
-			return new Server<S, FS>(label.GetInternalCommunication());
-		}
-
-		public static Server<S, Block<S, B>> Zero<S, B>(this Server<Jump<Zero>, Block<S, B>> jump) where S : SessionType where B : IBlock
-		{
-			return new Server<S, Block<S, B>>(jump.GetInternalCommunication());
-		}
-
-		public static Client<S, FS> Enter<S, B, FS>(this Client<Block<S, B>, FS> label) where S : SessionType where B : IBlock where FS : SessionType
-		{
-			return new Client<S, FS>(label.GetInternalCommunication());
-		}
-
-		public static Client<S, Block<S, B>> Zero<S, B>(this Client<Jump<Zero>, Block<S, B>> jump) where S : SessionType where B : IBlock
-		{
-			return new Client<S, Block<S, B>>(jump.GetInternalCommunication());
-		}
-
-		public static Server<SL, FS> ChooseLeft<SL, SR, FS>(this Server<RespondChoice<SL, SR>, FS> respondChoice) where SL : SessionType where SR : SessionType where FS : SessionType
-		{
-			var c = respondChoice.GetInternalCommunication();
-			c.Send(1);
-			return new Server<SL, FS>(c);
-		}
-
-		public static Server<SR, FS> ChooseRight<SL, SR, FS>(this Server<RespondChoice<SL, SR>, FS> respondChoice) where SL : SessionType where SR : SessionType where FS : SessionType
-		{
-			var c = respondChoice.GetInternalCommunication();
-			c.Send(2);
-			return new Server<SR, FS>(c);
-		}
-
-		public static Client<SL, FS> ChooseLeft<SL, SR, FS>(this Client<RequestChoice<SL, SR>, FS> requestChoice) where SL : SessionType where SR : SessionType where FS : SessionType
-		{
-			var c = requestChoice.GetInternalCommunication();
-			c.Send(1);
-			return new Client<SL, FS>(c);
-		}
-
-		public static Client<SR, FS> ChooseRight<SL, SR, FS>(this Client<RequestChoice<SL, SR>, FS> requestChoice) where SL : SessionType where SR : SessionType where FS : SessionType
-		{
-			var c = requestChoice.GetInternalCommunication();
-			c.Send(2);
-			return new Client<SR, FS>(c);
-		}
-
-		public static async Task Follow<SL, SR, FS>(this Server<RequestChoice<SL, SR>, FS> requestChoice, Func<Server<SL, FS>, Task> leftAction, Func<Server<SR, FS>, Task> rightAction) where SL : SessionType where SR : SessionType where FS : SessionType
-		{
-			var c = requestChoice.GetInternalCommunication();
-			var v = await Task.Run(async () => await c.ReceiveAsync<int>());
-
-			if (v == 1)
-			{
-				await leftAction(new Server<SL, FS>(c));
-			}
-			else if (v == 2)
-			{
-				await rightAction(new Server<SR, FS>(c));
+				throw new LinearityViolationException();
 			}
 			else
 			{
-
+				used = true;
+				communicator.Send(value);
 			}
 		}
 
-		public static async Task Follow<SL, SR, FS>(this Client<RespondChoice<SL, SR>, FS> respondChoice, Func<Client<SL, FS>, Task> leftAction, Func<Client<SR, FS>, Task> rightAction) where SL : SessionType where SR : SessionType where FS : SessionType
+		internal Task SendAsync<T>(T value)
 		{
-			var c = respondChoice.GetInternalCommunication();
-			var v = await Task.Run(async () => await c.ReceiveAsync<int>());
-
-			if (v == 1)
+			if (used)
 			{
-				await leftAction(new Client<SL, FS>(c));
-			}
-			else if (v == 2)
-			{
-				await rightAction(new Client<SR, FS>(c));
+				throw new LinearityViolationException();
 			}
 			else
 			{
-
+				used = true;
+				return communicator.SendAsync(value);
 			}
 		}
-	}
 
-	public abstract class Communicator
-	{
-		private int used = 0;
-
-		private BinaryCommunication binaryCommunication;
-
-		public Communicator(BinaryCommunication communication)
+		internal T Receive<T>()
 		{
-			binaryCommunication = communication;
-		}
-
-		public BinaryCommunication GetInternalCommunication()
-		{
-			if (used != 0)
+			if (used)
 			{
-				throw new InvalidOperationException();
+				throw new LinearityViolationException();
 			}
-			used++;
-			return binaryCommunication;
+			else
+			{
+				used = true;
+				return communicator.Receive<T>();
+			}
 		}
-	}
 
-	public sealed class Server<S, FS> : Communicator where S : SessionType where FS : SessionType
-	{
-		public Server(BinaryCommunication communication) : base(communication)
+		internal Task<T> ReceiveAsync<T>()
 		{
-
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				return communicator.ReceiveAsync<T>();
+			}	
 		}
-	}
 
-	public sealed class Client<S, FS> : Communicator where S : SessionType where FS : SessionType
-	{
-		public Client(BinaryCommunication communication) : base(communication)
+		internal void Choose(BinaryChoice choice)
 		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				communicator.Choose(choice);
+			}
+		}
 
+		internal Task ChooseAsync(BinaryChoice choice)
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				return communicator.ChooseAsync(choice);
+			}
+		}
+
+		internal BinaryChoice Follow()
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				return communicator.Follow();
+			}
+		}
+
+		internal Task<BinaryChoice> FollowAsync()
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				return communicator.FollowAsync();
+			}
+		}
+
+		internal void Close()
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				communicator.Close();
+			}
 		}
 	}
 
-	public abstract class IBlock : SessionType { }
+	public sealed class Client<S, P> : BinarySession where S : SessionType where P : SessionType
+	{
+		internal Client(BinarySession session) : base(session) { }
 
-	public sealed class EndBlock : IBlock { }
+		internal Client(BinaryCommunicator communicator) : base(communicator) { }
+	}
 
-	public sealed class Block<S, B> : IBlock where S : SessionType where B : IBlock { }
+	public sealed class Server<S, P> : BinarySession where S : SessionType where P : SessionType
+	{
+		internal Server(BinarySession session) : base(session) { }
 
-	public abstract class SessionType { }
-
-	public sealed class Request<T, S> : SessionType where S : SessionType { }
-
-	public sealed class Respond<T, S> : SessionType where S : SessionType { }
-
-	public sealed class RequestChoice<SL, SR> : SessionType where SL : SessionType where SR : SessionType { }
-
-	public sealed class RespondChoice<SL, SR> : SessionType where SL : SessionType where SR : SessionType { }
-
-	public sealed class Jump<N> : SessionType where N : TypeLevelNatural { }
-
-	public sealed class Close : SessionType { }
+		internal Server(BinaryCommunicator communicator) : base(communicator) { }
+	}
 }
