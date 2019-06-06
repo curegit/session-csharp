@@ -1,4 +1,4 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
 namespace SessionTypes.Binary
 {
@@ -67,7 +67,7 @@ namespace SessionTypes.Binary
 			{
 				used = true;
 				return communicator.ReceiveAsync<T>();
-			}	
+			}
 		}
 
 		internal void Choose(BinaryChoice choice)
