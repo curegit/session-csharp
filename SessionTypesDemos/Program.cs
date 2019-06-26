@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using SessionTypes;
@@ -148,7 +148,7 @@ namespace SessionTypesDemos
 						},
 						right =>
 						{
-							
+
 						});
 					// TODO
 					if (!l)

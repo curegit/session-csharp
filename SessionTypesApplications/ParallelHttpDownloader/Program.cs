@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
@@ -63,7 +63,8 @@ namespace ParallelHttpDownloader
 				{
 					var flag = false;
 					s.Follow(
-						left => {
+						left =>
+						{
 							var s1 = left.Receive(out var url);
 							Console.WriteLine($"Thread {id} Started downloading");
 							var d = Download(http, url);
@@ -71,7 +72,8 @@ namespace ParallelHttpDownloader
 							var s2 = s1.Send(d);
 							s = s2.Zero();
 						},
-						right => {
+						right =>
+						{
 							Console.WriteLine($"Thread {id} Closed");
 							flag = true; right.Close();
 						}

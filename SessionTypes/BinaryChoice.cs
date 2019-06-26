@@ -1,4 +1,4 @@
-﻿namespace SessionTypes
+namespace SessionTypes
 {
 	internal enum BinaryChoice
 	{
