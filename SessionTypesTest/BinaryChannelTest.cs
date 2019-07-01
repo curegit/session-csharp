@@ -10,7 +10,7 @@ namespace SessionTypesTest
 		[Fact]
 		public void ContinuationPassingTest()
 		{
-			var client = BinarySessionChannel<Request<int, Respond<double, Close>>>.Fork
+			var client = BinarySessionChannel<Req<int, Resp<double, Close>>>.Fork
 			(
 				server =>
 				{

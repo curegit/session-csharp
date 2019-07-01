@@ -55,7 +55,7 @@ namespace ParallelHttpDownloader
 
 			var ids = Enumerable.Range(1, n).ToArray();
 
-			var clients = BinarySessionChannel<Cons<RequestChoice<Request<string, Respond<byte[], Jump<Zero>>>, Close>, Nil>>.Distribute((server, id) =>
+			var clients = BinarySessionChannel<Cons<RequestChoice<Req<string, Resp<byte[], Jump<Zero>>>, Close>, Nil>>.Distribute((server, id) =>
 			{
 				var s = server.Enter();
 				var http = new HttpClient();
@@ -85,7 +85,7 @@ namespace ParallelHttpDownloader
 
 
 			var entries = clients.Select(c => c.Enter()).ToList();
-			var working = new List<Task<(Client<Jump<Zero>, Cons<RequestChoice<Request<string, Respond<byte[], Jump<Zero>>>, Close>, Nil>>, byte[])>>();
+			var working = new List<Task<(Client<Jump<Zero>, Cons<RequestChoice<Req<string, Resp<byte[], Jump<Zero>>>, Close>, Nil>>, byte[])>>();
 			var data = new List<byte[]>();
 			foreach (var url in args)
 			{

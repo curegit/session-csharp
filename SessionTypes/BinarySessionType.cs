@@ -5,14 +5,14 @@ namespace SessionTypes.Binary
 		private protected SessionType() { }
 	}
 
-	public sealed class Request<T, S> : SessionType where S : SessionType
+	public sealed class Req<T, S> : SessionType where S : SessionType
 	{
-		private Request() { }
+		private Req() { }
 	}
 
-	public sealed class Respond<T, S> : SessionType where S : SessionType
+	public sealed class Resp<T, S> : SessionType where S : SessionType
 	{
-		private Respond() { }
+		private Resp() { }
 	}
 
 	public sealed class RequestChoice<L, R> : SessionType where L : SessionType where R : SessionType
