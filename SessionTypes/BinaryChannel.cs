@@ -5,7 +5,7 @@ using System.Threading.Channels;
 
 namespace SessionTypes.Binary.Threading
 {
-	public static class BinaryChannel<P> where P : SessionType
+	public static class BinaryChannel<P> where P : ProtocolType
 	{
 		private static (Client<P, P> client, Server<P, P> server) NewChannel()
 		{

@@ -136,14 +136,14 @@ namespace SessionTypes.Binary
 		}
 	}
 
-	public sealed class Client<S, P> : BinarySession where S : SessionType where P : SessionType
+	public sealed class Client<S, P> : BinarySession where S : ProtocolType where P : ProtocolType
 	{
 		internal Client(BinarySession session) : base(session) { }
 
 		internal Client(BinaryCommunicator communicator) : base(communicator) { }
 	}
 
-	public sealed class Server<S, P> : BinarySession where S : SessionType where P : SessionType
+	public sealed class Server<S, P> : BinarySession where S : ProtocolType where P : ProtocolType
 	{
 		internal Server(BinarySession session) : base(session) { }
 

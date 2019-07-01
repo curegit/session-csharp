@@ -129,6 +129,8 @@ namespace SessionTypesDemos
 		/// </summary>
 		private static async Task Example3(int n)
 		{
+			//BinaryChannel<Cons<Cons<Nil, Nil>, Nil>>.Fork(s => );
+
 			var client = BinaryChannel<Cons<Req<int, Resp<string, RequestChoice<Jump<Zero>, Eps>>>, Nil>>.Fork(async server =>
 			{
 				// サーバースレッドの処理

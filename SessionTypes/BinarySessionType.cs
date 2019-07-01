@@ -1,6 +1,11 @@
 namespace SessionTypes.Binary
 {
-	public abstract class SessionType
+	public abstract class ProtocolType
+	{
+		private protected ProtocolType() { }
+	}
+
+	public abstract class SessionType : ProtocolType
 	{
 		private protected SessionType() { }
 	}
@@ -35,7 +40,7 @@ namespace SessionTypes.Binary
 		private Eps() { }
 	}
 
-	public abstract class SessionList : SessionType
+	public abstract class SessionList : ProtocolType
 	{
 		private protected SessionList() { }
 	}
