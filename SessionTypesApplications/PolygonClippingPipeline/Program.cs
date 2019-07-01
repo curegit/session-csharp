@@ -58,7 +58,7 @@ namespace PolygonClippingPipeline
 			}
 
 			// 本命のパイプライン処理
-			var (argc, retc) = BinarySessionChannel<Cons<RequestChoice<Req<Vector, Jump<Zero>>, Close>, Nil>>.Pipeline
+			var (argc, retc) = BinarySessionChannel<Cons<RequestChoice<Req<Vector, Jump<Zero>>, Eps>, Nil>>.Pipeline
 			(
 				// それぞれのパイプラインスレッドの処理
 				async (prev, next, edge) =>

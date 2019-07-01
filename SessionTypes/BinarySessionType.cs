@@ -30,9 +30,9 @@ namespace SessionTypes.Binary
 		private Jump() { }
 	}
 
-	public sealed class Close : SessionType
+	public sealed class Eps : SessionType
 	{
-		private Close() { }
+		private Eps() { }
 	}
 
 	public abstract class SessionList : SessionType

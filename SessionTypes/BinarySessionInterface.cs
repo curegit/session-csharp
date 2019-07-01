@@ -477,12 +477,12 @@ namespace SessionTypes.Binary
 			return new Server<S, Cons<S, L>>(server);
 		}
 
-		public static void Close<P>(this Client<Close, P> client) where P : SessionType
+		public static void Close<P>(this Client<Eps, P> client) where P : SessionType
 		{
 			client.Close();
 		}
 
-		public static void Close<P>(this Server<Close, P> server) where P : SessionType
+		public static void Close<P>(this Server<Eps, P> server) where P : SessionType
 		{
 			server.Close();
 		}
