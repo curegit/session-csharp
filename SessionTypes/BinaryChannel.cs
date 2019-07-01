@@ -5,7 +5,7 @@ using System.Threading.Channels;
 
 namespace SessionTypes.Binary.Threading
 {
-	public static class BinarySessionChannel<P> where P : SessionType
+	public static class BinaryChannel<P> where P : SessionType
 	{
 		private static (Client<P, P> client, Server<P, P> server) NewChannel()
 		{
@@ -16,13 +16,13 @@ namespace SessionTypes.Binary.Threading
 
 		private static Client<P, P> NewClient(Channel<object> up, Channel<object> down)
 		{
-			var c = new BinaryChannelCommunication(down.Reader, up.Writer);
+			var c = new BinaryChannelCommunicator(down.Reader, up.Writer);
 			return new Client<P, P>(c);
 		}
 
 		private static Server<P, P> NewServer(Channel<object> up, Channel<object> down)
 		{
-			var c = new BinaryChannelCommunication(up.Reader, down.Writer);
+			var c = new BinaryChannelCommunicator(up.Reader, down.Writer);
 			return new Server<P, P>(c);
 		}
 
@@ -75,12 +75,12 @@ namespace SessionTypes.Binary.Threading
 		}
 	}
 
-	internal class BinaryChannelCommunication : BinaryCommunicator
+	internal class BinaryChannelCommunicator : BinaryCommunicator
 	{
 		private ChannelReader<object> reader;
 		private ChannelWriter<object> writer;
 
-		public BinaryChannelCommunication(ChannelReader<object> reader, ChannelWriter<object> writer)
+		public BinaryChannelCommunicator(ChannelReader<object> reader, ChannelWriter<object> writer)
 		{
 			this.reader = reader;
 			this.writer = writer;

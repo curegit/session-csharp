@@ -55,7 +55,7 @@ namespace ParallelHttpDownloader
 
 			var ids = Enumerable.Range(1, n).ToArray();
 
-			var clients = BinarySessionChannel<Cons<RequestChoice<Req<string, Resp<byte[], Jump<Zero>>>, Eps>, Nil>>.Distribute((server, id) =>
+			var clients = BinaryChannel<Cons<RequestChoice<Req<string, Resp<byte[], Jump<Zero>>>, Eps>, Nil>>.Distribute((server, id) =>
 			{
 				var s = server.Enter();
 				var http = new HttpClient();

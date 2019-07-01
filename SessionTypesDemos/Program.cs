@@ -52,7 +52,7 @@ namespace SessionTypesDemos
 		/// </summary>
 		private static async Task Example1(int n)
 		{
-			var client = BinarySessionChannel<Req<int, Resp<string, Eps>>>.Fork(async server =>
+			var client = BinaryChannel<Req<int, Resp<string, Eps>>>.Fork(async server =>
 			{
 				// サーバースレッドの処理
 				server.Receive(out var num).Let(out var ord, ToOrdinal(num, false)).Send(ord);
@@ -72,7 +72,7 @@ namespace SessionTypesDemos
 		/// </summary>
 		private static async Task Example2(int dividend, int divisor)
 		{
-			var client = BinarySessionChannel<Req<int, Req<int, RespondChoice<Resp<int, Eps>, Resp<string, Eps>>>>>.Fork(async server =>
+			var client = BinaryChannel<Req<int, Req<int, RespondChoice<Resp<int, Eps>, Resp<string, Eps>>>>>.Fork(async server =>
 			{
 				// サーバースレッドの処理
 				Console.WriteLine("Server Start");
@@ -129,7 +129,7 @@ namespace SessionTypesDemos
 		/// </summary>
 		private static async Task Example3(int n)
 		{
-			var client = BinarySessionChannel<Cons<Req<int, Resp<string, RequestChoice<Jump<Zero>, Eps>>>, Nil>>.Fork(async server =>
+			var client = BinaryChannel<Cons<Req<int, Resp<string, RequestChoice<Jump<Zero>, Eps>>>, Nil>>.Fork(async server =>
 			{
 				// サーバースレッドの処理
 				var s1 = server.Enter();
