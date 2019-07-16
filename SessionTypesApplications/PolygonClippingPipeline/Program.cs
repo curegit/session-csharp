@@ -58,7 +58,7 @@ namespace PolygonClippingPipeline
 			}
 
 			// 本命のパイプライン処理
-			var (argc, retc) = BinaryChannel<Cons<RequestChoice<Req<Vector, Jump<Zero>>, Eps>, Nil>>.Pipeline
+			var (argc, retc) = BinaryChannel<Cons<ReqChoice<Req<Vector, Goto0>, Eps>, Nil>>.Pipeline
 			(
 				// それぞれのパイプラインスレッドの処理
 				async (prev, next, edge) =>
@@ -89,10 +89,10 @@ namespace PolygonClippingPipeline
 									{
 										var next2 = next1.ChooseLeft();
 										var next3 = next2.Send(v);
-										next1 = next3.Zero();
+										next1 = next3.Jump();
 									}
 								}
-								prev1 = prev2.Zero();
+								prev1 = prev2.Jump();
 							},
 							right =>
 							{
@@ -101,7 +101,7 @@ namespace PolygonClippingPipeline
 								{
 									var next2 = next1.ChooseLeft();
 									var next3 = next2.Send(v);
-									next1 = next3.Zero();
+									next1 = next3.Jump();
 								}
 								next1.ChooseRight();
 								breakFlag = true;
@@ -122,7 +122,7 @@ namespace PolygonClippingPipeline
 			{
 				var argc2 = argc1.ChooseLeft();
 				var argc3 = argc2.Send(v);
-				argc1 = argc3.Zero();
+				argc1 = argc3.Jump();
 			}
 			argc1.ChooseRight();
 
@@ -138,7 +138,7 @@ namespace PolygonClippingPipeline
 					{
 						var (retc2, vertex) = await left.ReceiveAsync();
 						result.Add(vertex);
-						retc1 = retc2.Zero();
+						retc1 = retc2.Jump();
 					},
 					right =>
 					{

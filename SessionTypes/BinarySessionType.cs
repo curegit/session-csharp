@@ -20,19 +20,29 @@ namespace SessionTypes.Binary
 		private Resp() { }
 	}
 
-	public sealed class RequestChoice<L, R> : SessionType where L : SessionType where R : SessionType
+	public sealed class ReqChoice<L, R> : SessionType where L : SessionType where R : SessionType
 	{
-		private RequestChoice() { }
+		private ReqChoice() { }
 	}
 
-	public sealed class RespondChoice<L, R> : SessionType where L : SessionType where R : SessionType
+	public sealed class RespChoice<L, R> : SessionType where L : SessionType where R : SessionType
 	{
-		private RespondChoice() { }
+		private RespChoice() { }
 	}
 
-	public sealed class Jump<N> : SessionType where N : TypeLevelNatural
+	public sealed class Goto0 : SessionType
 	{
-		private Jump() { }
+		private Goto0() { }
+	}
+
+	public sealed class Goto1 : SessionType
+	{
+		private Goto1() { }
+	}
+
+	public sealed class Goto2 : SessionType
+	{
+		private Goto2() { }
 	}
 
 	public sealed class Eps : SessionType

@@ -149,55 +149,55 @@ namespace SessionTypes.Binary
 			await action(new Server<S, P>(server), await server.ReceiveAsync<T>());
 		}
 
-		public static Client<L, P> ChooseLeft<L, R, P>(this Client<RequestChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : ProtocolType
+		public static Client<L, P> ChooseLeft<L, R, P>(this Client<ReqChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			client.Choose(BinaryChoice.Left);
 			return new Client<L, P>(client);
 		}
 
-		public static Client<R, P> ChooseRight<L, R, P>(this Client<RequestChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : ProtocolType
+		public static Client<R, P> ChooseRight<L, R, P>(this Client<ReqChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			client.Choose(BinaryChoice.Right);
 			return new Client<R, P>(client);
 		}
 
-		public static Server<L, P> ChooseLeft<L, R, P>(this Server<RespondChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : ProtocolType
+		public static Server<L, P> ChooseLeft<L, R, P>(this Server<RespChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			server.Choose(BinaryChoice.Left);
 			return new Server<L, P>(server);
 		}
 
-		public static Server<R, P> ChooseRight<L, R, P>(this Server<RespondChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : ProtocolType
+		public static Server<R, P> ChooseRight<L, R, P>(this Server<RespChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			server.Choose(BinaryChoice.Right);
 			return new Server<R, P>(server);
 		}
 
-		public static async Task<Client<L, P>> ChooseLeftAsync<L, R, P>(this Client<RequestChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task<Client<L, P>> ChooseLeftAsync<L, R, P>(this Client<ReqChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			await client.ChooseAsync(BinaryChoice.Left);
 			return new Client<L, P>(client);
 		}
 
-		public static async Task<Client<R, P>> ChooseRightAsync<L, R, P>(this Client<RequestChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task<Client<R, P>> ChooseRightAsync<L, R, P>(this Client<ReqChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			await client.ChooseAsync(BinaryChoice.Right);
 			return new Client<R, P>(client);
 		}
 
-		public static async Task<Server<L, P>> ChooseLeftAsync<L, R, P>(this Server<RespondChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task<Server<L, P>> ChooseLeftAsync<L, R, P>(this Server<RespChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			await server.ChooseAsync(BinaryChoice.Left);
 			return new Server<L, P>(server);
 		}
 
-		public static async Task<Server<R, P>> ChooseRightAsync<L, R, P>(this Server<RespondChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task<Server<R, P>> ChooseRightAsync<L, R, P>(this Server<RespChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			await server.ChooseAsync(BinaryChoice.Right);
 			return new Server<R, P>(server);
 		}
 
-		public static void Follow<L, R, P>(this Client<RespondChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static void Follow<L, R, P>(this Client<RespChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (client.Follow())
 			{
@@ -212,7 +212,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Client<RespondChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task Follow<L, R, P>(this Client<RespChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (client.Follow())
 			{
@@ -227,7 +227,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Client<RespondChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task Follow<L, R, P>(this Client<RespChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (client.Follow())
 			{
@@ -242,7 +242,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Client<RespondChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task Follow<L, R, P>(this Client<RespChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (client.Follow())
 			{
@@ -257,7 +257,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static void Follow<L, R, P>(this Server<RequestChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static void Follow<L, R, P>(this Server<ReqChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (server.Follow())
 			{
@@ -272,7 +272,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Server<RequestChoice<L, R>, P> server, Func<Server<L, P>, Task> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task Follow<L, R, P>(this Server<ReqChoice<L, R>, P> server, Func<Server<L, P>, Task> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (server.Follow())
 			{
@@ -287,7 +287,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Server<RequestChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task Follow<L, R, P>(this Server<ReqChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (server.Follow())
 			{
@@ -302,7 +302,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Server<RequestChoice<L, R>, P> server, Func<Server<L, P>, Task> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task Follow<L, R, P>(this Server<ReqChoice<L, R>, P> server, Func<Server<L, P>, Task> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (server.Follow())
 			{
@@ -317,7 +317,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task FollowAsync<L, R, P>(this Client<RespChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (await client.FollowAsync())
 			{
@@ -332,7 +332,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task FollowAsync<L, R, P>(this Client<RespChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (await client.FollowAsync())
 			{
@@ -347,7 +347,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task FollowAsync<L, R, P>(this Client<RespChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (await client.FollowAsync())
 			{
@@ -362,7 +362,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Client<RespondChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task FollowAsync<L, R, P>(this Client<RespChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (await client.FollowAsync())
 			{
@@ -377,7 +377,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task FollowAsync<L, R, P>(this Server<ReqChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (await server.FollowAsync())
 			{
@@ -392,7 +392,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> server, Func<Server<L, P>, Task> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task FollowAsync<L, R, P>(this Server<ReqChoice<L, R>, P> server, Func<Server<L, P>, Task> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (await server.FollowAsync())
 			{
@@ -407,7 +407,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task FollowAsync<L, R, P>(this Server<ReqChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (await server.FollowAsync())
 			{
@@ -422,7 +422,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Server<RequestChoice<L, R>, P> server, Func<Server<L, P>, Task> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task FollowAsync<L, R, P>(this Server<ReqChoice<L, R>, P> server, Func<Server<L, P>, Task> leftAction, Func<Server<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (await server.FollowAsync())
 			{
@@ -467,12 +467,12 @@ namespace SessionTypes.Binary
 			return action(new Server<S, P>(server));
 		}
 
-		public static Client<S, Cons<S, L>> Zero<S, L>(this Client<Jump<Zero>, Cons<S, L>> client) where S : SessionType where L : SessionList
+		public static Client<S, Cons<S, L>> Jump<S, L>(this Client<Goto0, Cons<S, L>> client) where S : SessionType where L : SessionList
 		{
 			return new Client<S, Cons<S, L>>(client);
 		}
 
-		public static Server<S, Cons<S, L>> Zero<S, L>(this Server<Jump<Zero>, Cons<S, L>> server) where S : SessionType where L : SessionList
+		public static Server<S, Cons<S, L>> Jump<S, L>(this Server<Goto0, Cons<S, L>> server) where S : SessionType where L : SessionList
 		{
 			return new Server<S, Cons<S, L>>(server);
 		}

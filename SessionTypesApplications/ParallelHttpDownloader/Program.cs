@@ -55,7 +55,7 @@ namespace ParallelHttpDownloader
 
 			var ids = Enumerable.Range(1, n).ToArray();
 
-			var clients = BinaryChannel<Cons<RequestChoice<Req<string, Resp<byte[], Jump<Zero>>>, Eps>, Nil>>.Distribute((server, id) =>
+			var clients = BinaryChannel<Cons<ReqChoice<Req<string, Resp<byte[], Goto0>>, Eps>, Nil>>.Distribute((server, id) =>
 			{
 				var s = server.Enter();
 				var http = new HttpClient();
@@ -70,7 +70,7 @@ namespace ParallelHttpDownloader
 							var d = Download(http, url);
 							Console.WriteLine($"Thread {id} Finished downloading");
 							var s2 = s1.Send(d);
-							s = s2.Zero();
+							s = s2.Jump();
 						},
 						right =>
 						{
@@ -85,7 +85,7 @@ namespace ParallelHttpDownloader
 
 
 			var entries = clients.Select(c => c.Enter()).ToList();
-			var working = new List<Task<(Client<Jump<Zero>, Cons<RequestChoice<Req<string, Resp<byte[], Jump<Zero>>>, Eps>, Nil>>, byte[])>>();
+			var working = new List<Task<(Client<Goto0, Cons<ReqChoice<Req<string, Resp<byte[], Goto0>>, Eps>, Nil>>, byte[])>>();
 			var data = new List<byte[]>();
 			foreach (var url in args)
 			{
@@ -96,7 +96,7 @@ namespace ParallelHttpDownloader
 					working.Remove(task);
 					var e = task.Result.Bind(out var bytes);
 					data.Add(bytes);
-					entries.Add(e.Zero());
+					entries.Add(e.Jump());
 				}
 
 				working.Add(entries[0].ChooseLeft().Send(url).ReceiveAsync());
@@ -115,7 +115,7 @@ namespace ParallelHttpDownloader
 				working.Remove(task);
 				var e = task.Result.Bind(out var bytes);
 				data.Add(bytes);
-				e.Zero().ChooseRight().Close();
+				e.Jump().ChooseRight().Close();
 			}
 
 			for (int i = 0; i < data.Count; i++)

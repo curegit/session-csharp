@@ -72,7 +72,7 @@ namespace SessionTypesDemos
 		/// </summary>
 		private static async Task Example2(int dividend, int divisor)
 		{
-			var client = BinaryChannel<Req<int, Req<int, RespondChoice<Resp<int, Eps>, Resp<string, Eps>>>>>.Fork(async server =>
+			var client = BinaryChannel<Req<int, Req<int, RespChoice<Resp<int, Eps>, Resp<string, Eps>>>>>.Fork(async server =>
 			{
 				// サーバースレッドの処理
 				Console.WriteLine("Server Start");
@@ -131,7 +131,7 @@ namespace SessionTypesDemos
 		{
 			//BinaryChannel<Cons<Cons<Nil, Nil>, Nil>>.Fork(s => );
 
-			var client = BinaryChannel<Cons<Req<int, Resp<string, RequestChoice<Jump<Zero>, Eps>>>, Nil>>.Fork(async server =>
+			var client = BinaryChannel<Cons<Req<int, Resp<string, ReqChoice<Goto0, Eps>>>, Nil>>.Fork(async server =>
 			{
 				// サーバースレッドの処理
 				var s1 = server.Enter();
@@ -145,7 +145,7 @@ namespace SessionTypesDemos
 						left =>
 						{
 							l = true;
-							s1 = left.Zero();
+							s1 = left.Jump();
 							// TODO 本当はここからループはじめに飛びたい
 						},
 						right =>
@@ -172,7 +172,7 @@ namespace SessionTypesDemos
 					c3.ChooseRight();
 					break;
 				}
-				c1 = c3.ChooseLeft().Zero();
+				c1 = c3.ChooseLeft().Jump();
 				j++;
 			}
 		}
