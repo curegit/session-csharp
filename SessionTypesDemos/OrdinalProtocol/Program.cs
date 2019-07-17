@@ -4,11 +4,18 @@ using SessionTypes.Binary.Threading;
 
 namespace OrdinalProtocol
 {
+	using OrdProtocol = Req<int, Resp<string, Eps>>;
+
 	public class Program
 	{
 		public static void Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
+			var client = BinaryChannel<OrdProtocol>.Fork(server =>
+			{
+				server.Receive(out var number).Send(ToOrdinalString(number)).Close();
+			});
+			client.Send(21).Receive(out var ordinal).Close();
+			Console.WriteLine(ordinal);
 		}
 
 		private static string ToOrdinalString(int n)
