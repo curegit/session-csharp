@@ -10,8 +10,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolygonClippingPipeline", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParallelHttpDownloader", "SessionTypesApplications\ParallelHttpDownloader\ParallelHttpDownloader.csproj", "{7DB12895-6C1E-4D1E-BAA1-9119A9F82BBA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AdderProtocol", "SessionTypesDemos\AdderProtocol\AdderProtocol.csproj", "{FF8C10BA-682B-439D-B6F3-D124A06C2538}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrdinalProtocol", "SessionTypesDemos\OrdinalProtocol\OrdinalProtocol.csproj", "{A8158303-52C1-4E16-8A45-5715CFAEACAD}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SummationProtocol", "SessionTypesDemos\SummationProtocol\SummationProtocol.csproj", "{EBD7E10A-5877-479D-8EE2-E8BADC50AF91}"
@@ -40,10 +38,6 @@ Global
 		{7DB12895-6C1E-4D1E-BAA1-9119A9F82BBA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7DB12895-6C1E-4D1E-BAA1-9119A9F82BBA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7DB12895-6C1E-4D1E-BAA1-9119A9F82BBA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF8C10BA-682B-439D-B6F3-D124A06C2538}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF8C10BA-682B-439D-B6F3-D124A06C2538}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF8C10BA-682B-439D-B6F3-D124A06C2538}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF8C10BA-682B-439D-B6F3-D124A06C2538}.Release|Any CPU.Build.0 = Release|Any CPU
 		{A8158303-52C1-4E16-8A45-5715CFAEACAD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{A8158303-52C1-4E16-8A45-5715CFAEACAD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A8158303-52C1-4E16-8A45-5715CFAEACAD}.Release|Any CPU.ActiveCfg = Release|Any CPU
