@@ -467,6 +467,16 @@ namespace SessionTypes.Binary
 			return action(new Server<S, P>(server));
 		}
 
+		public static Client<S, S> Jump<S>(this Client<Goto0, S> client) where S : SessionType
+		{
+			return new Client<S, S>(client);
+		}
+
+		public static Server<S, S> Jump<S>(this Server<Goto0, S> server) where S : SessionType
+		{
+			return new Server<S, S>(server);
+		}
+
 		public static Client<S, Cons<S, L>> Jump<S, L>(this Client<Goto0, Cons<S, L>> client) where S : SessionType where L : SessionList
 		{
 			return new Client<S, Cons<S, L>>(client);
