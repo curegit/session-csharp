@@ -5,28 +5,38 @@ using System.Threading.Channels;
 
 namespace SessionTypes.Binary.Threading
 {
-	public static class BinaryChannel<P> where P : ProtocolType
+	public static class A
 	{
-		private static (Client<P, P> client, Server<P, P> server) NewChannel()
+		public static BinaryChannel<CC, SS> AsChannel<CC, SS>(this Dual<CC, SS> dual) where CC : ProtocolType where SS : ProtocolType
+		{
+			return new BinaryChannel<CC, SS>();
+		}
+	}
+
+	public class BinaryChannel<C, S> where C : ProtocolType where S : ProtocolType
+	{
+
+
+		private static (Endpoint<C, C> client, Endpoint<S, S> server) NewChannel()
 		{
 			var up = Channel.CreateUnbounded<object>();
 			var down = Channel.CreateUnbounded<object>();
 			return (NewClient(up, down), NewServer(up, down));
 		}
 
-		private static Client<P, P> NewClient(Channel<object> up, Channel<object> down)
+		private static Endpoint<C, C> NewClient(Channel<object> up, Channel<object> down)
 		{
 			var c = new BinaryChannelCommunicator(down.Reader, up.Writer);
-			return new Client<P, P>(c);
+			return new Endpoint<C, C>(c);
 		}
 
-		private static Server<P, P> NewServer(Channel<object> up, Channel<object> down)
+		private static Endpoint<S, S> NewServer(Channel<object> up, Channel<object> down)
 		{
 			var c = new BinaryChannelCommunicator(up.Reader, down.Writer);
-			return new Server<P, P>(c);
+			return new Endpoint<S, S>(c);
 		}
 
-		public static Client<P, P> Fork(Action<Server<P, P>> threadFunction)
+		public Endpoint<C, C> Fork(Action<Endpoint<S, S>> threadFunction)
 		{
 			var (client, server) = NewChannel();
 			var threadStart = new ThreadStart(() => threadFunction(server));
@@ -35,6 +45,7 @@ namespace SessionTypes.Binary.Threading
 			return client;
 		}
 
+		/*
 		public static Client<P, P>[] Distribute<A>(Action<Server<P, P>, A> threadFunction, A[] args)
 		{
 			int n = args.Length;
@@ -73,6 +84,7 @@ namespace SessionTypes.Binary.Threading
 			}
 			return (clients[0], servers[0]);
 		}
+		*/
 	}
 
 	internal class BinaryChannelCommunicator : BinaryCommunicator

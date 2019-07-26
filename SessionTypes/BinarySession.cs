@@ -136,6 +136,7 @@ namespace SessionTypes.Binary
 		}
 	}
 
+	/*
 	public sealed class Client<S, P> : BinarySession where S : ProtocolType where P : ProtocolType
 	{
 		internal Client(BinarySession session) : base(session) { }
@@ -149,4 +150,5 @@ namespace SessionTypes.Binary
 
 		internal Server(BinaryCommunicator communicator) : base(communicator) { }
 	}
+	*/
 }

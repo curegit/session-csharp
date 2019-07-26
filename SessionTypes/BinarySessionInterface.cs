@@ -5,6 +5,13 @@ namespace SessionTypes.Binary
 {
 	public static class BinarySessionInterface
 	{
+		public static Endpoint<S, P> Send<S, P, T>(this Endpoint<Send<T, S>, P> endpoint, T value) where S : SessionType where P : ProtocolType
+		{
+			endpoint.Send(value);
+			return new Endpoint<S, P>(endpoint);
+		}
+
+		/*
 		public static Client<S, P> Send<S, P, T>(this Client<Req<T, S>, P> client, T value) where S : SessionType where P : ProtocolType
 		{
 			client.Send(value);
@@ -496,5 +503,6 @@ namespace SessionTypes.Binary
 		{
 			server.Close();
 		}
+		*/
 	}
 }

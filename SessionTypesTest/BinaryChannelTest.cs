@@ -10,6 +10,13 @@ namespace SessionTypesTest
 		[Fact]
 		public void ContinuationPassingTest()
 		{
+			var s = Pro.s2c(Pro.typ<string>(), Pro.c2s(Pro.typ<int>(), Pro.Finish()));
+			var c = s.AsChannel().Fork(s1 =>
+			{
+				s1.
+			});
+			c.Send();
+			/*
 			var client = BinaryChannel<Req<int, Resp<double, Eps>>>.Fork
 			(
 				server =>
@@ -30,6 +37,7 @@ namespace SessionTypesTest
 					);
 				}
 			);
+			*/
 			Assert.Equal(Math.Sqrt(10), result);
 		}
 	}

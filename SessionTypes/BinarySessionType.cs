@@ -10,24 +10,24 @@ namespace SessionTypes.Binary
 		private protected SessionType() { }
 	}
 
-	public sealed class Req<T, S> : SessionType where S : SessionType
+	public sealed class Send<T, S> : SessionType where S : SessionType
 	{
-		private Req() { }
+		private Send() { }
 	}
 
-	public sealed class Resp<T, S> : SessionType where S : SessionType
+	public sealed class Recv<T, S> : SessionType where S : SessionType
 	{
-		private Resp() { }
+		private Recv() { }
 	}
 
-	public sealed class ReqChoice<L, R> : SessionType where L : SessionType where R : SessionType
+	public sealed class Selc<L, R> : SessionType where L : SessionType where R : SessionType
 	{
-		private ReqChoice() { }
+		private Selc() { }
 	}
 
-	public sealed class RespChoice<L, R> : SessionType where L : SessionType where R : SessionType
+	public sealed class Foll<L, R> : SessionType where L : SessionType where R : SessionType
 	{
-		private RespChoice() { }
+		private Foll() { }
 	}
 
 	public sealed class Goto0 : SessionType
@@ -63,5 +63,44 @@ namespace SessionTypes.Binary
 	public sealed class Nil : SessionList
 	{
 		private Nil() { }
+	}
+
+	public sealed class Dual<C, S>
+	{
+		internal C Client;
+
+		internal S Server;
+
+		internal Dual() { }
+	}
+
+	public sealed class Endpoint<S, P> : BinarySession
+	{
+		internal Endpoint(BinarySession session) : base(session) { }
+
+		internal Endpoint(BinaryCommunicator communicator) : base(communicator) { }
+	}
+
+	public class Proxy<T> { }
+
+	public class Pro
+	{
+		public static Proxy<T> typ<T>()
+		{
+			return null;
+		}
+
+		public static Dual<Send<T, S1>, Recv<T, S2>> s2c<T, S1, S2>(Proxy<T> t, Dual<S1, S2> s) where S1 : SessionType where S2 : SessionType
+		{
+			return null;
+		}
+		public static Dual<Recv<T, S1>, Send<T, S2>> c2s<T, S1, S2>(Proxy<T> t, Dual<S1, S2> s) where S1 : SessionType where S2 : SessionType
+		{
+			return null;
+		}
+		public static Dual<Eps, Eps> Finish()
+		{
+			return null;
+		}
 	}
 }
