@@ -2,6 +2,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Channels;
+using SessionTypes.Binary;
+using SessionTypes.Binary.Threading;
+using SessionTypes.MultiParty;
 
 namespace SessionTypes.Binary.Threading
 {
