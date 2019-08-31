@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace SessionTypes.Binary
 {
-	internal abstract class BinaryCommunicator
+	internal abstract class Communicator
 	{
 		public abstract void Send<T>(T value);
 
@@ -12,24 +12,24 @@ namespace SessionTypes.Binary
 
 		public abstract Task<T> ReceiveAsync<T>();
 
-		public virtual void Choose(BinaryChoice choice)
+		public virtual void Choose(Choice choice)
 		{
 			Send(choice);
 		}
 
-		public virtual Task ChooseAsync(BinaryChoice choice)
+		public virtual Task ChooseAsync(Choice choice)
 		{
 			return SendAsync(choice);
 		}
 
-		public virtual BinaryChoice Follow()
+		public virtual Choice Follow()
 		{
-			return Receive<BinaryChoice>();
+			return Receive<Choice>();
 		}
 
-		public virtual Task<BinaryChoice> FollowAsync()
+		public virtual Task<Choice> FollowAsync()
 		{
-			return ReceiveAsync<BinaryChoice>();
+			return ReceiveAsync<Choice>();
 		}
 
 		public virtual void Close() { }

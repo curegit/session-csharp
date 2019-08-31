@@ -5,10 +5,11 @@ namespace SessionTypes.Binary
 {
 	public static class BinarySessionInterface
 	{
-		public static Endpoint<S, P> Send<S, P, T>(this Endpoint<Send<T, S>, P> endpoint, T value) where S : SessionType where P : ProtocolType
+		public static Session<S, P> Send<S, P, T>(this Session<Send<T, S>, P> endpoint, T value) where S : SessionType where P : ProtocolType
 		{
 			endpoint.Send(value);
-			return new Endpoint<S, P>(endpoint);
+			//return new Session<S, P>(endpoint.communicator);
+			return endpoint.ToNext<S, P>();
 		}
 
 		/*

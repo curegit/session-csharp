@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Threading.Channels;
 using SessionTypes.Binary;
 using SessionTypes.Binary.Threading;
-using SessionTypes.MultiParty;
 
 namespace SessionTypes.Binary.Threading
 {
@@ -20,26 +19,26 @@ namespace SessionTypes.Binary.Threading
 	{
 
 
-		private static (Endpoint<C, C> client, Endpoint<S, S> server) NewChannel()
+		private static (Session<C, C> client, Session<S, S> server) NewChannel()
 		{
 			var up = Channel.CreateUnbounded<object>();
 			var down = Channel.CreateUnbounded<object>();
 			return (NewClient(up, down), NewServer(up, down));
 		}
 
-		private static Endpoint<C, C> NewClient(Channel<object> up, Channel<object> down)
+		private static Session<C, C> NewClient(Channel<object> up, Channel<object> down)
 		{
 			var c = new BinaryChannelCommunicator(down.Reader, up.Writer);
-			return new Endpoint<C, C>(c);
+			return new Session<C, C>(c);
 		}
 
-		private static Endpoint<S, S> NewServer(Channel<object> up, Channel<object> down)
+		private static Session<S, S> NewServer(Channel<object> up, Channel<object> down)
 		{
 			var c = new BinaryChannelCommunicator(up.Reader, down.Writer);
-			return new Endpoint<S, S>(c);
+			return new Session<S, S>(c);
 		}
 
-		public Endpoint<C, C> Fork(Action<Endpoint<S, S>> threadFunction)
+		public Session<C, C> Fork(Action<Session<S, S>> threadFunction)
 		{
 			var (client, server) = NewChannel();
 			var threadStart = new ThreadStart(() => threadFunction(server));
@@ -90,7 +89,7 @@ namespace SessionTypes.Binary.Threading
 		*/
 	}
 
-	internal class BinaryChannelCommunicator : BinaryCommunicator
+	internal class BinaryChannelCommunicator : Communicator
 	{
 		private ChannelReader<object> reader;
 		private ChannelWriter<object> writer;

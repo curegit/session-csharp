@@ -2,20 +2,20 @@ using System.Threading.Tasks;
 
 namespace SessionTypes.Binary
 {
-	public abstract class BinarySession
+	public sealed class Session<S, P> where S : ProtocolType where P : ProtocolType
 	{
 		private bool used;
 
-		private readonly BinaryCommunicator communicator;
+		private readonly Communicator communicator;
 
-		internal BinarySession(BinarySession session)
-		{
-			communicator = session.communicator;
-		}
-
-		private protected BinarySession(BinaryCommunicator communicator)
+		internal Session(Communicator communicator)
 		{
 			this.communicator = communicator;
+		}
+
+		internal Session<S1, P1> ToNext<S1, P1>() where S1 : SessionType where P1 : ProtocolType
+		{
+			return new Session<S1, P1>(communicator);
 		}
 
 		internal void Send<T>(T value)
@@ -70,7 +70,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		internal void Choose(BinaryChoice choice)
+		internal void Choose(Choice choice)
 		{
 			if (used)
 			{
@@ -83,7 +83,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		internal Task ChooseAsync(BinaryChoice choice)
+		internal Task ChooseAsync(Choice choice)
 		{
 			if (used)
 			{
@@ -96,7 +96,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		internal BinaryChoice Follow()
+		internal Choice Follow()
 		{
 			if (used)
 			{
@@ -109,7 +109,7 @@ namespace SessionTypes.Binary
 			}
 		}
 
-		internal Task<BinaryChoice> FollowAsync()
+		internal Task<Choice> FollowAsync()
 		{
 			if (used)
 			{
@@ -135,20 +135,4 @@ namespace SessionTypes.Binary
 			}
 		}
 	}
-
-	/*
-	public sealed class Client<S, P> : BinarySession where S : ProtocolType where P : ProtocolType
-	{
-		internal Client(BinarySession session) : base(session) { }
-
-		internal Client(BinaryCommunicator communicator) : base(communicator) { }
-	}
-
-	public sealed class Server<S, P> : BinarySession where S : ProtocolType where P : ProtocolType
-	{
-		internal Server(BinarySession session) : base(session) { }
-
-		internal Server(BinaryCommunicator communicator) : base(communicator) { }
-	}
-	*/
 }
