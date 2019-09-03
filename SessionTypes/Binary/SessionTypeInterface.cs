@@ -165,42 +165,45 @@ namespace SessionTypes.Binary
 		}
 		*/
 
-		public static Client<L, P> ChooseLeft<L, R, P>(this Client<ReqChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : ProtocolType
+		public static Session<L, P> ChooseLeft<L, R, P>(this Session<Selc<L, R>, P> session) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			client.Choose(BinaryChoice.Left);
-			return new Client<L, P>(client);
+			session.Choose(Choice.Left);
+			return session.ToNext<L>();
 		}
 
-		public static Client<R, P> ChooseRight<L, R, P>(this Client<ReqChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : ProtocolType
+		public static Session<R, P> ChooseRight<L, R, P>(this Session<Selc<L, R>, P> session) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			client.Choose(BinaryChoice.Right);
-			return new Client<R, P>(client);
+			session.Choose(Choice.Right);
+			return session.ToNext<R>();
 		}
 
-		public static Server<L, P> ChooseLeft<L, R, P>(this Server<RespChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : ProtocolType
+		/*
+		public static Session<L, P> ChooseLeft<L, R, P>(this Server<RespChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			server.Choose(BinaryChoice.Left);
 			return new Server<L, P>(server);
 		}
 
-		public static Server<R, P> ChooseRight<L, R, P>(this Server<RespChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : ProtocolType
+		public static Session<R, P> ChooseRight<L, R, P>(this Server<RespChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			server.Choose(BinaryChoice.Right);
 			return new Server<R, P>(server);
 		}
+		*/
 
-		public static async Task<Client<L, P>> ChooseLeftAsync<L, R, P>(this Client<ReqChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task<Session<L, P>> ChooseLeftAsync<L, R, P>(this Session<Selc<L, R>, P> session) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			await client.ChooseAsync(BinaryChoice.Left);
-			return new Client<L, P>(client);
+			await session.ChooseAsync(Choice.Left);
+			return session.ToNext<L>();
 		}
 
-		public static async Task<Client<R, P>> ChooseRightAsync<L, R, P>(this Client<ReqChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task<Session<R, P>> ChooseRightAsync<L, R, P>(this Session<Selc<L, R>, P> session) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			await client.ChooseAsync(BinaryChoice.Right);
-			return new Client<R, P>(client);
+			await session.ChooseAsync(Choice.Right);
+			return session.ToNext<R>();
 		}
 
+		/*
 		public static async Task<Server<L, P>> ChooseLeftAsync<L, R, P>(this Server<RespChoice<L, R>, P> server) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			await server.ChooseAsync(BinaryChoice.Left);
@@ -212,75 +215,77 @@ namespace SessionTypes.Binary
 			await server.ChooseAsync(BinaryChoice.Right);
 			return new Server<R, P>(server);
 		}
+		*/
 
-		public static void Follow<L, R, P>(this Client<RespChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static void Follow<L, R, P>(this Session<Foll<L, R>, P> session, Action<Session<L, P>> leftAction, Action<Session<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			switch (client.Follow())
+			switch (session.Follow())
 			{
-				case BinaryChoice.Left:
-					leftAction(new Client<L, P>(client));
+				case Choice.Left:
+					leftAction(session.ToNext<L>());
 					break;
-				case BinaryChoice.Right:
-					rightAction(new Client<R, P>(client));
+				case Choice.Right:
+					rightAction(session.ToNext<R>());
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Client<RespChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task Follow<L, R, P>(this Session<Foll<L, R>, P> session, Func<Session<L, P>, Task> leftAction, Action<Session<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			switch (client.Follow())
+			switch (session.Follow())
 			{
-				case BinaryChoice.Left:
-					await leftAction(new Client<L, P>(client));
+				case Choice.Left:
+					await leftAction(session.ToNext<L>());
 					break;
-				case BinaryChoice.Right:
-					rightAction(new Client<R, P>(client));
+				case Choice.Right:
+					rightAction(session.ToNext<R>());
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Client<RespChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task Follow<L, R, P>(this Session<Foll<L, R>, P> session, Action<Session<L, P>> leftAction, Func<Session<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			switch (client.Follow())
+			switch (session.Follow())
 			{
-				case BinaryChoice.Left:
-					leftAction(new Client<L, P>(client));
+				case Choice.Left:
+					leftAction(session.ToNext<L>());
 					break;
-				case BinaryChoice.Right:
-					await rightAction(new Client<R, P>(client));
+				case Choice.Right:
+					await rightAction(session.ToNext<R>());
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task Follow<L, R, P>(this Client<RespChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task Follow<L, R, P>(this Session<Foll<L, R>, P> session, Func<Session<L, P>, Task> leftAction, Func<Session<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			switch (client.Follow())
+			switch (session.Follow())
 			{
-				case BinaryChoice.Left:
-					await leftAction(new Client<L, P>(client));
+				case Choice.Left:
+					await leftAction(session.ToNext<L>());
 					break;
-				case BinaryChoice.Right:
-					await rightAction(new Client<R, P>(client));
+				case Choice.Right:
+					await rightAction(session.ToNext<R>());
 					break;
 				default:
 					break;
 			}
 		}
 
+		/*
 		public static void Follow<L, R, P>(this Server<ReqChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (server.Follow())
 			{
-				case BinaryChoice.Left:
+				case Choice.Left:
 					leftAction(new Server<L, P>(server));
 					break;
-				case BinaryChoice.Right:
+				case Choice.Right:
 					rightAction(new Server<R, P>(server));
 					break;
 				default:
@@ -292,10 +297,10 @@ namespace SessionTypes.Binary
 		{
 			switch (server.Follow())
 			{
-				case BinaryChoice.Left:
+				case Choice.Left:
 					await leftAction(new Server<L, P>(server));
 					break;
-				case BinaryChoice.Right:
+				case Choice.Right:
 					rightAction(new Server<R, P>(server));
 					break;
 				default:
@@ -307,10 +312,10 @@ namespace SessionTypes.Binary
 		{
 			switch (server.Follow())
 			{
-				case BinaryChoice.Left:
+				case Choice.Left:
 					leftAction(new Server<L, P>(server));
 					break;
-				case BinaryChoice.Right:
+				case Choice.Right:
 					await rightAction(new Server<R, P>(server));
 					break;
 				default:
@@ -322,85 +327,87 @@ namespace SessionTypes.Binary
 		{
 			switch (server.Follow())
 			{
-				case BinaryChoice.Left:
+				case Choice.Left:
 					await leftAction(new Server<L, P>(server));
 					break;
-				case BinaryChoice.Right:
+				case Choice.Right:
 					await rightAction(new Server<R, P>(server));
 					break;
 				default:
 					break;
 			}
 		}
+		*/
 
-		public static async Task FollowAsync<L, R, P>(this Client<RespChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task FollowAsync<L, R, P>(this Session<Foll<L, R>, P> session, Action<Session<L, P>> leftAction, Action<Session<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			switch (await client.FollowAsync())
+			switch (await session.FollowAsync())
 			{
-				case BinaryChoice.Left:
-					leftAction(new Client<L, P>(client));
+				case Choice.Left:
+					leftAction(session.ToNext<L>());
 					break;
-				case BinaryChoice.Right:
-					rightAction(new Client<R, P>(client));
+				case Choice.Right:
+					rightAction(session.ToNext<R>());
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Client<RespChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Action<Client<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task FollowAsync<L, R, P>(this Session<Foll<L, R>, P> session, Func<Session<L, P>, Task> leftAction, Action<Session<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			switch (await client.FollowAsync())
+			switch (await session.FollowAsync())
 			{
-				case BinaryChoice.Left:
-					await leftAction(new Client<L, P>(client));
+				case Choice.Left:
+					await leftAction(session.ToNext<L>());
 					break;
-				case BinaryChoice.Right:
-					rightAction(new Client<R, P>(client));
+				case Choice.Right:
+					rightAction(session.ToNext<R>());
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Client<RespChoice<L, R>, P> client, Action<Client<L, P>> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task FollowAsync<L, R, P>(this Session<Foll<L, R>, P> session, Action<Session<L, P>> leftAction, Func<Session<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			switch (await client.FollowAsync())
+			switch (await session.FollowAsync())
 			{
-				case BinaryChoice.Left:
-					leftAction(new Client<L, P>(client));
+				case Choice.Left:
+					leftAction(session.ToNext<L>());
 					break;
-				case BinaryChoice.Right:
-					await rightAction(new Client<R, P>(client));
+				case Choice.Right:
+					await rightAction(session.ToNext<R>());
 					break;
 				default:
 					break;
 			}
 		}
 
-		public static async Task FollowAsync<L, R, P>(this Client<RespChoice<L, R>, P> client, Func<Client<L, P>, Task> leftAction, Func<Client<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
+		public static async Task FollowAsync<L, R, P>(this Session<Foll<L, R>, P> session, Func<Session<L, P>, Task> leftAction, Func<Session<R, P>, Task> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			switch (await client.FollowAsync())
+			switch (await session.FollowAsync())
 			{
-				case BinaryChoice.Left:
-					await leftAction(new Client<L, P>(client));
+				case Choice.Left:
+					await leftAction(session.ToNext<L>());
 					break;
-				case BinaryChoice.Right:
-					await rightAction(new Client<R, P>(client));
+				case Choice.Right:
+					await rightAction(session.ToNext<R>());
 					break;
 				default:
 					break;
 			}
 		}
 
+		/*
 		public static async Task FollowAsync<L, R, P>(this Server<ReqChoice<L, R>, P> server, Action<Server<L, P>> leftAction, Action<Server<R, P>> rightAction) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			switch (await server.FollowAsync())
 			{
-				case BinaryChoice.Left:
+				case Choice.Left:
 					leftAction(new Server<L, P>(server));
 					break;
-				case BinaryChoice.Right:
+				case Choice.Right:
 					rightAction(new Server<R, P>(server));
 					break;
 				default:
@@ -412,10 +419,10 @@ namespace SessionTypes.Binary
 		{
 			switch (await server.FollowAsync())
 			{
-				case BinaryChoice.Left:
+				case Choice.Left:
 					await leftAction(new Server<L, P>(server));
 					break;
-				case BinaryChoice.Right:
+				case Choice.Right:
 					rightAction(new Server<R, P>(server));
 					break;
 				default:
@@ -427,10 +434,10 @@ namespace SessionTypes.Binary
 		{
 			switch (await server.FollowAsync())
 			{
-				case BinaryChoice.Left:
+				case Choice.Left:
 					leftAction(new Server<L, P>(server));
 					break;
-				case BinaryChoice.Right:
+				case Choice.Right:
 					await rightAction(new Server<R, P>(server));
 					break;
 				default:
@@ -442,22 +449,24 @@ namespace SessionTypes.Binary
 		{
 			switch (await server.FollowAsync())
 			{
-				case BinaryChoice.Left:
+				case Choice.Left:
 					await leftAction(new Server<L, P>(server));
 					break;
-				case BinaryChoice.Right:
+				case Choice.Right:
 					await rightAction(new Server<R, P>(server));
 					break;
 				default:
 					break;
 			}
 		}
+		*/
 
-		public static Client<S, P> Enter<S, L, P>(this Client<Cons<S, L>, P> client) where S : SessionType where L : SessionList where P : ProtocolType
+		public static Session<S, P> Enter<S, L, P>(this Session<Cons<S, L>, P> session) where S : SessionType where L : SessionList where P : ProtocolType
 		{
-			return new Client<S, P>(client);
+			return session.ToNext<S>();
 		}
 
+		/*
 		public static Server<S, P> Enter<S, L, P>(this Server<Cons<S, L>, P> server) where S : SessionType where L : SessionList where P : ProtocolType
 		{
 			return new Server<S, P>(server);
@@ -482,32 +491,38 @@ namespace SessionTypes.Binary
 		{
 			return action(new Server<S, P>(server));
 		}
+		*/
 
-		public static Client<S, S> Jump<S>(this Client<Goto0, S> client) where S : SessionType
+		public static Session<S, S> Jump<S>(this Session<Goto0, S> session) where S : SessionType
 		{
-			return new Client<S, S>(client);
+			return session.ToNext<S>();
 		}
 
+		/*
 		public static Server<S, S> Jump<S>(this Server<Goto0, S> server) where S : SessionType
 		{
 			return new Server<S, S>(server);
 		}
+		*/
 
-		public static Client<S, Cons<S, L>> Jump<S, L>(this Client<Goto0, Cons<S, L>> client) where S : SessionType where L : SessionList
+		public static Session<S, Cons<S, L>> Jump<S, L>(this Session<Goto0, Cons<S, L>> session) where S : SessionType where L : SessionList
 		{
-			return new Client<S, Cons<S, L>>(client);
+			return session.ToNext<S>();
 		}
 
+		/*
 		public static Server<S, Cons<S, L>> Jump<S, L>(this Server<Goto0, Cons<S, L>> server) where S : SessionType where L : SessionList
 		{
 			return new Server<S, Cons<S, L>>(server);
 		}
+		*/
 
-		public static void Close<P>(this Client<Eps, P> client) where P : ProtocolType
+		public static void Close<P>(this Session<Eps, P> client) where P : ProtocolType
 		{
 			client.Close();
 		}
 
+		/*
 		public static void Close<P>(this Server<Eps, P> server) where P : ProtocolType
 		{
 			server.Close();
