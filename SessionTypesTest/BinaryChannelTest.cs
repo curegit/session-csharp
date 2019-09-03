@@ -10,7 +10,7 @@ namespace SessionTypesTest
 		[Fact]
 		public void ContinuationPassingTest()
 		{
-			var s = Pro.s2c(Pro.typ<string>(), Pro.c2s(Pro.typ<int>(), Pro.Finish()));
+			var s = ProtocolBuilder.S2C(ProtocolBuilder.Data<string>(), ProtocolBuilder.C2S(ProtocolBuilder.Data<int>(), ProtocolBuilder.End()));
 			var c = s.AsChannel().Fork(s1 =>
 			{
 				s1.
