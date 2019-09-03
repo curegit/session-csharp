@@ -1,6 +1,6 @@
 namespace SessionTypes.Binary
 {
-	public static class BinarySessionInterfaceHelper
+	public static class BinaryInterfaceHelper
 	{
 		public static Session<S, P> Let<S, P, T>(this Session<S, P> session, out T variable, T value) where S : SessionType where P : ProtocolType
 		{

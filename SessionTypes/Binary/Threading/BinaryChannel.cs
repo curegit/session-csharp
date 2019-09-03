@@ -2,12 +2,10 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Channels;
-using SessionTypes.Binary;
-using SessionTypes.Binary.Threading;
 
 namespace SessionTypes.Binary.Threading
 {
-	public static class A
+	public static partial class A
 	{
 		public static BinaryChannel<CC, SS> AsChannel<CC, SS>(this Dual<CC, SS> dual) where CC : ProtocolType where SS : ProtocolType
 		{

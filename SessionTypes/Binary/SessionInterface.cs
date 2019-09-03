@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 
 namespace SessionTypes.Binary
 {
-	public static class BinarySessionInterface
+	public static class SessionInterface
 	{
 		public static Session<S, P> Send<S, P, T>(this Session<Send<T, S>, P> session, T value) where S : SessionType where P : ProtocolType
 		{
@@ -517,9 +517,9 @@ namespace SessionTypes.Binary
 		}
 		*/
 
-		public static void Close<P>(this Session<Eps, P> client) where P : ProtocolType
+		public static void Close<P>(this Session<Eps, P> session) where P : ProtocolType
 		{
-			client.Close();
+			session.Close();
 		}
 
 		/*
