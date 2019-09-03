@@ -5,11 +5,10 @@ namespace SessionTypes.Binary
 {
 	public static class BinarySessionInterface
 	{
-		public static Session<S, P> Send<S, P, T>(this Session<Send<T, S>, P> endpoint, T value) where S : SessionType where P : ProtocolType
+		public static Session<S, P> Send<S, P, T>(this Session<Send<T, S>, P> session, T value) where S : SessionType where P : ProtocolType
 		{
-			endpoint.Send(value);
-			//return new Session<S, P>(endpoint.communicator);
-			return endpoint.ToNext<S, P>();
+			session.Send(value);
+			return session.ToNext<S>();
 		}
 
 		/*
@@ -48,13 +47,15 @@ namespace SessionTypes.Binary
 			server.Send(value);
 			return action(new Server<S, P>(server));
 		}
+		*/
 
-		public static async Task<Client<S, P>> SendAsync<S, P, T>(this Client<Req<T, S>, P> client, T value) where S : SessionType where P : ProtocolType
+		public static async Task<Session<S, P>> SendAsync<S, P, T>(this Session<Send<T, S>, P> session, T value) where S : SessionType where P : ProtocolType
 		{
-			await client.SendAsync(value);
-			return new Client<S, P>(client);
+			await session.SendAsync(value);
+			return session.ToNext<S>();
 		}
 
+		/*
 		public static async Task<Server<S, P>> SendAsync<S, P, T>(this Server<Resp<T, S>, P> server, T value) where S : SessionType where P : ProtocolType
 		{
 			await server.SendAsync(value);
@@ -84,23 +85,27 @@ namespace SessionTypes.Binary
 			await server.SendAsync(value);
 			await action(new Server<S, P>(server));
 		}
+		*/
 
-		public static (Client<S, P>, T) Receive<S, P, T>(this Client<Resp<T, S>, P> client) where S : SessionType where P : ProtocolType
+		public static (Session<S, P>, T) Receive<S, P, T>(this Session<Recv<T, S>, P> session) where S : SessionType where P : ProtocolType
 		{
-			return (new Client<S, P>(client), client.Receive<T>());
+			return (session.ToNext<S>(), session.Receive<T>());
 		}
 
+		/*
 		public static (Server<S, P>, T) Receive<S, P, T>(this Server<Req<T, S>, P> server) where S : SessionType where P : ProtocolType
 		{
 			return (new Server<S, P>(server), server.Receive<T>());
 		}
+		*/
 
-		public static Client<S, P> Receive<S, P, T>(this Client<Resp<T, S>, P> client, out T value) where S : SessionType where P : ProtocolType
+		public static Session<S, P> Receive<S, P, T>(this Session<Recv<T, S>, P> session, out T value) where S : SessionType where P : ProtocolType
 		{
-			value = client.Receive<T>();
-			return new Client<S, P>(client);
+			value = session.Receive<T>();
+			return session.ToNext<S>();
 		}
 
+		/*
 		public static Server<S, P> Receive<S, P, T>(this Server<Req<T, S>, P> server, out T value) where S : SessionType where P : ProtocolType
 		{
 			value = server.Receive<T>();
@@ -126,12 +131,14 @@ namespace SessionTypes.Binary
 		{
 			return action(new Server<S, P>(server), server.Receive<T>());
 		}
+		*/
 
-		public static async Task<(Client<S, P>, T)> ReceiveAsync<S, P, T>(this Client<Resp<T, S>, P> client) where S : SessionType where P : ProtocolType
+		public static async Task<(Session<S, P>, T)> ReceiveAsync<S, P, T>(this Session<Recv<T, S>, P> session) where S : SessionType where P : ProtocolType
 		{
-			return (new Client<S, P>(client), await client.ReceiveAsync<T>());
+			return (session.ToNext<S>(), await session.ReceiveAsync<T>());
 		}
 
+		/*
 		public static async Task<(Server<S, P>, T)> ReceiveAsync<S, P, T>(this Server<Req<T, S>, P> server) where S : SessionType where P : ProtocolType
 		{
 			return (new Server<S, P>(server), await server.ReceiveAsync<T>());
@@ -156,6 +163,7 @@ namespace SessionTypes.Binary
 		{
 			await action(new Server<S, P>(server), await server.ReceiveAsync<T>());
 		}
+		*/
 
 		public static Client<L, P> ChooseLeft<L, R, P>(this Client<ReqChoice<L, R>, P> client) where L : SessionType where R : SessionType where P : ProtocolType
 		{
