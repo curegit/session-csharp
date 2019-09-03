@@ -13,9 +13,9 @@ namespace SessionTypes.Binary
 			this.communicator = communicator;
 		}
 
-		internal Session<S1, P1> ToNext<S1, P1>() where S1 : SessionType where P1 : ProtocolType
+		internal Session<N, P> ToNext<N>() where N : SessionType
 		{
-			return new Session<S1, P1>(communicator);
+			return new Session<N, P>(communicator);
 		}
 
 		internal void Send<T>(T value)
