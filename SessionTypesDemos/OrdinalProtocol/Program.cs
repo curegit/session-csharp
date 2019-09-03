@@ -4,13 +4,14 @@ using SessionTypes.Binary.Threading;
 
 namespace OrdinalProtocol
 {
-	using OrdProtocol = Req<int, Resp<string, Eps>>;
+	using static ProtocolBuilder;
 
 	public class Program
 	{
 		public static void Main(string[] args)
 		{
-			var client = BinaryChannel<OrdProtocol>.Fork(server =>
+			var dual = C2S(Data<int>(), S2C(Data<string>(), End())).AsChannel();
+			var client = dual.Fork(server =>
 			{
 				server.Receive(out var number).Send(ToOrdinalString(number)).Close();
 			});
