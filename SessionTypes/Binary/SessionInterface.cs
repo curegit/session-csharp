@@ -228,7 +228,7 @@ namespace SessionTypes.Binary
 					rightAction(session.ToNext<R>());
 					break;
 				default:
-					break;
+					throw new UnknownChoiceException();
 			}
 		}
 
@@ -243,7 +243,7 @@ namespace SessionTypes.Binary
 					rightAction(session.ToNext<R>());
 					break;
 				default:
-					break;
+					throw new UnknownChoiceException();
 			}
 		}
 
@@ -258,7 +258,7 @@ namespace SessionTypes.Binary
 					await rightAction(session.ToNext<R>());
 					break;
 				default:
-					break;
+					throw new UnknownChoiceException();
 			}
 		}
 
@@ -273,7 +273,7 @@ namespace SessionTypes.Binary
 					await rightAction(session.ToNext<R>());
 					break;
 				default:
-					break;
+					throw new UnknownChoiceException();
 			}
 		}
 
@@ -350,7 +350,7 @@ namespace SessionTypes.Binary
 					rightAction(session.ToNext<R>());
 					break;
 				default:
-					break;
+					throw new UnknownChoiceException();
 			}
 		}
 
@@ -365,7 +365,7 @@ namespace SessionTypes.Binary
 					rightAction(session.ToNext<R>());
 					break;
 				default:
-					break;
+					throw new UnknownChoiceException();
 			}
 		}
 
@@ -380,7 +380,7 @@ namespace SessionTypes.Binary
 					await rightAction(session.ToNext<R>());
 					break;
 				default:
-					break;
+					throw new UnknownChoiceException();
 			}
 		}
 
@@ -395,7 +395,7 @@ namespace SessionTypes.Binary
 					await rightAction(session.ToNext<R>());
 					break;
 				default:
-					break;
+					throw new UnknownChoiceException();
 			}
 		}
 
