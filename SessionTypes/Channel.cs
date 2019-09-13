@@ -5,7 +5,7 @@ using System.Threading.Channels;
 
 namespace SessionTypes.Binary.Threading
 {
-	public static partial class A
+	public static class ChannelStarter
 	{
 		public static BinaryChannel<CC, SS> AsChannel<CC, SS>(this Dual<CC, SS> dual) where CC : ProtocolType where SS : ProtocolType
 		{
