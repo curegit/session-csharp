@@ -1,6 +1,6 @@
 using System;
 
-namespace SessionTypes.Binary
+namespace SessionTypes
 {
 	public class Proxy<T>
 	{

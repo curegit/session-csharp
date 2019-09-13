@@ -1,4 +1,4 @@
-namespace SessionTypes.Binary
+namespace SessionTypes
 {
 	public abstract class ProtocolType
 	{

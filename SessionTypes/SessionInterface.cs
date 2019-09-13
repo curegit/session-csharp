@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace SessionTypes.Binary
+namespace SessionTypes
 {
 	public static class SessionInterface
 	{

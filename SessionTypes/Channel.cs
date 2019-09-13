@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Channels;
 
-namespace SessionTypes.Binary.Threading
+namespace SessionTypes.Threading
 {
 	public static class ChannelStarter
 	{

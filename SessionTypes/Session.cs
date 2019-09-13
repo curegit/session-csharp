@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace SessionTypes.Binary
+namespace SessionTypes
 {
 	public sealed class Session<S, P> where S : ProtocolType where P : ProtocolType
 	{

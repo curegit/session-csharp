@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace SessionTypes.Binary
+namespace SessionTypes
 {
 	internal abstract class Communicator
 	{
