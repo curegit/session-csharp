@@ -1,6 +1,6 @@
 using System;
-using SessionTypes.Binary;
-using SessionTypes.Binary.Threading;
+using SessionTypes;
+using SessionTypes.Threading;
 
 namespace OrdinalProtocol
 {
@@ -10,7 +10,7 @@ namespace OrdinalProtocol
 	{
 		public static void Main(string[] args)
 		{
-			var dual = C2S(Data<int>(), S2C(Data<string>(), End())).AsChannel();
+			var dual = C2S(P<int>, S2C(P<string>, End())).AsChannel();
 			var client = dual.Fork(server =>
 			{
 				server.Receive(out var number).Send(ToOrdinalString(number)).Close();

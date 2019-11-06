@@ -39,6 +39,16 @@ namespace SessionTypes
 			return null;
 		}
 
+		public static Dual<Cons<C1, Nil>, Cons<S1, Nil>> SessionList<S1, C1>(Dual<C1, S1> s1) where S1 : SessionType where C1 : SessionType
+		{
+			return null;
+		}
+
+		public static Dual<Cons<C1, Cons<C2,Nil>>, Cons<S1, Cons<S2, Nil>>> SessionList<S1, S2, C1, C2>(Dual<C1, S1> s1, Dual<C2, S2> s2) where S2 : SessionType where S1 : SessionType where C2 : SessionType where C1 : SessionType
+		{
+			return null;
+		}
+
 		public static Dual<Cons<C1, Cons<C2, Cons<C3, Nil>>>, Cons<S1, Cons<S2, Cons<S3, Nil>>>> SessionList<S1, S2, S3, C1, C2, C3>(Dual<C1, S1> s1, Dual<C2, S2> s2, Dual<C3, S3> s3) where S3 : SessionType where S2 : SessionType where S1 : SessionType where C3 : SessionType where C2 : SessionType where C1: SessionType
 		{
 			return null;
