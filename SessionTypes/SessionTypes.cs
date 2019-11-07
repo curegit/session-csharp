@@ -15,19 +15,19 @@ namespace SessionTypes
 		private Send() { }
 	}
 
-	public sealed class Recv<T, S> : SessionType where S : SessionType
+	public sealed class Receive<T, S> : SessionType where S : SessionType
 	{
-		private Recv() { }
+		private Receive() { }
 	}
 
-	public sealed class Selc<L, R> : SessionType where L : SessionType where R : SessionType
+	public sealed class Select<L, R> : SessionType where L : SessionType where R : SessionType
 	{
-		private Selc() { }
+		private Select() { }
 	}
 
-	public sealed class Foll<L, R> : SessionType where L : SessionType where R : SessionType
+	public sealed class Follow<L, R> : SessionType where L : SessionType where R : SessionType
 	{
-		private Foll() { }
+		private Follow() { }
 	}
 
 	public sealed class Goto0 : SessionType
@@ -45,9 +45,9 @@ namespace SessionTypes
 		private Goto2() { }
 	}
 
-	public sealed class Eps : SessionType
+	public sealed class Close : SessionType
 	{
-		private Eps() { }
+		private Close() { }
 	}
 
 	public abstract class SessionList : ProtocolType

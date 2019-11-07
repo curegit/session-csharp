@@ -14,22 +14,22 @@ namespace SessionTypes
 			throw new Exception();
 		}
 
-		public static Dual<Send<T, S1>, Recv<T, S2>> C2S<T, S1, S2>(Func<Proxy<T>> type, Dual<S1, S2> dual) where S1 : SessionType where S2 : SessionType
+		public static Dual<Send<T, S1>, Receive<T, S2>> C2S<T, S1, S2>(Func<Proxy<T>> type, Dual<S1, S2> dual) where S1 : SessionType where S2 : SessionType
 		{
 			return null;
 		}
 
-		public static Dual<Recv<T, S1>, Send<T, S2>> S2C<T, S1, S2>(Func<Proxy<T>> type, Dual<S1, S2> dual) where S1 : SessionType where S2 : SessionType
+		public static Dual<Receive<T, S1>, Send<T, S2>> S2C<T, S1, S2>(Func<Proxy<T>> type, Dual<S1, S2> dual) where S1 : SessionType where S2 : SessionType
 		{
 			return null;
 		}
 
-		public static Dual<Selc<CL, CR>, Foll<SL, SR>> CC<CL, CR, SL, SR>(Dual<CL, SL> l, Dual<CR, SR> r) where CL : SessionType where CR : SessionType where SL : SessionType where SR : SessionType
+		public static Dual<Select<CL, CR>, Follow<SL, SR>> CC<CL, CR, SL, SR>(Dual<CL, SL> l, Dual<CR, SR> r) where CL : SessionType where CR : SessionType where SL : SessionType where SR : SessionType
 		{
 			return null;
 		}
 
-		public static Dual<Foll<CL, CR>, Selc<SL, SR>> SS<CL, CR, SL, SR>(Dual<CL, SL> l, Dual<CR, SR> r) where CL : SessionType where CR : SessionType where SL :SessionType where SR: SessionType
+		public static Dual<Follow<CL, CR>, Select<SL, SR>> SS<CL, CR, SL, SR>(Dual<CL, SL> l, Dual<CR, SR> r) where CL : SessionType where CR : SessionType where SL :SessionType where SR: SessionType
 		{
 			return null;
 		}
@@ -54,9 +54,9 @@ namespace SessionTypes
 			return null;
 		}
 
-		public static Dual<Eps, Eps> End()
+		public static Dual<Close, Close> End()
 		{
-			return null;
+			return new Dual<Close, Close>();
 		}
 	}
 }
