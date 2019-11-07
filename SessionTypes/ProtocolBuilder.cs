@@ -2,61 +2,89 @@ using System;
 
 namespace SessionTypes
 {
-	public class Proxy<T>
+	public sealed class Payload<T>
 	{
-		private Proxy() { }
+		private Payload() { }
 	}
 
 	public static class ProtocolBuilder
 	{
-		public static Proxy<T> P<T>()
+		public static Payload<T> P<T>()
 		{
-			throw new Exception();
+			throw new MethodAccessException();
 		}
 
-		public static Duality<Send<T, S1>, Receive<T, S2>> C2S<T, S1, S2>(Func<Proxy<T>> type, Duality<S1, S2> dual) where S1 : SessionType where S2 : SessionType
+		public static Duality<Send<T, C>, Receive<T, S>> C2S<T, C, S>(Func<Payload<T>> type, Duality<C, S> tail) where C : SessionType where S : SessionType
 		{
-			return null;
+			return tail == null ? throw new ArgumentNullException(nameof(tail)) : new Duality<Send<T, C>, Receive<T, S>>();
 		}
 
-		public static Duality<Receive<T, S1>, Send<T, S2>> S2C<T, S1, S2>(Func<Proxy<T>> type, Duality<S1, S2> dual) where S1 : SessionType where S2 : SessionType
+		public static Duality<Receive<T, C>, Send<T, S>> S2C<T, C, S>(Func<Payload<T>> type, Duality<C, S> tail) where C : SessionType where S : SessionType
 		{
-			return null;
+			return tail == null ? throw new ArgumentNullException(nameof(tail)) : new Duality<Receive<T, C>, Send<T, S>>();
 		}
 
-		public static Duality<Select<CL, CR>, Follow<SL, SR>> CC<CL, CR, SL, SR>(Duality<CL, SL> l, Duality<CR, SR> r) where CL : SessionType where CR : SessionType where SL : SessionType where SR : SessionType
+		public static Duality<Select<CL, CR>, Follow<SL, SR>> CC<CL, CR, SL, SR>(Duality<CL, SL> left, Duality<CR, SR> right) where CL : SessionType where CR : SessionType where SL : SessionType where SR : SessionType
 		{
-			return null;
+			return left == null ? throw new ArgumentNullException(nameof(left)) : right == null ? throw new ArgumentNullException(nameof(right)) : new Duality<Select<CL, CR>, Follow<SL, SR>>();
 		}
 
-		public static Duality<Follow<CL, CR>, Select<SL, SR>> SS<CL, CR, SL, SR>(Duality<CL, SL> l, Duality<CR, SR> r) where CL : SessionType where CR : SessionType where SL :SessionType where SR: SessionType
+		public static Duality<Follow<CL, CR>, Select<SL, SR>> SS<CL, CR, SL, SR>(Duality<CL, SL> left, Duality<CR, SR> right) where CL : SessionType where CR : SessionType where SL : SessionType where SR : SessionType
 		{
-			return null;
+			return left == null ? throw new ArgumentNullException(nameof(left)) : right == null ? throw new ArgumentNullException(nameof(right)) : new Duality<Follow<CL, CR>, Select<SL, SR>>();
 		}
 
-		public static Duality<Goto0, Goto0> Goto0()
+		public static Duality<Goto0, Goto0> Goto0
 		{
-			return null;
+			get
+			{
+				return new Duality<Goto0, Goto0>();
+			}
 		}
 
-		public static Duality<Cons<C1, Nil>, Cons<S1, Nil>> SessionList<S1, C1>(Duality<C1, S1> s1) where S1 : SessionType where C1 : SessionType
+		public static Duality<Goto1, Goto1> Goto1
 		{
-			return null;
+			get
+			{
+				return new Duality<Goto1, Goto1>();
+			}
 		}
 
-		public static Duality<Cons<C1, Cons<C2,Nil>>, Cons<S1, Cons<S2, Nil>>> SessionList<S1, S2, C1, C2>(Duality<C1, S1> s1, Duality<C2, S2> s2) where S2 : SessionType where S1 : SessionType where C2 : SessionType where C1 : SessionType
+		public static Duality<Goto2, Goto2> Goto2
 		{
-			return null;
+			get
+			{
+				return new Duality<Goto2, Goto2>();
+			}
 		}
 
-		public static Duality<Cons<C1, Cons<C2, Cons<C3, Nil>>>, Cons<S1, Cons<S2, Cons<S3, Nil>>>> SessionList<S1, S2, S3, C1, C2, C3>(Duality<C1, S1> s1, Duality<C2, S2> s2, Duality<C3, S3> s3) where S3 : SessionType where S2 : SessionType where S1 : SessionType where C3 : SessionType where C2 : SessionType where C1: SessionType
+		public static Duality<Close, Close> End
 		{
-			return null;
+			get
+			{
+				return new Duality<Close, Close>();
+			}
 		}
 
-		public static Duality<Close, Close> End()
+		public static Duality<Cons<C0, Nil>, Cons<S0, Nil>> SessionList<S0, C0>(Duality<C0, S0> duality0) where S0 : SessionType where C0 : SessionType
 		{
-			return new Duality<Close, Close>();
+			if (duality0 == null) throw new ArgumentNullException(nameof(duality0));
+			return new Duality<Cons<C0, Nil>, Cons<S0, Nil>>();
+		}
+
+		public static Duality<Cons<C0, Cons<C1, Nil>>, Cons<S0, Cons<S1, Nil>>> SessionList<S0, S1, C0, C1>(Duality<C0, S0> duality0, Duality<C1, S1> duality1) where S0 : SessionType where S1 : SessionType where C0 : SessionType where C1 : SessionType
+		{
+			if (duality0 == null) throw new ArgumentNullException(nameof(duality0));
+			if (duality1 == null) throw new ArgumentNullException(nameof(duality1));
+			return new Duality<Cons<C0, Cons<C1, Nil>>, Cons<S0, Cons<S1, Nil>>>();
+		}
+
+		public static Duality<Cons<C0, Cons<C1, Cons<C2, Nil>>>, Cons<S0, Cons<S1, Cons<S2, Nil>>>> SessionList<S0, S1, S2, C0, C1, C2>(Duality<C0, S0> duality0, Duality<C1, S1> duality1, Duality<C2, S2> duality2) where S0 : SessionType where S1 : SessionType where S2 : SessionType where C0 : SessionType where C1 : SessionType where C2 : SessionType
+		{
+			if (duality0 == null) throw new ArgumentNullException(nameof(duality0));
+			if (duality1 == null) throw new ArgumentNullException(nameof(duality1));
+			if (duality2 == null) throw new ArgumentNullException(nameof(duality2));
+			return new Duality<Cons<C0, Cons<C1, Cons<C2, Nil>>>, Cons<S0, Cons<S1, Cons<S2, Nil>>>>();
 		}
 	}
 }
