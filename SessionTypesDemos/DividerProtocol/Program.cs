@@ -15,11 +15,11 @@ namespace DividerProtocol
 				var s = server.Receive(out var dividend).Receive(out var divisor);
 				if (divisor != 0)
 				{
-					s.ChooseLeft().Send(dividend / divisor).Close();
+					s.SelectLeft().Send(dividend / divisor).Close();
 				}
 				else
 				{
-					s.ChooseRight().Send("Dividing by zero!").Close();
+					s.SelectRight().Send("Dividing by zero!").Close();
 				}
 			});
 			var c = client.Send(193).Send(13);

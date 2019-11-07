@@ -30,10 +30,10 @@ namespace SummationProtocol
 				}
 			});
 			var c = client.Enter();
-			c = c.ChooseLeft().Send(44).Jump();
-			c = c.ChooseLeft().Send(57).Jump();
-			c = c.ChooseLeft().Send(83).Jump();
-			c.ChooseRight().Receive(out var ans).Close();
+			c = c.SelectLeft().Send(44).Jump();
+			c = c.SelectLeft().Send(57).Jump();
+			c = c.SelectLeft().Send(83).Jump();
+			c.SelectRight().Receive(out var ans).Close();
 			Console.WriteLine(ans);
 		}
 	}
