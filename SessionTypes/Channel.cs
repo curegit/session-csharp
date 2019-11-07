@@ -5,56 +5,45 @@ using System.Threading.Channels;
 
 namespace SessionTypes.Threading
 {
-	public static class ChannelStarter
+	public static class BinaryChannel
 	{
-		public static BinaryChannel<CC, SS> AsChannel<CC, SS>(this Duality<CC, SS> dual) where CC : ProtocolType where SS : ProtocolType
-		{
-			return new BinaryChannel<CC, SS>();
-		}
-	}
-
-	public class BinaryChannel<C, S> where C : ProtocolType where S : ProtocolType
-	{
-
-
-		private static (Session<C, C> client, Session<S, S> server) NewChannel()
-		{
-			var up = Channel.CreateUnbounded<object>();
-			var down = Channel.CreateUnbounded<object>();
-			return (NewClient(up, down), NewServer(up, down));
-		}
-
-		private static Session<C, C> NewClient(Channel<object> up, Channel<object> down)
+		private static Session<C, C> NewClient<C>(Channel<object> up, Channel<object> down) where C : ProtocolType
 		{
 			var c = new BinaryChannelCommunicator(down.Reader, up.Writer);
 			return new Session<C, C>(c);
 		}
 
-		private static Session<S, S> NewServer(Channel<object> up, Channel<object> down)
+		private static Session<S, S> NewServer<S>(Channel<object> up, Channel<object> down) where S : ProtocolType
 		{
 			var c = new BinaryChannelCommunicator(up.Reader, down.Writer);
 			return new Session<S, S>(c);
 		}
 
-		public Session<C, C> Fork(Action<Session<S, S>> threadFunction)
+		private static (Session<C, C> client, Session<S, S> server) NewChannel<C, S>() where C : ProtocolType where S : ProtocolType
 		{
-			var (client, server) = NewChannel();
+			var up = Channel.CreateUnbounded<object>();
+			var down = Channel.CreateUnbounded<object>();
+			return (NewClient<C>(up, down), NewServer<S>(up, down));
+		}
+
+		public static Session<C, C> Fork<C, S>(this Duality<C, S> protocol, Action<Session<S, S>> threadFunction) where C : ProtocolType where S : ProtocolType
+		{
+			var (client, server) = NewChannel<C, S>();
 			var threadStart = new ThreadStart(() => threadFunction(server));
 			var serverThread = new Thread(threadStart);
 			serverThread.Start();
 			return client;
 		}
 
-		/*
-		public static Client<P, P>[] Distribute<A>(Action<Server<P, P>, A> threadFunction, A[] args)
+		public static Session<C, C>[] Distribute<C, S, A>(this Duality<C, S> protocol, Action<Session<S, S>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
 		{
 			int n = args.Length;
-			var clients = new Client<P, P>[n];
-			var servers = new Server<P, P>[n];
+			var clients = new Session<C, C>[n];
+			var servers = new Session<S, S>[n];
 			for (int i = 0; i < n; i++)
 			{
 				var threadNumber = i;
-				var (c, s) = NewChannel();
+				var (c, s) = NewChannel<C, S>();
 				clients[threadNumber] = c;
 				servers[threadNumber] = s;
 				var threadStart = new ThreadStart(() => threadFunction(servers[threadNumber], args[threadNumber]));
@@ -64,14 +53,14 @@ namespace SessionTypes.Threading
 			return clients;
 		}
 
-		public static (Client<P, P>, Server<P, P>) Pipeline<A>(Action<Server<P, P>, Client<P, P>, A> threadFunction, A[] args)
+		public static (Session<C, C>, Session<S, S>) Pipeline<C, S, A>(this Duality<C, S> protocol, Action<Session<S, S>, Session<C, C>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
 		{
 			int n = args.Length + 1;
-			Client<P, P>[] clients = new Client<P, P>[n];
-			Server<P, P>[] servers = new Server<P, P>[n];
+			Session<C, C>[] clients = new Session<C, C>[n];
+			Session<S, S>[] servers = new Session<S, S>[n];
 			for (int i = 0; i < n; i++)
 			{
-				var (c, s) = NewChannel();
+				var (c, s) = NewChannel<C, S>();
 				clients[i] = c;
 				servers[(i + 1) % n] = s;
 			}
@@ -84,7 +73,6 @@ namespace SessionTypes.Threading
 			}
 			return (clients[0], servers[0]);
 		}
-		*/
 	}
 
 	internal class BinaryChannelCommunicator : Communicator

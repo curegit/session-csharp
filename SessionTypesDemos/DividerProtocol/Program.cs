@@ -10,7 +10,7 @@ namespace DividerProtocol
 	{
 		public static void Main(string[] args)
 		{
-			var client = C2S(P<int>, C2S(P<int>, SS(S2C(P<int>, End()), S2C(P<string>, End())))).AsChannel().Fork(server =>
+			var client = C2S(P<int>, C2S(P<int>, AtS(S2C(P<int>, End), S2C(P<string>, End)))).Fork(server =>
 			{
 				var s = server.Receive(out var dividend).Receive(out var divisor);
 				if (divisor != 0)

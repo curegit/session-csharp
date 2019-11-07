@@ -24,12 +24,12 @@ namespace SessionTypes
 			return tail == null ? throw new ArgumentNullException(nameof(tail)) : new Duality<Receive<T, C>, Send<T, S>>();
 		}
 
-		public static Duality<Select<CL, CR>, Follow<SL, SR>> CC<CL, CR, SL, SR>(Duality<CL, SL> left, Duality<CR, SR> right) where CL : SessionType where CR : SessionType where SL : SessionType where SR : SessionType
+		public static Duality<Select<CL, CR>, Follow<SL, SR>> AtC<CL, CR, SL, SR>(Duality<CL, SL> left, Duality<CR, SR> right) where CL : SessionType where CR : SessionType where SL : SessionType where SR : SessionType
 		{
 			return left == null ? throw new ArgumentNullException(nameof(left)) : right == null ? throw new ArgumentNullException(nameof(right)) : new Duality<Select<CL, CR>, Follow<SL, SR>>();
 		}
 
-		public static Duality<Follow<CL, CR>, Select<SL, SR>> SS<CL, CR, SL, SR>(Duality<CL, SL> left, Duality<CR, SR> right) where CL : SessionType where CR : SessionType where SL : SessionType where SR : SessionType
+		public static Duality<Follow<CL, CR>, Select<SL, SR>> AtS<CL, CR, SL, SR>(Duality<CL, SL> left, Duality<CR, SR> right) where CL : SessionType where CR : SessionType where SL : SessionType where SR : SessionType
 		{
 			return left == null ? throw new ArgumentNullException(nameof(left)) : right == null ? throw new ArgumentNullException(nameof(right)) : new Duality<Follow<CL, CR>, Select<SL, SR>>();
 		}

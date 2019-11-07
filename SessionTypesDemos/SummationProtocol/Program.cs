@@ -10,7 +10,7 @@ namespace SummationProtocol
 	{
 		public static void Main(string[] args)
 		{
-			var client = SessionList(CC(C2S(P<int>, Goto0()), S2C(P<int>, End()))).AsChannel().Fork(server =>
+			var client = SessionList(AtC(C2S(P<int>, Goto0), S2C(P<int>, End))).Fork(server =>
 			{
 				var sum = 0;
 				var cont = true;
@@ -19,7 +19,7 @@ namespace SummationProtocol
 				{
 					s.Follow(left =>
 					{
-						s = left.Receive(out var number).Go();
+						s = left.Receive(out var number).Goto();
 						sum += number;
 					},
 					right =>

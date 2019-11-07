@@ -10,8 +10,8 @@ namespace OrdinalProtocol
 	{
 		public static void Main(string[] args)
 		{
-			var dual = C2S(P<int>, S2C(P<string>, End())).AsChannel();
-			var client = dual.Fork(server =>
+			var protocol = C2S(P<int>, S2C(P<string>, End));
+			var client = protocol.Fork(server =>
 			{
 				server.Receive(out var number).Send(ToOrdinalString(number)).Close();
 			});
