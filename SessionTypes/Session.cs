@@ -70,7 +70,7 @@ namespace SessionTypes
 			}
 		}
 
-		internal void Choose(Choice choice)
+		internal void Select(Direction direction)
 		{
 			if (used)
 			{
@@ -79,11 +79,11 @@ namespace SessionTypes
 			else
 			{
 				used = true;
-				communicator.Choose(choice);
+				communicator.Select(direction);
 			}
 		}
 
-		internal Task ChooseAsync(Choice choice)
+		internal Task SelectAsync(Direction direction)
 		{
 			if (used)
 			{
@@ -92,11 +92,11 @@ namespace SessionTypes
 			else
 			{
 				used = true;
-				return communicator.ChooseAsync(choice);
+				return communicator.SelectAsync(direction);
 			}
 		}
 
-		internal Choice Follow()
+		internal Direction Follow()
 		{
 			if (used)
 			{
@@ -109,7 +109,7 @@ namespace SessionTypes
 			}
 		}
 
-		internal Task<Choice> FollowAsync()
+		internal Task<Direction> FollowAsync()
 		{
 			if (used)
 			{

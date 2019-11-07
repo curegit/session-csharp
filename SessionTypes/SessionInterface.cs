@@ -35,25 +35,25 @@ namespace SessionTypes
 
 		public static Session<L, P> SelectLeft<L, R, P>(this Session<Select<L, R>, P> session) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			session.Choose(Choice.Left);
+			session.Select(Direction.Left);
 			return session.ToNext<L>();
 		}
 
 		public static Session<R, P> SelectRight<L, R, P>(this Session<Select<L, R>, P> session) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			session.Choose(Choice.Right);
+			session.Select(Direction.Right);
 			return session.ToNext<R>();
 		}
 
 		public static async Task<Session<L, P>> SelectLeftAsync<L, R, P>(this Session<Select<L, R>, P> session) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			await session.ChooseAsync(Choice.Left);
+			await session.SelectAsync(Direction.Left);
 			return session.ToNext<L>();
 		}
 
 		public static async Task<Session<R, P>> SelectRightAsync<L, R, P>(this Session<Select<L, R>, P> session) where L : SessionType where R : SessionType where P : ProtocolType
 		{
-			await session.ChooseAsync(Choice.Right);
+			await session.SelectAsync(Direction.Right);
 			return session.ToNext<R>();
 		}
 
@@ -61,10 +61,10 @@ namespace SessionTypes
 		{
 			switch (session.Follow())
 			{
-				case Choice.Left:
+				case Direction.Left:
 					leftAction(session.ToNext<L>());
 					break;
-				case Choice.Right:
+				case Direction.Right:
 					rightAction(session.ToNext<R>());
 					break;
 				default:
@@ -76,10 +76,10 @@ namespace SessionTypes
 		{
 			switch (session.Follow())
 			{
-				case Choice.Left:
+				case Direction.Left:
 					await leftAction(session.ToNext<L>());
 					break;
-				case Choice.Right:
+				case Direction.Right:
 					rightAction(session.ToNext<R>());
 					break;
 				default:
@@ -91,10 +91,10 @@ namespace SessionTypes
 		{
 			switch (session.Follow())
 			{
-				case Choice.Left:
+				case Direction.Left:
 					leftAction(session.ToNext<L>());
 					break;
-				case Choice.Right:
+				case Direction.Right:
 					await rightAction(session.ToNext<R>());
 					break;
 				default:
@@ -106,10 +106,10 @@ namespace SessionTypes
 		{
 			switch (session.Follow())
 			{
-				case Choice.Left:
+				case Direction.Left:
 					await leftAction(session.ToNext<L>());
 					break;
-				case Choice.Right:
+				case Direction.Right:
 					await rightAction(session.ToNext<R>());
 					break;
 				default:
@@ -121,10 +121,10 @@ namespace SessionTypes
 		{
 			switch (await session.FollowAsync())
 			{
-				case Choice.Left:
+				case Direction.Left:
 					leftAction(session.ToNext<L>());
 					break;
-				case Choice.Right:
+				case Direction.Right:
 					rightAction(session.ToNext<R>());
 					break;
 				default:
@@ -136,10 +136,10 @@ namespace SessionTypes
 		{
 			switch (await session.FollowAsync())
 			{
-				case Choice.Left:
+				case Direction.Left:
 					await leftAction(session.ToNext<L>());
 					break;
-				case Choice.Right:
+				case Direction.Right:
 					rightAction(session.ToNext<R>());
 					break;
 				default:
@@ -151,10 +151,10 @@ namespace SessionTypes
 		{
 			switch (await session.FollowAsync())
 			{
-				case Choice.Left:
+				case Direction.Left:
 					leftAction(session.ToNext<L>());
 					break;
-				case Choice.Right:
+				case Direction.Right:
 					await rightAction(session.ToNext<R>());
 					break;
 				default:
@@ -166,10 +166,10 @@ namespace SessionTypes
 		{
 			switch (await session.FollowAsync())
 			{
-				case Choice.Left:
+				case Direction.Left:
 					await leftAction(session.ToNext<L>());
 					break;
-				case Choice.Right:
+				case Direction.Right:
 					await rightAction(session.ToNext<R>());
 					break;
 				default:

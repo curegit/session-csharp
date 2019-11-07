@@ -12,24 +12,24 @@ namespace SessionTypes
 
 		public abstract Task<T> ReceiveAsync<T>();
 
-		public virtual void Choose(Choice choice)
+		public virtual void Select(Direction direction)
 		{
-			Send(choice);
+			Send(direction);
 		}
 
-		public virtual Task ChooseAsync(Choice choice)
+		public virtual Task SelectAsync(Direction direction)
 		{
-			return SendAsync(choice);
+			return SendAsync(direction);
 		}
 
-		public virtual Choice Follow()
+		public virtual Direction Follow()
 		{
-			return Receive<Choice>();
+			return Receive<Direction>();
 		}
 
-		public virtual Task<Choice> FollowAsync()
+		public virtual Task<Direction> FollowAsync()
 		{
-			return ReceiveAsync<Choice>();
+			return ReceiveAsync<Direction>();
 		}
 
 		public virtual void Close() { }
