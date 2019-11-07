@@ -13,7 +13,7 @@ namespace SessionTypes
 			this.communicator = communicator;
 		}
 
-		internal Session<N, P> ToNext<N>() where N : SessionType
+		internal Session<N, P> ToNextSession<N>() where N : SessionType
 		{
 			return new Session<N, P>(communicator);
 		}
