@@ -7,7 +7,7 @@ namespace SessionTypes.Threading
 {
 	public static class ChannelStarter
 	{
-		public static BinaryChannel<CC, SS> AsChannel<CC, SS>(this Dual<CC, SS> dual) where CC : ProtocolType where SS : ProtocolType
+		public static BinaryChannel<CC, SS> AsChannel<CC, SS>(this Duality<CC, SS> dual) where CC : ProtocolType where SS : ProtocolType
 		{
 			return new BinaryChannel<CC, SS>();
 		}
