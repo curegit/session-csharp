@@ -19,7 +19,7 @@ namespace SummationProtocol
 				{
 					s.Follow(left =>
 					{
-						s = left.Receive(out var number).Jump();
+						s = left.Receive(out var number).Go();
 						sum += number;
 					},
 					right =>
@@ -30,9 +30,9 @@ namespace SummationProtocol
 				}
 			});
 			var c = client.Enter();
-			c = c.SelectLeft().Send(44).Jump();
-			c = c.SelectLeft().Send(57).Jump();
-			c = c.SelectLeft().Send(83).Jump();
+			c = c.SelectLeft().Send(44).Goto();
+			c = c.SelectLeft().Send(57).Goto();
+			c = c.SelectLeft().Send(83).Goto();
 			c.SelectRight().Receive(out var ans).Close();
 			Console.WriteLine(ans);
 		}

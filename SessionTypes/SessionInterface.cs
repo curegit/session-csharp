@@ -182,14 +182,24 @@ namespace SessionTypes
 			return session.ToNextSession<S>();
 		}
 
-		public static Session<S, S> Jump<S>(this Session<Goto0, S> session) where S : SessionType
+		public static Session<S, S> Goto<S>(this Session<Goto0, S> session) where S : SessionType
 		{
 			return session.ToNextSession<S>();
 		}
 
-		public static Session<S, Cons<S, L>> Jump<S, L>(this Session<Goto0, Cons<S, L>> session) where S : SessionType where L : SessionList
+		public static Session<S0, Cons<S0, L>> Goto<S0, L>(this Session<Goto0, Cons<S0, L>> session) where S0 : SessionType where L : SessionList
 		{
-			return session.ToNextSession<S>();
+			return session.ToNextSession<S0>();
+		}
+
+		public static Session<S1, Cons<S0, Cons<S1, L>>> Goto<S0, S1, L>(this Session<Goto1, Cons<S0, Cons<S1, L>>> session) where S0 : SessionType where S1 : SessionType where L : SessionList
+		{
+			return session.ToNextSession<S1>();
+		}
+
+		public static Session<S2, Cons<S0, Cons<S1, Cons<S2, L>>>> Goto<S0, S1, S2, L>(this Session<Goto2, Cons<S0, Cons<S1, Cons<S2, L>>>> session) where S0 : SessionType where S1 : SessionType where S2 : SessionType where L : SessionList
+		{
+			return session.ToNextSession<S2>();
 		}
 
 		public static void Close<P>(this Session<Close, P> session) where P : ProtocolType
