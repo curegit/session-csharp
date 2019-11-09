@@ -26,7 +26,7 @@ namespace SessionTypes.Threading
 			return (NewClient<C>(up, down), NewServer<S>(up, down));
 		}
 
-		public static Session<C, C> Fork<C, S>(this Duality<C, S> protocol, Action<Session<S, S>> threadFunction) where C : ProtocolType where S : ProtocolType
+		public static Session<C, C> Fork<C, S>(this Protocol<C, S> protocol, Action<Session<S, S>> threadFunction) where C : ProtocolType where S : ProtocolType
 		{
 			var (client, server) = NewChannel<C, S>();
 			var threadStart = new ThreadStart(() => threadFunction(server));
@@ -35,7 +35,7 @@ namespace SessionTypes.Threading
 			return client;
 		}
 
-		public static Session<C, C>[] Distribute<C, S, A>(this Duality<C, S> protocol, Action<Session<S, S>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
+		public static Session<C, C>[] Distribute<C, S, A>(this Protocol<C, S> protocol, Action<Session<S, S>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
 		{
 			int n = args.Length;
 			var clients = new Session<C, C>[n];
@@ -53,7 +53,7 @@ namespace SessionTypes.Threading
 			return clients;
 		}
 
-		public static (Session<C, C>, Session<S, S>) Pipeline<C, S, A>(this Duality<C, S> protocol, Action<Session<S, S>, Session<C, C>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
+		public static (Session<C, C>, Session<S, S>) Pipeline<C, S, A>(this Protocol<C, S> protocol, Action<Session<S, S>, Session<C, C>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
 		{
 			int n = args.Length + 1;
 			Session<C, C>[] clients = new Session<C, C>[n];
