@@ -20,6 +20,16 @@ namespace SessionTypes
 		private Receive() { }
 	}
 
+	public sealed class AddSend<P, O, S> : SessionType where P : ProtocolType where O : ProtocolType where S : SessionType
+	{
+		private AddSend() { }
+	}
+
+	public sealed class AddReceive<P, S> : SessionType where P : ProtocolType where S : SessionType
+	{
+		private AddReceive() { }
+	}
+
 	public sealed class Select<L, R> : SessionType where L : SessionType where R : SessionType
 	{
 		private Select() { }

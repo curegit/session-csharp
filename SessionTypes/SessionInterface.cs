@@ -33,6 +33,18 @@ namespace SessionTypes
 			return (session.ToNextSession<S>(), await session.ReceiveAsync<T>());
 		}
 
+		public static Session<S, P> SendNewChannel<N, O, S, P>(this Session<AddSend<N, O, S>, P> session, out Session<N, N> channel) where N : ProtocolType where O : ProtocolType where S : SessionType where P : ProtocolType
+		{
+			channel = session.SendNewChannel<N, O>();
+			return session.ToNextSession<S>();
+		}
+
+		public static Session<S, P> ReceiveNewChannel<N, S, P>(this Session<AddReceive<N, S>, P> session, out Session<N, N> channel) where N : ProtocolType where S : SessionType where P : ProtocolType
+		{
+			channel = session.ReceiveNewChannel<N>();
+			return session.ToNextSession<S>();
+		}
+
 		public static Session<L, P> SelectLeft<L, R, P>(this Session<Select<L, R>, P> session) where L : SessionType where R : SessionType where P : ProtocolType
 		{
 			session.Select(Direction.Left);

@@ -70,6 +70,32 @@ namespace SessionTypes
 			}
 		}
 
+		internal Session<Q, Q> SendNewChannel<Q, O>() where Q : ProtocolType where O : ProtocolType
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				return communicator.AddSend<Q, O>();
+			}
+		}
+
+		internal Session<Q, Q> ReceiveNewChannel<Q>() where Q : ProtocolType
+		{
+			if (used)
+			{
+				throw new LinearityViolationException();
+			}
+			else
+			{
+				used = true;
+				return communicator.AddReceive<Q>();
+			}
+		}
+
 		internal void Select(Direction direction)
 		{
 			if (used)

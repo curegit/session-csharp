@@ -19,7 +19,7 @@ namespace SessionTypes.Threading
 			return new Session<S, S>(c);
 		}
 
-		private static (Session<C, C> client, Session<S, S> server) NewChannel<C, S>() where C : ProtocolType where S : ProtocolType
+		internal static (Session<C, C> client, Session<S, S> server) NewChannel<C, S>() where C : ProtocolType where S : ProtocolType
 		{
 			var up = Channel.CreateUnbounded<object>();
 			var down = Channel.CreateUnbounded<object>();
@@ -104,6 +104,28 @@ namespace SessionTypes.Threading
 		public override async Task<T> ReceiveAsync<T>()
 		{
 			return (T)await reader.ReadAsync();
+		}
+
+		public override Session<P, P> AddSend<P, O>()
+		{
+			var (c, s) = BinaryChannel.NewChannel<P, O>();
+			Send(s);
+			return c;
+		}
+
+		public override Task<Session<P, P>> AddSendAsync<P, O>()
+		{
+			throw new NotImplementedException();
+		}
+
+		public override Session<P, P> AddReceive<P>()
+		{
+			return Receive<Session<P, P>>();
+		}
+
+		public override Task<Session<P, P>> AddReceiveAsync<P>()
+		{
+			throw new NotImplementedException();
 		}
 
 		public override void Close()

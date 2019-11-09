@@ -24,6 +24,16 @@ namespace SessionTypes
 			return tail == null ? throw new ArgumentNullException(nameof(tail)) : new Protocol<Receive<T, C>, Send<T, S>>();
 		}
 
+		public static Protocol<AddSend<DC, DS, C>, AddReceive<DS, S>> C2SAdd<DC, DS, C, S>(Protocol<DC, DS> d, Protocol<C, S> tail) where DC : SessionType where DS : SessionType where C : SessionType where S : SessionType
+		{
+			return new Protocol<AddSend<DC, DS, C>, AddReceive<DS, S>>();
+		}
+
+		public static Protocol<AddReceive<DC, C>, AddSend<DS, DC, S>> S2CAdd<DC, DS, C, S>(Protocol<DC, DS> d, Protocol<C, S> tail) where DC : SessionType where DS : SessionType where C : SessionType where S : SessionType
+		{
+			return new Protocol<AddReceive<DC, C>, AddSend<DS, DC, S>>();
+		}
+
 		public static Protocol<Select<CL, CR>, Follow<SL, SR>> AtC<CL, CR, SL, SR>(Protocol<CL, SL> left, Protocol<CR, SR> right) where CL : SessionType where CR : SessionType where SL : SessionType where SR : SessionType
 		{
 			return left == null ? throw new ArgumentNullException(nameof(left)) : right == null ? throw new ArgumentNullException(nameof(right)) : new Protocol<Select<CL, CR>, Follow<SL, SR>>();

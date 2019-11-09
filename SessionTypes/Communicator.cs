@@ -12,6 +12,14 @@ namespace SessionTypes
 
 		public abstract Task<T> ReceiveAsync<T>();
 
+		public abstract Session<P, P> AddSend<P, O>() where P : ProtocolType where O : ProtocolType;
+
+		public abstract Task<Session<P, P>> AddSendAsync<P, O>() where P : ProtocolType where O : ProtocolType;
+
+		public abstract Session<P, P> AddReceive<P>() where P : ProtocolType;
+
+		public abstract Task<Session<P, P>> AddReceiveAsync<P>() where P : ProtocolType;
+
 		public virtual void Select(Direction direction)
 		{
 			Send(direction);
