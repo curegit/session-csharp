@@ -16,6 +16,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SummationProtocol", "Sessio
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DividerProtocol", "SessionTypesDemos\DividerProtocol\DividerProtocol.csproj", "{BAD13E33-AD2F-433A-8154-151257C2D9CF}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VarianceProtocol", "SessionTypesDemos\VarianceProtocol\VarianceProtocol.csproj", "{819D13BE-45FA-4257-8C91-7EA0A220BFF7}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaraiProtocol", "SessionTypesDemos\TaraiProtocol\TaraiProtocol.csproj", "{33152845-4EE8-4E2E-A354-BEE4D562E5C1}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -50,6 +54,14 @@ Global
 		{BAD13E33-AD2F-433A-8154-151257C2D9CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAD13E33-AD2F-433A-8154-151257C2D9CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAD13E33-AD2F-433A-8154-151257C2D9CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{819D13BE-45FA-4257-8C91-7EA0A220BFF7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{819D13BE-45FA-4257-8C91-7EA0A220BFF7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{819D13BE-45FA-4257-8C91-7EA0A220BFF7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{819D13BE-45FA-4257-8C91-7EA0A220BFF7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{33152845-4EE8-4E2E-A354-BEE4D562E5C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{33152845-4EE8-4E2E-A354-BEE4D562E5C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{33152845-4EE8-4E2E-A354-BEE4D562E5C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{33152845-4EE8-4E2E-A354-BEE4D562E5C1}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

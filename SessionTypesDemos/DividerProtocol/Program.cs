@@ -1,25 +1,25 @@
 using System;
-using SessionTypes.Binary;
-using SessionTypes.Binary.Threading;
+using SessionTypes;
+using SessionTypes.Threading;
 
 namespace DividerProtocol
 {
-	using DivProtocol = Req<int, Req<int, RespChoice<Resp<int, Eps>, Resp<string, Eps>>>>;
+	using static ProtocolBuilder;
 
 	public class Program
 	{
 		public static void Main(string[] args)
 		{
-			var client = BinaryChannel<DivProtocol>.Fork(server =>
+			var client = C2S(P<int>, C2S(P<int>, AtS(S2C(P<int>, End), S2C(P<string>, End)))).Fork(server =>
 			{
 				var s = server.Receive(out var dividend).Receive(out var divisor);
 				if (divisor != 0)
 				{
-					s.ChooseLeft().Send(dividend / divisor).Close();
+					s.SelectLeft().Send(dividend / divisor).Close();
 				}
 				else
 				{
-					s.ChooseRight().Send("Dividing by zero!").Close();
+					s.SelectRight().Send("Dividing by zero!").Close();
 				}
 			});
 			var c = client.Send(193).Send(13);

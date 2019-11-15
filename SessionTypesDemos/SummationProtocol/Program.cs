@@ -1,16 +1,16 @@
 using System;
-using SessionTypes.Binary;
-using SessionTypes.Binary.Threading;
+using SessionTypes;
+using SessionTypes.Threading;
 
 namespace SummationProtocol
 {
-	using SumProtocol = Cons<ReqChoice<Req<int, Goto0>, Resp<int, Eps>>, Nil>;
+	using static ProtocolBuilder;
 
 	public class Program
 	{
 		public static void Main(string[] args)
 		{
-			var client = BinaryChannel<SumProtocol>.Fork(server =>
+			var client = SessionList(AtC(C2S(P<int>, Goto0), S2C(P<int>, End))).Fork(server =>
 			{
 				var sum = 0;
 				var cont = true;
@@ -19,7 +19,7 @@ namespace SummationProtocol
 				{
 					s.Follow(left =>
 					{
-						s = left.Receive(out var number).Jump();
+						s = left.Receive(out var number).Goto();
 						sum += number;
 					},
 					right =>
@@ -30,10 +30,10 @@ namespace SummationProtocol
 				}
 			});
 			var c = client.Enter();
-			c = c.ChooseLeft().Send(44).Jump();
-			c = c.ChooseLeft().Send(57).Jump();
-			c = c.ChooseLeft().Send(83).Jump();
-			c.ChooseRight().Receive(out var ans).Close();
+			c = c.SelectLeft().Send(44).Goto();
+			c = c.SelectLeft().Send(57).Goto();
+			c = c.SelectLeft().Send(83).Goto();
+			c.SelectRight().Receive(out var ans).Close();
 			Console.WriteLine(ans);
 		}
 	}

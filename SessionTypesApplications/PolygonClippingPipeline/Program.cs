@@ -2,11 +2,12 @@ using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using SessionTypes;
-using SessionTypes.Binary;
-using SessionTypes.Binary.Threading;
+using SessionTypes.Threading;
 
 namespace PolygonClippingPipeline
 {
+	using static SessionTypes.ProtocolBuilder;
+
 	/// <summary>
 	/// Sutherland–Hodgman の Polygon Clipping Algorithm をセッション型を用いたパイプライン処理によって行う応用例
 	/// </summary>
@@ -57,8 +58,10 @@ namespace PolygonClippingPipeline
 				edges[i] = (clipper[i], clipper[(i + 1) % clipper.Length]);
 			}
 
+			var d = SessionList(AtC(C2S(P<Vector>, Goto0), End));
+
 			// 本命のパイプライン処理
-			var (argc, retc) = BinaryChannel<Cons<ReqChoice<Req<Vector, Goto0>, Eps>, Nil>>.Pipeline
+			var (argc, retc) = d.Pipeline
 			(
 				// それぞれのパイプラインスレッドの処理
 				async (prev, next, edge) =>

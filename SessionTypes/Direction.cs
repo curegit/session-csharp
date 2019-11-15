@@ -1,6 +1,6 @@
 namespace SessionTypes
 {
-	internal enum BinaryChoice
+	internal enum Direction
 	{
 		Left = -1,
 		Default = 0,

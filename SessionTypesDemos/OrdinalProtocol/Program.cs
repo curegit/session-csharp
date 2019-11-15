@@ -1,16 +1,17 @@
 using System;
-using SessionTypes.Binary;
-using SessionTypes.Binary.Threading;
+using SessionTypes;
+using SessionTypes.Threading;
 
 namespace OrdinalProtocol
 {
-	using OrdProtocol = Req<int, Resp<string, Eps>>;
+	using static ProtocolBuilder;
 
 	public class Program
 	{
 		public static void Main(string[] args)
 		{
-			var client = BinaryChannel<OrdProtocol>.Fork(server =>
+			var protocol = C2S(P<int>, S2C(P<string>, End));
+			var client = protocol.Fork(server =>
 			{
 				server.Receive(out var number).Send(ToOrdinalString(number)).Close();
 			});
