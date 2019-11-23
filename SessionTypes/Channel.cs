@@ -3,6 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Channels;
 
+using System.Collections.Generic;
+
 namespace SessionTypes.Threading
 {
 	public static class BinaryChannel
@@ -33,6 +35,31 @@ namespace SessionTypes.Threading
 			var serverThread = new Thread(threadStart);
 			serverThread.Start();
 			return client;
+		}
+
+		public static IEnumerable<Session<C, C>> DistributeTask<C, S, A>(this Protocol<C, S> protocol, Action<Session<S, S>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
+		{
+			int n = args.Length;
+
+			List<Task> running = new List<Task>();
+
+			while (true)
+			{
+				if (running.Count < n)
+				{
+					var (c, s) = NewChannel<C, S>();
+					var t = Task.Run(() =>
+					{
+						threadFunction(s, args[0]);
+					});
+					running.Add(t);
+					yield return c;
+				}
+				else
+				{
+					Task.WaitAny(running.ToArray());
+				}
+			}
 		}
 
 		public static Session<C, C>[] Distribute<C, S, A>(this Protocol<C, S> protocol, Action<Session<S, S>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType

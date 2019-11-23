@@ -5,15 +5,22 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
 using SessionTypes;
-using SessionTypes.Binary;
-using SessionTypes.Binary.Threading;
+using SessionTypes.Threading;
 
 namespace ParallelHttpDownloader
 {
+	using static ProtocolBuilder;
+
+	//delegate Session<S, P> SendDeleg<T, S, P>(Session<Send<T, S>, P> s) where S:SessionType where P: ProtocolType;
+
 	public class Program
 	{
 		private static void Main(string[] args)
 		{
+			//var a = new SendDeleg(s => { s.Send(1)});
+
+			//Fuc.SedSome(sbyt);
+
 			Console.WriteLine("Parallel HTTP Downloader");
 			var n = Environment.ProcessorCount;
 			Console.WriteLine($"{n} Threads");
@@ -55,68 +62,65 @@ namespace ParallelHttpDownloader
 
 			var ids = Enumerable.Range(1, n).ToArray();
 
-			var clients = BinaryChannel<Cons<ReqChoice<Req<string, Resp<byte[], Goto0>>, Close>, Nil>>.Distribute((server, id) =>
+			var protocol = AtC(C2S(P<string>, S2C(P<byte[]>, Goto0)), End);
+
+			var clients = protocol.Distribute((server, id) =>
 			{
-				var s = server.Enter();
+				//
 				var http = new HttpClient();
-				while (true)
+				//
+				byte[] Download()
 				{
-					var flag = false;
-					s.Follow(
-						left =>
-						{
-							var s1 = left.Receive(out var url);
-							Console.WriteLine($"Thread {id} Started downloading");
-							var d = Download(http, url);
-							Console.WriteLine($"Thread {id} Finished downloading");
-							var s2 = s1.Send(d);
-							s = s2.Jump();
-						},
-						right =>
-						{
-							Console.WriteLine($"Thread {id} Closed");
-							flag = true; right.Close();
-						}
-					);
-					if (flag) break;
+					try
+					{
+						
+					}
+					catch
+					{
+						return null;
+					}
 				}
-			}
-			, ids);
+				//
+				var loop = true;
+				
+				while(loop) {
+					server.Follow(
+					left =>
+					{
+						var s3 = left.Receive(out var url);
+						var d = Download(http, url);
+						server = s3.Send(d).Goto();
+					},
+					right =>
+					{
+						right.Close();
+						loop = false;
+					});
+				}
+			}, ids);
 
+			var (s, unusedSessios, remainigArgs) = clients.ZipSessions(args.AsEnumerable(), (c, u) => c.SelectLeft().Send(u).ReceiveAsync());
 
-			var entries = clients.Select(c => c.Enter()).ToList();
-			var working = new List<Task<(Client<Goto0, Cons<ReqChoice<Req<string, Resp<byte[], Goto0>>, Close>, Nil>>, byte[])>>();
+			//var (cs1, rem, ss) = clients.Zip(args, (c, u) => c.SelectLeft().Send(u).ReceiveAsync()).ToList();
+
+			//var rem = args.Skip(cs1.Count()).ToList();
+			var us = unusedSessios.ToList();
+			var ss = s.ToList();
+
 			var data = new List<byte[]>();
-			foreach (var url in args)
-			{
-				if (!entries.Any())
-				{
-					var wait = Task.WhenAny(working);
-					var task = wait.Result;
-					working.Remove(task);
-					var e = task.Result.Bind(out var bytes);
-					data.Add(bytes);
-					entries.Add(e.Jump());
-				}
 
-				working.Add(entries[0].ChooseLeft().Send(url).ReceiveAsync());
-				entries.RemoveAt(0);
-			}
+			us.Select(s1 => { s1.SelectRight().Close(); return 0; });
 
-			foreach (var entry in entries)
+			foreach(var r in args)
 			{
-				entry.ChooseRight().Close();
+				int i = Task.WaitAny(ss.ToArray());
+				var s2 = ss[i].Result.Bind(out var d).Goto();
+				ss.RemoveAt(i);
+				data.Add(d);
+				ss.Add(s2.SelectLeft().Send(r).ReceiveAsync());
 			}
+			ss.Select(s2 => { s2.Result.Bind(out var a).Goto().SelectRight().Close(); data.Add(a);  return 0; });
 
-			while (working.Any())
-			{
-				var wait = Task.WhenAny(working);
-				var task = wait.Result;
-				working.Remove(task);
-				var e = task.Result.Bind(out var bytes);
-				data.Add(bytes);
-				e.Jump().ChooseRight().Close();
-			}
 
 			for (int i = 0; i < data.Count; i++)
 			{
