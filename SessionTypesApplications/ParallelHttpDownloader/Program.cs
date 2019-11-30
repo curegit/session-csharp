@@ -69,11 +69,11 @@ namespace ParallelHttpDownloader
 				//
 				var http = new HttpClient();
 				//
-				byte[] Download()
+				byte[] Download(HttpClient client, string url)
 				{
 					try
 					{
-						
+						return client.GetByteArrayAsync(url).Result;
 					}
 					catch
 					{
@@ -81,14 +81,14 @@ namespace ParallelHttpDownloader
 					}
 				}
 				//
-				var loop = true;
-				
-				while(loop) {
+				for (var loop = true; loop;)
+				{
 					server.Follow(
 					left =>
 					{
 						var s3 = left.Receive(out var url);
 						var d = Download(http, url);
+						// TODO: byte? or choice
 						server = s3.Send(d).Goto();
 					},
 					right =>
@@ -97,9 +97,10 @@ namespace ParallelHttpDownloader
 						loop = false;
 					});
 				}
-			}, ids);
+			},
+			ids);
 
-			var (s, unusedSessios, remainigArgs) = clients.ZipSessions(args.AsEnumerable(), (c, u) => c.SelectLeft().Send(u).ReceiveAsync());
+			var (s, unusedSessios, remainigArgs) = clients.ZipArgs(args.AsEnumerable(), (c, u) => c.SelectLeft().Send(u).ReceiveAsync());
 
 			//var (cs1, rem, ss) = clients.Zip(args, (c, u) => c.SelectLeft().Send(u).ReceiveAsync()).ToList();
 
@@ -109,9 +110,11 @@ namespace ParallelHttpDownloader
 
 			var data = new List<byte[]>();
 
-			us.Select(s1 => { s1.SelectRight().Close(); return 0; });
+			us.Do(s1 => s1.SelectRight().Close());
 
-			foreach(var r in args)
+			//us.Select(s1 => { s1.SelectRight().Close(); return 0; });
+
+			foreach (var r in args)
 			{
 				int i = Task.WaitAny(ss.ToArray());
 				var s2 = ss[i].Result.Bind(out var d).Goto();
@@ -119,7 +122,7 @@ namespace ParallelHttpDownloader
 				data.Add(d);
 				ss.Add(s2.SelectLeft().Send(r).ReceiveAsync());
 			}
-			ss.Select(s2 => { s2.Result.Bind(out var a).Goto().SelectRight().Close(); data.Add(a);  return 0; });
+			ss.Select(s2 => { s2.Result.Bind(out var a).Goto().SelectRight().Close(); data.Add(a); return 0; });
 
 
 			for (int i = 0; i < data.Count; i++)
@@ -128,18 +131,6 @@ namespace ParallelHttpDownloader
 				{
 					File.WriteAllBytes($@"{i}.jpg", data[i]);
 				}
-			}
-		}
-
-		private static byte[] Download(HttpClient client, string url)
-		{
-			try
-			{
-				return client.GetByteArrayAsync(url).Result;
-			}
-			catch
-			{
-				return null;
 			}
 		}
 	}

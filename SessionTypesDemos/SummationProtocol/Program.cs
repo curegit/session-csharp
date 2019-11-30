@@ -14,6 +14,7 @@ namespace SummationProtocol
 			{
 				var sum = 0;
 				var cont = true;
+				
 				var s = server.Enter();
 				while (cont)
 				{

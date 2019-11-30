@@ -18,17 +18,31 @@ namespace SessionTypes
 			return new Session<N, P>(communicator);
 		}
 
+		private Communicator GetCommunicator()
+		{
+			lock (communicator)
+			{
+				if (used)
+				{
+					throw new LinearityViolationException();
+				}
+				else
+				{
+					used = true;
+				}
+			}
+			return communicator;
+		}
+
+		private void MarkAsUsed()
+		{
+
+		}
+
 		internal void Send<T>(T value)
 		{
-			if (used)
-			{
-				throw new LinearityViolationException();
-			}
-			else
-			{
-				used = true;
-				communicator.Send(value);
-			}
+			MarkAsUsed();
+			communicator.Send(value);
 		}
 
 		internal Task SendAsync<T>(T value)
