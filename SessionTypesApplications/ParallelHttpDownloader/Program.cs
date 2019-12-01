@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 using System.Net.Http;
 using SessionTypes;
 using SessionTypes.Threading;
+using SessionTypes.Serialization;
 
 namespace ParallelHttpDownloader
 {
-	using static ProtocolBuilder;
+	//using static 
+
+	using static Combinator;
+	using static ProtocolBuffers;
 
 	//delegate Session<S, P> SendDeleg<T, S, P>(Session<Send<T, S>, P> s) where S:SessionType where P: ProtocolType;
 

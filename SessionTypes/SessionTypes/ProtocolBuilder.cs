@@ -7,7 +7,15 @@ namespace SessionTypes
 		private Payload() { }
 	}
 
-	public static class ProtocolBuilder
+	public static class Combinator<S>
+	{
+		public static Payload<T> S<T>()
+		{
+			throw new MethodAccessException();
+		}
+	}
+
+	public static class Combinator
 	{
 		public static Payload<T> P<T>()
 		{

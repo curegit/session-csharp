@@ -4,7 +4,7 @@ using SessionTypes.Threading;
 
 namespace OrdinalProtocol
 {
-	using static ProtocolBuilder;
+	using static Combinator;
 
 	public class Program
 	{

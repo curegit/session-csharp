@@ -3,15 +3,37 @@ using System.Threading.Tasks;
 using SessionTypes;
 using SessionTypes.Threading;
 
+using System.Runtime.Serialization.Formatters.Binary;
+
 namespace TaraiProtocol
 {
-	using static ProtocolBuilder;
+	//using static Combinator<>;
+	using static Portobuf;
+	using static Combinator;
+	using static Combinator<Protobuf>;
+	//using static ProtocolCom
+
+	namespace TaraiProtocol
+	{
+		public class TaraiProtocol
+		{
+
+		}
+
+		public class TaraiProtocol2 : TaraiProtocol
+		{
+
+		}
+	}
+
 
 	public class Program
 	{
 		public static async Task Main(string[] args)
 		{
 			var protocol = C2S(P<int>, C2S(P<int>, C2S(P<int>, S2CAdd(C2S(P<bool>, End), AtS(S2C(P<int>, End), End)))));
+
+			//protocol.
 
 			var client = protocol.Fork(async server =>
 			{
@@ -30,6 +52,8 @@ namespace TaraiProtocol
 					s2.SelectRight().Close();
 					cancel.Result.Bind(out var b).Close();
 				}
+
+				
 			});
 
 			var c1 = client.Send(16).Send(3).Send(2);

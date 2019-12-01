@@ -4,7 +4,7 @@ using SessionTypes.Threading;
 
 namespace SummationProtocol
 {
-	using static ProtocolBuilder;
+	using static Combinator;
 
 	public class Program
 	{
