@@ -1,6 +1,6 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 15
-VisualStudioVersion = 15.0.28307.271
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29519.87
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SessionTypes", "SessionTypes\SessionTypes.csproj", "{203AB79E-EC77-438F-9749-DC60B68B3686}"
 EndProject
@@ -15,6 +15,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SummationProtocol", "SessionTypesDemos\SummationProtocol\SummationProtocol.csproj", "{EBD7E10A-5877-479D-8EE2-E8BADC50AF91}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DividerProtocol", "SessionTypesDemos\DividerProtocol\DividerProtocol.csproj", "{BAD13E33-AD2F-433A-8154-151257C2D9CF}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReverseProtocol", "SessionTypesDemos\ReverseProtocol\ReverseProtocol.csproj", "{0EAB24D4-0F0D-4486-BB6F-EEF7AC99EC6D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -50,6 +52,10 @@ Global
 		{BAD13E33-AD2F-433A-8154-151257C2D9CF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BAD13E33-AD2F-433A-8154-151257C2D9CF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BAD13E33-AD2F-433A-8154-151257C2D9CF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0EAB24D4-0F0D-4486-BB6F-EEF7AC99EC6D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0EAB24D4-0F0D-4486-BB6F-EEF7AC99EC6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0EAB24D4-0F0D-4486-BB6F-EEF7AC99EC6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0EAB24D4-0F0D-4486-BB6F-EEF7AC99EC6D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

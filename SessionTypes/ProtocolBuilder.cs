@@ -58,6 +58,11 @@ namespace SessionTypes
 			}
 		}
 
+		public static Duality<Call0<C>, Call0<S>> Call0<C, S>(Duality<C, S> tail) where C : SessionType where S : SessionType
+		{
+			return new Duality<Call0<C>, Call0<S>>();
+		}
+
 		public static Duality<Close, Close> End
 		{
 			get

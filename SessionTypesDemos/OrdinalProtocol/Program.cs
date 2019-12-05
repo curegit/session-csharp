@@ -10,6 +10,28 @@ namespace OrdinalProtocol
 	{
 		public static void Main(string[] args)
 		{
+			var en = C2S(P<int>, AtC(Call0(S2C(P<int>, End)), End));
+			var proto = SessionList(en);
+
+			var c = proto.Fork(null);
+
+			var d = c.Enter().Send(1).SelectLeft().Call().Send(2).SelectLeft();
+
+
+
+			var t = d.Call((se, self) =>
+			{
+				var h = se.Send(1).Call(self);
+
+				var a = h.Receive(out var g);
+
+				return a.Return();
+			});
+
+			t.Receive(out var b).Return().Receive(out var v).Close();
+
+			//t.
+
 			var protocol = C2S(P<int>, S2C(P<string>, End));
 			var client = protocol.Fork(server =>
 			{

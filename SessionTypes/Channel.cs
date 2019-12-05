@@ -26,7 +26,7 @@ namespace SessionTypes.Threading
 			return (NewClient<C>(up, down), NewServer<S>(up, down));
 		}
 
-		public static Session<C, C> Fork<C, S>(this Duality<C, S> protocol, Action<Session<S, S>> threadFunction) where C : ProtocolType where S : ProtocolType
+		public static Session<C, Empty, C> Fork<C, S>(this Duality<C, S> protocol, Action<Session<S, Empty, S>> threadFunction) where C : ProtocolType where S : ProtocolType
 		{
 			var (client, server) = NewChannel<C, S>();
 			var threadStart = new ThreadStart(() => threadFunction(server));
