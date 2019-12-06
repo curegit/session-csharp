@@ -39,7 +39,7 @@ namespace ReverseProtocol
 			// クライアント側
 			// 3回送信する（Call() で残りのセッションをスタックに入れて、再帰先のセッションを展開する）
 			var c1 = client.Enter().SelectLeft().Send(1).Call().SelectLeft().Send(2).Call().SelectLeft().Send(3);
-			// ここで右を選択
+			// ここで右を選択して呼び出し地点へ戻り始める
 			var c2 = c1.Call().SelectRight().Return();
 			// 3回送信したので3回受信する必要がある（Return() はスタックからセッション型をとってくる操作）
 			c2.Receive(out var x).Return().Receive(out var y).Return().Receive(out var z).Close();
