@@ -1,9 +1,9 @@
 namespace SessionTypes
 {
-	internal enum Direction
+	internal enum Direction : byte
 	{
-		Left = -1,
 		Default = 0,
-		Right = 1,
+		Left = 1,
+		Right = 2,
 	}
 }
