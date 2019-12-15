@@ -4,7 +4,7 @@ using SessionTypes.Threading;
 
 namespace DividerProtocol
 {
-	using static Combinator;
+	using static ProtocolCombinator;
 
 	public class Program
 	{

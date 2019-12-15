@@ -1,6 +1,6 @@
 namespace SessionTypes.Se
 {
-	public static class Protob
+	public class Protob
 	{
 		public static Payload<T> Proto<T>() 
 		{

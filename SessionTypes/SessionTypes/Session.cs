@@ -6,9 +6,9 @@ namespace SessionTypes
 	{
 		private bool used;
 
-		private readonly Communicator communicator;
+		private readonly ICommunicator communicator;
 
-		internal Session(Communicator communicator)
+		internal Session(ICommunicator communicator)
 		{
 			this.communicator = communicator;
 		}
@@ -18,30 +18,24 @@ namespace SessionTypes
 			return new Session<N, P>(communicator);
 		}
 
-		private Communicator GetCommunicator()
+		private void Consume()
 		{
 			lock (communicator)
 			{
 				if (used)
 				{
-					throw new LinearityViolationException();
+					throw new LinearityException();
 				}
 				else
 				{
 					used = true;
 				}
 			}
-			return communicator;
-		}
-
-		private void MarkAsUsed()
-		{
-
 		}
 
 		internal void Send<T>(T value)
 		{
-			MarkAsUsed();
+			Consume();
 			communicator.Send(value);
 		}
 
@@ -49,7 +43,7 @@ namespace SessionTypes
 		{
 			if (used)
 			{
-				throw new LinearityViolationException();
+				throw new LinearityException();
 			}
 			else
 			{
@@ -62,7 +56,7 @@ namespace SessionTypes
 		{
 			if (used)
 			{
-				throw new LinearityViolationException();
+				throw new LinearityException();
 			}
 			else
 			{
@@ -75,7 +69,7 @@ namespace SessionTypes
 		{
 			if (used)
 			{
-				throw new LinearityViolationException();
+				throw new LinearityException();
 			}
 			else
 			{
@@ -88,12 +82,12 @@ namespace SessionTypes
 		{
 			if (used)
 			{
-				throw new LinearityViolationException();
+				throw new LinearityException();
 			}
 			else
 			{
 				used = true;
-				return communicator.AddSend<Q, O>();
+				return communicator.Cast<Q, O>();
 			}
 		}
 
@@ -101,12 +95,12 @@ namespace SessionTypes
 		{
 			if (used)
 			{
-				throw new LinearityViolationException();
+				throw new LinearityException();
 			}
 			else
 			{
 				used = true;
-				return communicator.AddReceive<Q>();
+				return communicator.Accept<Q>();
 			}
 		}
 
@@ -114,7 +108,7 @@ namespace SessionTypes
 		{
 			if (used)
 			{
-				throw new LinearityViolationException();
+				throw new LinearityException();
 			}
 			else
 			{
@@ -127,7 +121,7 @@ namespace SessionTypes
 		{
 			if (used)
 			{
-				throw new LinearityViolationException();
+				throw new LinearityException();
 			}
 			else
 			{
@@ -140,7 +134,7 @@ namespace SessionTypes
 		{
 			if (used)
 			{
-				throw new LinearityViolationException();
+				throw new LinearityException();
 			}
 			else
 			{
@@ -153,7 +147,7 @@ namespace SessionTypes
 		{
 			if (used)
 			{
-				throw new LinearityViolationException();
+				throw new LinearityException();
 			}
 			else
 			{
@@ -162,11 +156,13 @@ namespace SessionTypes
 			}
 		}
 
+
+
 		internal void Close()
 		{
 			if (used)
 			{
-				throw new LinearityViolationException();
+				throw new LinearityException();
 			}
 			else
 			{

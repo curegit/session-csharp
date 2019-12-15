@@ -4,12 +4,21 @@ using SessionTypes.Threading;
 
 namespace OrdinalProtocol
 {
-	using static Combinator;
+	using static ProtocolCombinator;
 
-	public class Program
+	public static class Program
 	{
 		public static void Main(string[] args)
 		{
+			A();
+
+			SessionList(C2S<int> * S2C<int> * End | C2S<int> * S2C<int> * End);
+
+			End <= C2S<int> <= S2C<int> + 
+
+		   (C2S<int> * (S2C<int> * End))
+
+
 			var protocol = C2S(P<int>, S2C(P<string>, End));
 			var client = protocol.Fork(server =>
 			{
@@ -17,6 +26,11 @@ namespace OrdinalProtocol
 			});
 			client.Send(21).Receive(out var ordinal).Close();
 			Console.WriteLine(ordinal);
+
+			int A()
+			{
+				return 0;
+			}
 		}
 
 		private static string ToOrdinalString(int n)

@@ -7,28 +7,28 @@ using System.Collections.Generic;
 
 namespace SessionTypes.Threading
 {
-	public static class BinaryChannel
+	public static class Channel
 	{
 		private static Session<C, C> NewClient<C>(Channel<object> up, Channel<object> down) where C : ProtocolType
 		{
-			var c = new BinaryChannelCommunicator(down.Reader, up.Writer);
+			var c = new ChannelCommunicator(down.Reader, up.Writer);
 			return new Session<C, C>(c);
 		}
 
 		private static Session<S, S> NewServer<S>(Channel<object> up, Channel<object> down) where S : ProtocolType
 		{
-			var c = new BinaryChannelCommunicator(up.Reader, down.Writer);
+			var c = new ChannelCommunicator(up.Reader, down.Writer);
 			return new Session<S, S>(c);
 		}
 
 		internal static (Session<C, C> client, Session<S, S> server) NewChannel<C, S>() where C : ProtocolType where S : ProtocolType
 		{
-			var up = Channel.CreateUnbounded<object>();
-			var down = Channel.CreateUnbounded<object>();
+			var up = System.Threading.Channels.Channel.CreateUnbounded<object>();
+			var down = System.Threading.Channels.Channel.CreateUnbounded<object>();
 			return (NewClient<C>(up, down), NewServer<S>(up, down));
 		}
 
-		public static Session<C, C> Fork<C, S>(this Protocol<C, S> protocol, Action<Session<S, S>> threadFunction) where C : ProtocolType where S : ProtocolType
+		public static Session<C, C> Fork<T, C, S>(this Protocol<T, C, S> protocol, Action<Session<S, S>> threadFunction) where C : ProtocolType where S : ProtocolType
 		{
 			var (client, server) = NewChannel<C, S>();
 			var threadStart = new ThreadStart(() => threadFunction(server));
@@ -37,7 +37,7 @@ namespace SessionTypes.Threading
 			return client;
 		}
 
-		public static IEnumerable<Session<C, C>> DistributeTask<C, S, A>(this Protocol<C, S> protocol, Action<Session<S, S>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
+		public static IEnumerable<Session<C, C>> DistributeTask<T, C, S, A>(this Protocol<T, C, S> protocol, Action<Session<S, S>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
 		{
 			int n = args.Length;
 
@@ -62,7 +62,7 @@ namespace SessionTypes.Threading
 			}
 		}
 
-		public static Session<C, C>[] Distribute<C, S, A>(this Protocol<C, S> protocol, Action<Session<S, S>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
+		public static Session<C, C>[] Distribute<T, C, S, A>(this Protocol<T, C, S> protocol, Action<Session<S, S>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
 		{
 			int n = args.Length;
 			var clients = new Session<C, C>[n];
@@ -80,7 +80,7 @@ namespace SessionTypes.Threading
 			return clients;
 		}
 
-		public static (Session<C, C>, Session<S, S>) Pipeline<C, S, A>(this Protocol<C, S> protocol, Action<Session<S, S>, Session<C, C>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
+		public static (Session<C, C>, Session<S, S>) Pipeline<T, C, S, A>(this Protocol<T, C, S> protocol, Action<Session<S, S>, Session<C, C>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
 		{
 			int n = args.Length + 1;
 			Session<C, C>[] clients = new Session<C, C>[n];
@@ -99,65 +99,6 @@ namespace SessionTypes.Threading
 				thread.Start();
 			}
 			return (clients[0], servers[0]);
-		}
-	}
-
-	internal class BinaryChannelCommunicator : Communicator
-	{
-		private ChannelReader<object> reader;
-		private ChannelWriter<object> writer;
-
-		public BinaryChannelCommunicator(ChannelReader<object> reader, ChannelWriter<object> writer)
-		{
-			this.reader = reader;
-			this.writer = writer;
-		}
-
-		public override void Send<T>(T value)
-		{
-			Task.Run(async () => await writer.WriteAsync(value)).Wait();
-		}
-
-		public override Task SendAsync<T>(T value)
-		{
-			return writer.WriteAsync(value).AsTask();
-		}
-
-		public override T Receive<T>()
-		{
-			return (T)Task.Run(async () => await reader.ReadAsync()).Result;
-		}
-
-		public override async Task<T> ReceiveAsync<T>()
-		{
-			return (T)await reader.ReadAsync();
-		}
-
-		public override Session<P, P> AddSend<P, O>()
-		{
-			var (c, s) = BinaryChannel.NewChannel<P, O>();
-			Send(s);
-			return c;
-		}
-
-		public override Task<Session<P, P>> AddSendAsync<P, O>()
-		{
-			throw new NotImplementedException();
-		}
-
-		public override Session<P, P> AddReceive<P>()
-		{
-			return Receive<Session<P, P>>();
-		}
-
-		public override Task<Session<P, P>> AddReceiveAsync<P>()
-		{
-			throw new NotImplementedException();
-		}
-
-		public override void Close()
-		{
-			writer.Complete();
 		}
 	}
 }

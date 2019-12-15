@@ -3,64 +3,84 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Channels;
 
-using System.Collections.Generic;
-
 namespace SessionTypes.Threading
 {
-	internal class BinaryChannelCommunicator : Communicator
+	internal class TcpCommunicator : ICommunicator
 	{
 		private ChannelReader<object> reader;
 		private ChannelWriter<object> writer;
 
-		public TcpCommunicator(ChannelReader<object> reader, ChannelWriter<object> writer)
+		public ChannelCommunicator(ChannelReader<object> reader, ChannelWriter<object> writer)
 		{
 			this.reader = reader;
 			this.writer = writer;
 		}
 
-		public override void Send<T>(T value)
+		public void Send<T>(T value)
 		{
 			Task.Run(async () => await writer.WriteAsync(value)).Wait();
 		}
 
-		public override Task SendAsync<T>(T value)
+		public Task SendAsync<T>(T value)
 		{
 			return writer.WriteAsync(value).AsTask();
 		}
 
-		public override T Receive<T>()
+		public T Receive<T>()
 		{
 			return (T)Task.Run(async () => await reader.ReadAsync()).Result;
 		}
 
-		public override async Task<T> ReceiveAsync<T>()
+		public async Task<T> ReceiveAsync<T>()
 		{
 			return (T)await reader.ReadAsync();
 		}
 
-		public override Session<P, P> AddSend<P, O>()
+
+
+		public Session<P, P> Cast<P, O>() where P : ProtocolType where O : ProtocolType
 		{
-			var (c, s) = BinaryChannel.NewChannel<P, O>();
+			var (c, s) = Channel.NewChannel<P, O>();
 			Send(s);
 			return c;
 		}
 
-		public override Task<Session<P, P>> AddSendAsync<P, O>()
+		public Task<Session<P, P>> CastAsync<P, O>() where P : ProtocolType where O : ProtocolType
 		{
 			throw new NotImplementedException();
 		}
 
-		public override Session<P, P> AddReceive<P>()
+		public Session<P, P> Accept<P>() where P : ProtocolType
 		{
 			return Receive<Session<P, P>>();
 		}
 
-		public override Task<Session<P, P>> AddReceiveAsync<P>()
+		public Task<Session<P, P>> AcceptAsync<P>() where P : ProtocolType
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void Close()
+		public void Select(Direction direction)
+		{
+			Send(direction);
+		}
+
+		public Task SelectAsync(Direction direction)
+		{
+			return SendAsync(direction);
+		}
+
+		public Direction Follow()
+		{
+			return Receive<Direction>();
+		}
+
+		public Task<Direction> FollowAsync()
+		{
+			return ReceiveAsync<Direction>();
+		}
+
+		public void Close()
 		{
 			writer.Complete();
 		}

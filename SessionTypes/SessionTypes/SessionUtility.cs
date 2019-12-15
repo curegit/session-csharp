@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace SessionTypes
 {
-	public static class SessionInterfaceHelper
+	public static class SessionUtility
 	{
 		public static Session<S, P> Let<S, P, T>(this Session<S, P> session, out T variable, T value) where S : SessionType where P : ProtocolType
 		{

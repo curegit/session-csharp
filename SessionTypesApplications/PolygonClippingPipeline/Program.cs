@@ -6,7 +6,7 @@ using SessionTypes.Threading;
 
 namespace PolygonClippingPipeline
 {
-	using static SessionTypes.Combinator;
+	using static SessionTypes.ProtocolCombinator;
 
 	/// <summary>
 	/// Sutherland–Hodgman の Polygon Clipping Algorithm をセッション型を用いたパイプライン処理によって行う応用例

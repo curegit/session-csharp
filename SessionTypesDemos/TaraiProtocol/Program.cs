@@ -9,8 +9,8 @@ namespace TaraiProtocol
 {
 	//using static Combinator<>;
 	using static Portobuf;
-	using static Combinator;
-	using static Combinator<Protobuf>;
+	using static ProtocolCombinator;
+	using static ProtocolCombinator<Protobuf>;
 	//using static ProtocolCom
 
 	namespace TaraiProtocol

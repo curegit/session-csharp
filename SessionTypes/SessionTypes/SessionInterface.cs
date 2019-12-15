@@ -33,13 +33,13 @@ namespace SessionTypes
 			return (session.ToNextSession<S>(), await session.ReceiveAsync<T>());
 		}
 
-		public static Session<S, P> SendNewChannel<N, O, S, P>(this Session<AddSend<N, O, S>, P> session, out Session<N, N> channel) where N : ProtocolType where O : ProtocolType where S : SessionType where P : ProtocolType
+		public static Session<S, P> SendNewChannel<N, O, S, P>(this Session<Cast<N, O, S>, P> session, out Session<N, N> channel) where N : ProtocolType where O : ProtocolType where S : SessionType where P : ProtocolType
 		{
 			channel = session.SendNewChannel<N, O>();
 			return session.ToNextSession<S>();
 		}
 
-		public static Session<S, P> ReceiveNewChannel<N, S, P>(this Session<AddReceive<N, S>, P> session, out Session<N, N> channel) where N : ProtocolType where S : SessionType where P : ProtocolType
+		public static Session<S, P> ReceiveNewChannel<N, S, P>(this Session<Accept<N, S>, P> session, out Session<N, N> channel) where N : ProtocolType where S : SessionType where P : ProtocolType
 		{
 			channel = session.ReceiveNewChannel<N>();
 			return session.ToNextSession<S>();
@@ -214,7 +214,7 @@ namespace SessionTypes
 			return session.ToNextSession<S2>();
 		}
 
-		public static void Close<P>(this Session<Close, P> session) where P : ProtocolType
+		public static void Close<P>(this Session<End, P> session) where P : ProtocolType
 		{
 			session.Close();
 		}

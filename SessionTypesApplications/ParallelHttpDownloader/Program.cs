@@ -12,7 +12,7 @@ namespace ParallelHttpDownloader
 {
 	//using static 
 
-	using static Combinator;
+	using static ProtocolCombinator;
 	using static ProtocolBuffers;
 
 	//delegate Session<S, P> SendDeleg<T, S, P>(Session<Send<T, S>, P> s) where S:SessionType where P: ProtocolType;

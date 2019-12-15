@@ -20,14 +20,14 @@ namespace SessionTypes
 		private Receive() { }
 	}
 
-	public sealed class AddSend<P, O, S> : SessionType where P : ProtocolType where O : ProtocolType where S : SessionType
+	public sealed class Cast<P, O, S> : SessionType where P : ProtocolType where O : ProtocolType where S : SessionType
 	{
-		private AddSend() { }
+		private Cast() { }
 	}
 
-	public sealed class AddReceive<P, S> : SessionType where P : ProtocolType where S : SessionType
+	public sealed class Accept<P, S> : SessionType where P : ProtocolType where S : SessionType
 	{
-		private AddReceive() { }
+		private Accept() { }
 	}
 
 	public sealed class Select<L, R> : SessionType where L : SessionType where R : SessionType
@@ -55,9 +55,9 @@ namespace SessionTypes
 		private Goto2() { }
 	}
 
-	public sealed class Close : SessionType
+	public sealed class End : SessionType
 	{
-		private Close() { }
+		private End() { }
 	}
 
 	public abstract class SessionList : ProtocolType
