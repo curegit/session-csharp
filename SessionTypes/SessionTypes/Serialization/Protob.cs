@@ -1,4 +1,4 @@
-namespace SessionTypes.Se
+namespace SessionTypes.Serialization
 {
 	public class Protob
 	{

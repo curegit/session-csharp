@@ -5,6 +5,9 @@ using System.Threading.Channels;
 
 using System.Collections.Generic;
 
+using System.Net;
+using System.Net.Sockets;
+
 namespace SessionTypes.Threading
 {
 	public static class TcpO
@@ -24,7 +27,9 @@ namespace SessionTypes.Threading
 
 		public void Listen(Action<Session<P, P>> action)
 		{
+			var l = new TcpListener(IPAddress.Loopback, 45125);
 
+			
 		}
 
 		public Session<P, P> Connect()

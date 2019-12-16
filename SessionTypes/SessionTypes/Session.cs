@@ -8,6 +8,11 @@ namespace SessionTypes
 
 		private readonly ICommunicator communicator;
 
+		// TODO
+		public bool Alive => true;
+		// TODO
+		public bool Used => used;
+
 		internal Session(ICommunicator communicator)
 		{
 			this.communicator = communicator;
@@ -17,6 +22,8 @@ namespace SessionTypes
 		{
 			return new Session<N, P>(communicator);
 		}
+
+		// TODO: Goto等の線形性検査
 
 		private void Consume()
 		{

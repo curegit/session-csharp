@@ -1,23 +1,30 @@
 using System;
-using System.Threading;
+using System.Net.Sockets;
 using System.Threading.Tasks;
-using System.Threading.Channels;
 
-namespace SessionTypes.Threading
+namespace SessionTypes.Net
 {
 	internal class TcpCommunicator : ICommunicator
 	{
-		private ChannelReader<object> reader;
-		private ChannelWriter<object> writer;
+		private readonly TcpClient tcpClient;
 
-		public ChannelCommunicator(ChannelReader<object> reader, ChannelWriter<object> writer)
+		private readonly NetworkStream networkStream;
+
+		private readonly ISerializer serializer;
+
+		private readonly IConverter streamLink;
+
+		public TcpCommunicator(TcpClient tcpClient, ISerializer serializer)
 		{
-			this.reader = reader;
-			this.writer = writer;
+			this.tcpClient = tcpClient;
+			this.serializer = serializer;
+			networkStream = tcpClient.GetStream();
 		}
 
 		public void Send<T>(T value)
 		{
+			serializer.Serialize(value, networkStream);
+
 			Task.Run(async () => await writer.WriteAsync(value)).Wait();
 		}
 
@@ -36,13 +43,9 @@ namespace SessionTypes.Threading
 			return (T)await reader.ReadAsync();
 		}
 
-
-
 		public Session<P, P> Cast<P, O>() where P : ProtocolType where O : ProtocolType
 		{
-			var (c, s) = Channel.NewChannel<P, O>();
-			Send(s);
-			return c;
+			throw new NotImplementedException();
 		}
 
 		public Task<Session<P, P>> CastAsync<P, O>() where P : ProtocolType where O : ProtocolType
@@ -52,7 +55,7 @@ namespace SessionTypes.Threading
 
 		public Session<P, P> Accept<P>() where P : ProtocolType
 		{
-			return Receive<Session<P, P>>();
+			throw new NotImplementedException();
 		}
 
 		public Task<Session<P, P>> AcceptAsync<P>() where P : ProtocolType
@@ -62,11 +65,13 @@ namespace SessionTypes.Threading
 
 		public void Select(Direction direction)
 		{
-			Send(direction);
+			networkStream.WriteByte((byte)direction);
+			networkStream.
 		}
 
 		public Task SelectAsync(Direction direction)
 		{
+			networkStream.WriteAsync(,)
 			return SendAsync(direction);
 		}
 
@@ -82,7 +87,8 @@ namespace SessionTypes.Threading
 
 		public void Close()
 		{
-			writer.Complete();
+			//networkStream.di
+			tcpClient.Close();
 		}
 	}
 }
