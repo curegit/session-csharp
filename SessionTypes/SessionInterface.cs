@@ -220,6 +220,11 @@ namespace SessionTypes
 			return session.ToNextSession<S0, Push<N, E>>();
 		}
 
+		public static Session<S1, Push<N, E>, Cons<S0, Cons<S1, L>>> Call<S0, S1, N, E, L>(this Session<Call1<N>, E, Cons<S0, Cons<S1, L>>> session) where S0 : SessionType where S1 : SessionType where N : SessionType where L : SessionList where E : SessionStack
+		{
+			return session.ToNextSession<S1, Push<N, E>>();
+		}
+
 		public delegate Session<Close, E, P> SelfCall<S, E, P>(Session<S, E, P> s, SelfCall<S, E, P> f) where S : SessionType where P : ProtocolType where E : SessionStack;
 
 		public static Session<N, E, Cons<S0, L>> Call<S0, N, E, L>
@@ -227,6 +232,13 @@ namespace SessionTypes
 		where S0 : SessionType where N : SessionType where L : SessionList where E : SessionStack
 		{
 			return f(session.ToNextSession<S0>(), f).ToNextSession<N, E>();
+		}
+
+		public static Session<N, E, Cons<S0, Cons<S1, L>>> Call<S0, S1, N, E, L>
+	(this Session<Call1<N>, E, Cons<S0, Cons<S1, L>>> session, SelfCall<S1, E, Cons<S0, Cons<S1, L>>> f)
+where S0 : SessionType where S1 : SessionType where N : SessionType where L : SessionList where E : SessionStack
+		{
+			return f(session.ToNextSession<S1>(), f).ToNextSession<N, E>();
 		}
 
 		public static Session<F, E, P> Return<F, E,P>(this Session<Close, Push<F, E>, P> session) where F : SessionType where E : SessionStack where P : ProtocolType

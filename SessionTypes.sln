@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DividerProtocol", "SessionT
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReverseProtocol", "SessionTypesDemos\ReverseProtocol\ReverseProtocol.csproj", "{0EAB24D4-0F0D-4486-BB6F-EEF7AC99EC6D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StackProtocol", "SessionTypesDemos\StackProtocol\StackProtocol.csproj", "{43FD4D53-3F1A-40AC-BADB-33C4B5D1A431}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -56,6 +58,10 @@ Global
 		{0EAB24D4-0F0D-4486-BB6F-EEF7AC99EC6D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{0EAB24D4-0F0D-4486-BB6F-EEF7AC99EC6D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{0EAB24D4-0F0D-4486-BB6F-EEF7AC99EC6D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{43FD4D53-3F1A-40AC-BADB-33C4B5D1A431}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{43FD4D53-3F1A-40AC-BADB-33C4B5D1A431}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{43FD4D53-3F1A-40AC-BADB-33C4B5D1A431}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{43FD4D53-3F1A-40AC-BADB-33C4B5D1A431}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
