@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 
 namespace SessionTypes
 {
-	public sealed class Session<S, P> where S : ProtocolType where P : ProtocolType
+	public sealed class Session<S, E, P> where S : ProtocolType where E : SessionStack where P : ProtocolType
 	{
 		private bool used;
 
@@ -18,9 +18,14 @@ namespace SessionTypes
 			this.communicator = communicator;
 		}
 
-		internal Session<N, P> ToNextSession<N>() where N : SessionType
+		internal Session<N, E, P> ToNextSession<N>() where N : SessionType
 		{
-			return new Session<N, P>(communicator);
+			return new Session<N, E, P>(communicator);
+		}
+
+		internal Session<N, M, P> ToNextSession<N, M>() where N : SessionType where M : SessionStack
+		{
+			return new Session<N, M, P>(communicator);
 		}
 
 		// TODO: Goto等の線形性検査
