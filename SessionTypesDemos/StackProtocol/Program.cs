@@ -10,14 +10,6 @@ namespace StackProtocol
 	{
 		public static void Main(string[] args)
 		{
-			Console.WriteLine("Hello World!");
-
-			/*
-			var p0 = AtC(C2S(P<int>, Goto1), End);
-			var p1 = AtC(C2S(P<int>, Call1(Goto0)), S2C(P<int>, Goto0));
-			var protocol = SessionList(p0, p1);
-			*/
-
 			var p0 = Call1(End);
 			var p1 = AtC(C2S(P<int>, Call1(S2C(P<int>, Goto1))), End);
 			var protocol = SessionList(p0, p1);
@@ -32,7 +24,6 @@ namespace StackProtocol
 					);
 				}).Close();
 			});
-
 
 			var counter = 0;
 			var random = new Random();
