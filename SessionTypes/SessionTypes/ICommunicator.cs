@@ -28,9 +28,9 @@ namespace SessionTypes
 
 		public Task<Selection> FollowAsync();
 
-		public Session<S, Empty, P> CastNewChannel<S, P, X, Q>() where S : SessionType where P : ProtocolType where X : SessionType where Q : ProtocolType;
+		public Session<S, Empty, P> CastNewChannel<S, P, Z, Q>() where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType;
 
-		public Task<Session<S, Empty, P>> CastNewChannelAsync<S, P, X, Q>() where S : SessionType where P : ProtocolType where X : SessionType where Q : ProtocolType;
+		public Task<Session<S, Empty, P>> CastNewChannelAsync<S, P, Z, Q>() where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType;
 
 		public Session<S, Empty, P> AcceptNewChannel<S, P>() where S : SessionType where P : ProtocolType;
 
