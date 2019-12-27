@@ -1,9 +1,9 @@
 namespace SessionTypes
 {
-	public sealed class Protocol<T, C, S> where C : ProtocolType where S : ProtocolType
+	public sealed class Protocol<S, P, O, Q> where S : SessionType where P : ProtocolType where O : SessionType where Q : ProtocolType
 	{
 		internal Protocol() { }
 
-		public Protocol<T, S, C> Swapped => new Protocol<T, S, C>();
+		public Protocol<O, Q, S, P> Swapped => new Protocol<O, Q, S, P>();
 	}
 }
