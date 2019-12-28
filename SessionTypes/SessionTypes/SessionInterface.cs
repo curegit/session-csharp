@@ -650,11 +650,13 @@ namespace SessionTypes
 
 		public static Session<F, E, P> Return<F, E, P>(this Session<Eps, Push<F, E>, P> session) where F : SessionType where E : SessionStack where P : ProtocolType
 		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
 			return session.ToNextSession<F, E>();
 		}
 
 		public static void Close<P>(this Session<Eps, Empty, P> session) where P : ProtocolType
 		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
 			session.Close();
 		}
 	}
