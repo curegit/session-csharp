@@ -80,6 +80,86 @@ namespace SessionTypes
 		private Call2() { }
 	}
 
+	public sealed class Call3 : SessionType
+	{
+		private Call3() { }
+	}
+
+	public sealed class Call3<S> : SessionType where S : SessionType
+	{
+		private Call3() { }
+	}
+
+	public sealed class Call4 : SessionType
+	{
+		private Call4() { }
+	}
+
+	public sealed class Call4<S> : SessionType where S : SessionType
+	{
+		private Call4() { }
+	}
+
+	public sealed class Call5 : SessionType
+	{
+		private Call5() { }
+	}
+
+	public sealed class Call5<S> : SessionType where S : SessionType
+	{
+		private Call5() { }
+	}
+
+	public sealed class Call6 : SessionType
+	{
+		private Call6() { }
+	}
+
+	public sealed class Call6<S> : SessionType where S : SessionType
+	{
+		private Call6() { }
+	}
+
+	public sealed class Call7 : SessionType
+	{
+		private Call7() { }
+	}
+
+	public sealed class Call7<S> : SessionType where S : SessionType
+	{
+		private Call7() { }
+	}
+
+	public sealed class Call8 : SessionType
+	{
+		private Call8() { }
+	}
+
+	public sealed class Call8<S> : SessionType where S : SessionType
+	{
+		private Call8() { }
+	}
+
+	public sealed class Call9 : SessionType
+	{
+		private Call9() { }
+	}
+
+	public sealed class Call9<S> : SessionType where S : SessionType
+	{
+		private Call9() { }
+	}
+
+	public sealed class Cast<X, P, Y, Q, S> : SessionType where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType
+	{
+		private Cast() { }
+	}
+
+	public sealed class Accept<X, P, S> : SessionType where X : SessionType where P : ProtocolType where S : SessionType
+	{
+		private Accept() { }
+	}
+
 	public sealed class Eps : SessionType
 	{
 		private Eps() { }
