@@ -279,18 +279,18 @@ namespace SessionTypes
 			return new Protocol<Call9<S>, Call9<S>, Call9<Z>, Call9<Z>>();
 		}
 
-		public static Protocol<Cast<X, P, Y, Q, S>, Cast<X, P, Y, Q, S>, Accept<Y, Q, Z>, Accept<Y, Q, Z>> CastNewChannel<X, P, Y, Q, Z, S>(Protocol<X, P, Y, Q> protocol, Protocol<S, S, Z, Z> continuation) where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType where Z : SessionType
+		public static Protocol<Cast<X, P, S>, Cast<X, P, S>, Accept<Y, Q, Z>, Accept<Y, Q, Z>> CastNewChannel<X, P, Y, Q, Z, S>(Protocol<X, P, Y, Q> protocol, Protocol<S, S, Z, Z> continuation) where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType where Z : SessionType
 		{
 			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Cast<X, P, Y, Q, S>, Cast<X, P, Y, Q, S>, Accept<Y, Q, Z>, Accept<Y, Q, Z>>();
+			return new Protocol<Cast<X, P, S>, Cast<X, P, S>, Accept<Y, Q, Z>, Accept<Y, Q, Z>>();
 		}
 
-		public static Protocol<Accept<X, P, S>, Accept<X, P, S>, Cast<Y, Q, X, P, Z>, Cast<Y, Q, X, P, Z>> AcceptNewChannel<X, P, Y, Q, Z, S>(Protocol<X, P, Y, Q> protocol, Protocol<S, S, Z, Z> continuation) where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType where Z : SessionType
+		public static Protocol<Accept<X, P, S>, Accept<X, P, S>, Cast<Y, Q, Z>, Cast<Y, Q, Z>> AcceptNewChannel<X, P, Y, Q, Z, S>(Protocol<X, P, Y, Q> protocol, Protocol<S, S, Z, Z> continuation) where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType where Z : SessionType
 		{
 			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Accept<X, P, S>, Accept<X, P, S>, Cast<Y, Q, X, P, Z>, Cast<Y, Q, X, P, Z>>();
+			return new Protocol<Accept<X, P, S>, Accept<X, P, S>, Cast<Y, Q, Z>, Cast<Y, Q, Z>>();
 		}
 
 		public static Protocol<Eps, Eps, Eps, Eps> End => new Protocol<Eps, Eps, Eps, Eps>();

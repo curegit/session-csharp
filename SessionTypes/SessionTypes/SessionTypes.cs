@@ -150,7 +150,7 @@ namespace SessionTypes
 		private Call9() { }
 	}
 
-	public sealed class Cast<X, P, Y, Q, S> : SessionType where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType
+	public sealed class Cast<X, P, S> : SessionType where X : SessionType where P : ProtocolType where S : SessionType
 	{
 		private Cast() { }
 	}
