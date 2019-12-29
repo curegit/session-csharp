@@ -6,18 +6,19 @@ namespace SessionTypes
 {
 	public static class SessionUtility
 	{
-		public static Session<S, P> Let<S, P, T>(this Session<S, P> session, out T variable, T value) where S : SessionType where P : ProtocolType
+		public static Session<S, E, P> Let<S, E, P, T>(this Session<S, E, P> session, out T variable, T value) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			variable = value;
 			return session;
 		}
 
-		public static Session<S, P> Bind<S, P, T>(this (Session<S, P> session, T value) received, out T variable) where S : SessionType where P : ProtocolType
+		public static Session<S, E, P> Assign<S, E, P, T>(this (Session<S, E, P> session, T value) received, out T variable) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			variable = received.value;
 			return received.session;
 		}
 
+		/*
 		public static void Do<S, P>(this IEnumerable<Session<S, P>> sessions, Action<Session<S, P>> action) where S : ProtocolType where P : ProtocolType
 		{
 			foreach (var session in sessions)
@@ -26,6 +27,7 @@ namespace SessionTypes
 			}
 		}
 
+		
 		public static IReadOnlyList<Session<N, P>> Do<S, N, P>(this IEnumerable<Session<S, P>> sessions, Func<Session<S, P>, Session<N, P>> action)
 			where S : ProtocolType where N : ProtocolType where P : ProtocolType
 		{
@@ -54,5 +56,6 @@ namespace SessionTypes
 			}
 			return (a, b, c);
 		}
+		*/
 	}
 }
