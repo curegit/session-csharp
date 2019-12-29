@@ -2,185 +2,149 @@ using System.Threading.Tasks;
 
 namespace SessionTypes
 {
-	public sealed class Session<S, E, P> where S : ProtocolType where E : SessionStack where P : ProtocolType
+	public sealed class Session<S, E, P> where S : SessionType where E : SessionStack where P : ProtocolType
 	{
 		private bool used;
 
 		private readonly ICommunicator communicator;
-
-		// TODO
-		public bool Alive => true;
-		// TODO
-		public bool Used => used;
 
 		internal Session(ICommunicator communicator)
 		{
 			this.communicator = communicator;
 		}
 
-		internal Session<N, E, P> ToNextSession<N>() where N : SessionType
+		internal Session<Z, E, P> ToNextSession<Z>() where Z : SessionType
 		{
-			return new Session<N, E, P>(communicator);
+			return new Session<Z, E, P>(communicator);
 		}
 
-		internal Session<N, M, P> ToNextSession<N, M>() where N : SessionType where M : SessionStack
+		internal Session<Z, H, P> ToNextSession<Z, H>() where Z : SessionType where H : SessionStack
 		{
-			return new Session<N, M, P>(communicator);
+			return new Session<Z, H, P>(communicator);
 		}
 
-		// TODO: Goto等の線形性検査
-
-		private void Consume()
+		private void CheckLinearity()
 		{
-			lock (communicator)
+			if (used)
 			{
-				if (used)
-				{
-					throw new LinearityException();
-				}
-				else
-				{
-					used = true;
-				}
+				throw new LinearityException();
 			}
+			else
+			{
+				used = true;
+			}
+		}
+
+		internal void Send()
+		{
+			CheckLinearity();
+			communicator.Send();
+		}
+
+		internal Task SendAsync()
+		{
+			CheckLinearity();
+			return communicator.SendAsync();
 		}
 
 		internal void Send<T>(T value)
 		{
-			Consume();
+			CheckLinearity();
 			communicator.Send(value);
 		}
 
 		internal Task SendAsync<T>(T value)
 		{
-			if (used)
-			{
-				throw new LinearityException();
-			}
-			else
-			{
-				used = true;
-				return communicator.SendAsync(value);
-			}
+			CheckLinearity();
+			return communicator.SendAsync(value);
+		}
+
+		internal void Receive()
+		{
+			CheckLinearity();
+			communicator.Receive();
+		}
+
+		internal Task ReceiveAsync()
+		{
+			CheckLinearity();
+			return communicator.ReceiveAsync();
 		}
 
 		internal T Receive<T>()
 		{
-			if (used)
-			{
-				throw new LinearityException();
-			}
-			else
-			{
-				used = true;
-				return communicator.Receive<T>();
-			}
+			CheckLinearity();
+			return communicator.Receive<T>();
 		}
 
 		internal Task<T> ReceiveAsync<T>()
 		{
-			if (used)
-			{
-				throw new LinearityException();
-			}
-			else
-			{
-				used = true;
-				return communicator.ReceiveAsync<T>();
-			}
+			CheckLinearity();
+			return communicator.ReceiveAsync<T>();
 		}
 
-		internal Session<Q, Q> SendNewChannel<Q, O>() where Q : ProtocolType where O : ProtocolType
+		internal Session<Z, Empty, Q> CastNewChannel<Z, Q>() where Z : SessionType where Q : ProtocolType
 		{
-			if (used)
-			{
-				throw new LinearityException();
-			}
-			else
-			{
-				used = true;
-				return communicator.Cast<Q, O>();
-			}
+			CheckLinearity();
+			return communicator.CastNewChannel<Z, Q>();
 		}
 
-		internal Session<Q, Q> ReceiveNewChannel<Q>() where Q : ProtocolType
+		internal Task<Session<Z, Empty, Q>> CastNewChannelAsync<Z, Q>() where Z : SessionType where Q : ProtocolType
 		{
-			if (used)
-			{
-				throw new LinearityException();
-			}
-			else
-			{
-				used = true;
-				return communicator.Accept<Q>();
-			}
+			CheckLinearity();
+			return communicator.CastNewChannelAsync<Z, Q>();
 		}
 
-		internal void Select(Direction direction)
+		internal Session<Z, Empty, Q> AcceptNewChannel<Z, Q>() where Z : SessionType where Q : ProtocolType
 		{
-			if (used)
-			{
-				throw new LinearityException();
-			}
-			else
-			{
-				used = true;
-				communicator.Select(direction);
-			}
+			CheckLinearity();
+			return communicator.AcceptNewChannel<Z, Q>();
 		}
 
-		internal Task SelectAsync(Direction direction)
+		internal Task<Session<Z, Empty, Q>> AcceptNewChannelAsync<Z, Q>() where Z : SessionType where Q : ProtocolType
 		{
-			if (used)
-			{
-				throw new LinearityException();
-			}
-			else
-			{
-				used = true;
-				return communicator.SelectAsync(direction);
-			}
+			CheckLinearity();
+			return communicator.AcceptNewChannelAsync<Z, Q>();
 		}
 
-		internal Direction Follow()
+		internal void Select(Selection direction)
 		{
-			if (used)
-			{
-				throw new LinearityException();
-			}
-			else
-			{
-				used = true;
-				return communicator.Follow();
-			}
+			CheckLinearity();
+			communicator.Select(direction);
 		}
 
-		internal Task<Direction> FollowAsync()
+		internal Task SelectAsync(Selection direction)
 		{
-			if (used)
-			{
-				throw new LinearityException();
-			}
-			else
-			{
-				used = true;
-				return communicator.FollowAsync();
-			}
+			CheckLinearity();
+			return communicator.SelectAsync(direction);
 		}
 
+		internal Selection Follow()
+		{
+			CheckLinearity();
+			return communicator.Follow();
+		}
 
+		internal Task<Selection> FollowAsync()
+		{
+			CheckLinearity();
+			return communicator.FollowAsync();
+		}
+
+		internal void Call()
+		{
+			CheckLinearity();
+		}
 
 		internal void Close()
 		{
-			if (used)
-			{
-				throw new LinearityException();
-			}
-			else
-			{
-				used = true;
-				communicator.Close();
-			}
+			CheckLinearity();
+			communicator.Close();
+		}
+
+		internal void Die()
+		{
+			communicator.Die();
 		}
 	}
 }
