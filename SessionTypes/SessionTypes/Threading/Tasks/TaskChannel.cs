@@ -2,41 +2,22 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Threading.Channels;
-
 using System.Collections.Generic;
 
-namespace SessionTypes.Threading
+namespace SessionTypes.Threading.Tasks
 {
-	public static class Channel
+	public static class TaskChannel
 	{
-		private static Session<C, C> NewClient<C>(Channel<object> up, Channel<object> down) where C : ProtocolType
+		public static Session<S, Empty, P> Fork<S, P, Z, Q>(this Protocol<S, P, Z, Q> protocol, Action<Session<Z, Empty, Q>> threadFunc) where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
 		{
-			var c = new ChannelCommunicator(down.Reader, up.Writer);
-			return new Session<C, C>(c);
-		}
-
-		private static Session<S, S> NewServer<S>(Channel<object> up, Channel<object> down) where S : ProtocolType
-		{
-			var c = new ChannelCommunicator(up.Reader, down.Writer);
-			return new Session<S, S>(c);
-		}
-
-		internal static (Session<C, C> client, Session<S, S> server) NewChannel<C, S>() where C : ProtocolType where S : ProtocolType
-		{
-			var up = System.Threading.Channels.Channel.CreateUnbounded<object>();
-			var down = System.Threading.Channels.Channel.CreateUnbounded<object>();
-			return (NewClient<C>(up, down), NewServer<S>(up, down));
-		}
-
-		public static Session<C, C> Fork<T, C, S>(this Protocol<T, C, S> protocol, Action<Session<S, S>> threadFunction) where C : ProtocolType where S : ProtocolType
-		{
-			var (client, server) = NewChannel<C, S>();
-			var threadStart = new ThreadStart(() => threadFunction(server));
-			var serverThread = new Thread(threadStart);
-			serverThread.Start();
+			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
+			if (threadFunc is null) throw new ArgumentNullException(nameof(threadFunc));
+			var (client, server) = ChannelFactory.CreateWithSession<S, P, Z, Q>();
+			Task.Run(() => threadFunc(server));
 			return client;
 		}
 
+		/*
 		public static IEnumerable<Session<C, C>> DistributeTask<T, C, S, A>(this Protocol<T, C, S> protocol, Action<Session<S, S>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
 		{
 			int n = args.Length;
@@ -100,5 +81,6 @@ namespace SessionTypes.Threading
 			}
 			return (clients[0], servers[0]);
 		}
+		*/
 	}
 }
