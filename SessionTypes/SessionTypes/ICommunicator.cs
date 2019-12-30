@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace SessionTypes
+namespace Session
 {
 	internal interface ICommunicator
 	{

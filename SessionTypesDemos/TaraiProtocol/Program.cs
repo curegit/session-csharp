@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
-using SessionTypes;
-using SessionTypes.Threading;
+using Session;
+using Session.Threading;
 
 namespace TaraiProtocol
 {

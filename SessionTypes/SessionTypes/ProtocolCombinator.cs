@@ -1,6 +1,6 @@
 using System;
 
-namespace SessionTypes
+namespace Session
 {
 	public sealed class UnitPayload
 	{

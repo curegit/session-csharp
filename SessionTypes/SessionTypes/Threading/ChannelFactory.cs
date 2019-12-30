@@ -1,6 +1,6 @@
 using System.Threading.Channels;
 
-namespace SessionTypes.Threading
+namespace Session.Threading
 {
 	internal static class ChannelFactory
 	{

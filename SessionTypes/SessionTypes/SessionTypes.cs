@@ -1,4 +1,4 @@
-namespace SessionTypes
+namespace Session
 {
 	public abstract class ProtocolType
 	{

@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using System.Threading.Channels;
 using System.Collections.Generic;
 
-namespace SessionTypes.Threading.Tasks
+namespace Session.Threading.Tasks
 {
 	public static class TaskChannel
 	{

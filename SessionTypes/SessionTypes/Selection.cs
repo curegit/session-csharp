@@ -1,4 +1,4 @@
-namespace SessionTypes
+namespace Session
 {
 	internal enum Selection : byte
 	{

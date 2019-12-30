@@ -5,7 +5,7 @@ using System.Threading.Channels;
 
 using System.Collections.Generic;
 
-namespace SessionTypes.Threading
+namespace Session.Threading
 {
 	public static class ThreadChannel
 	{

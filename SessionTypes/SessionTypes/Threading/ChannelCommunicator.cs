@@ -2,7 +2,7 @@ using System;
 using System.Threading.Tasks;
 using System.Threading.Channels;
 
-namespace SessionTypes.Threading
+namespace Session.Threading
 {
 	internal class ChannelCommunicator : ICommunicator
 	{

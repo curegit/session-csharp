@@ -1,4 +1,4 @@
-namespace SessionTypes
+namespace Session
 {
 	public sealed class Protocol<S, P, Z, Q> where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
 	{

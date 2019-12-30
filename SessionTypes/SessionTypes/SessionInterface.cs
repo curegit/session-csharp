@@ -1,7 +1,7 @@
 using System;
 using System.Threading.Tasks;
 
-namespace SessionTypes
+namespace Session
 {
 	public delegate Session<Eps, Any, P> DepletionFunc<S, P>(Session<S, Any, P> session, DepletionFunc<S, P> depletion) where S : SessionType where P : ProtocolType;
 
