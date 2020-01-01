@@ -6,13 +6,13 @@ namespace Session.Threading
 	{
 		public static (ChannelCommunicator client, ChannelCommunicator server) Create()
 		{
-			var option = new UnboundedChannelOptions
+			var options = new UnboundedChannelOptions
 			{
 				SingleReader = true,
 				SingleWriter = true,
 			};
-			var upstream = Channel.CreateUnbounded<object>(option);
-			var downstream = Channel.CreateUnbounded<object>(option);
+			var upstream = Channel.CreateUnbounded<object>(options);
+			var downstream = Channel.CreateUnbounded<object>(options);
 			return (new ChannelCommunicator(downstream.Reader, upstream.Writer), new ChannelCommunicator(upstream.Reader, downstream.Writer));
 		}
 
