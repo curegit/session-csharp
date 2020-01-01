@@ -1,22 +1,23 @@
 using System;
-using SessionTypes;
-using SessionTypes.Threading;
+using Session;
+using Session.Threading;
+using System.Threading.Tasks;
 
 namespace StackProtocol
 {
-	using static ProtocolBuilder;
+	using static ProtocolCombinator;
 
 	public class Program
 	{
 		public static void Main(string[] args)
 		{
-			var p0 = Call1(End);
-			var p1 = AtC(C2S(P<int>, Call1(S2C(P<int>, Goto1))), End);
-			var protocol = SessionList(p0, p1);
+			var sub0 = Call1(End);
+			var sub1 = Select(Send(Value<int>, Call1(Receive(Value<int>, Goto1))), End);
+			var protocol = Array(sub0, sub1);
 
-			var client = protocol.Fork(server =>
+			var client = protocol.ForkThread(server =>
 			{
-				server.Enter().Call((session, thisFunc) =>
+				server.Call((session, thisFunc) =>
 				{
 					return session.Follow(
 						push => thisFunc(push.Receive(out var x).Call(thisFunc).Send(x).Goto(), thisFunc),
@@ -27,7 +28,7 @@ namespace StackProtocol
 
 			var counter = 0;
 			var random = new Random();
-			client.Enter().Call((session, thisFunc) =>
+			client.Call((session, thisFunc) =>
 			{
 				if (random.NextDouble() < 0.5)
 				{
