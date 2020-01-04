@@ -9,19 +9,19 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PolygonClippingPipeline", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ParallelHttpDownloader", "SessionCSharpApplications\ParallelHttpDownloader\ParallelHttpDownloader.csproj", "{7DB12895-6C1E-4D1E-BAA1-9119A9F82BBA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrdinalProtocol", "SessionCSharpDemos\OrdinalProtocol\OrdinalProtocol.csproj", "{A8158303-52C1-4E16-8A45-5715CFAEACAD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "OrdinalProtocol", "SessionCSharpExamples\OrdinalProtocol\OrdinalProtocol.csproj", "{A8158303-52C1-4E16-8A45-5715CFAEACAD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SummationProtocol", "SessionCSharpDemos\SummationProtocol\SummationProtocol.csproj", "{EBD7E10A-5877-479D-8EE2-E8BADC50AF91}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SummationProtocol", "SessionCSharpExamples\SummationProtocol\SummationProtocol.csproj", "{EBD7E10A-5877-479D-8EE2-E8BADC50AF91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DividerProtocol", "SessionCSharpDemos\DividerProtocol\DividerProtocol.csproj", "{BAD13E33-AD2F-433A-8154-151257C2D9CF}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DividerProtocol", "SessionCSharpExamples\DividerProtocol\DividerProtocol.csproj", "{BAD13E33-AD2F-433A-8154-151257C2D9CF}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VarianceProtocol", "SessionCSharpDemos\VarianceProtocol\VarianceProtocol.csproj", "{819D13BE-45FA-4257-8C91-7EA0A220BFF7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "VarianceProtocol", "SessionCSharpExamples\VarianceProtocol\VarianceProtocol.csproj", "{819D13BE-45FA-4257-8C91-7EA0A220BFF7}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaraiProtocol", "SessionCSharpDemos\TaraiProtocol\TaraiProtocol.csproj", "{33152845-4EE8-4E2E-A354-BEE4D562E5C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TaraiProtocol", "SessionCSharpExamples\TaraiProtocol\TaraiProtocol.csproj", "{33152845-4EE8-4E2E-A354-BEE4D562E5C1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReverseProtocol", "SessionCSharpDemos\ReverseProtocol\ReverseProtocol.csproj", "{0EAB24D4-0F0D-4486-BB6F-EEF7AC99EC6D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReverseProtocol", "SessionCSharpExamples\ReverseProtocol\ReverseProtocol.csproj", "{0EAB24D4-0F0D-4486-BB6F-EEF7AC99EC6D}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackProtocol", "SessionCSharpDemos\StackProtocol\StackProtocol.csproj", "{43FD4D53-3F1A-40AC-BADB-33C4B5D1A431}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackProtocol", "SessionCSharpExamples\StackProtocol\StackProtocol.csproj", "{43FD4D53-3F1A-40AC-BADB-33C4B5D1A431}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
