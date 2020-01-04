@@ -35,7 +35,7 @@ namespace Session.Streaming.Net
 		{
 			return Task.Run(async () =>
 			{
-				var l = new TcpListener(IPAddress.Loopback, 45125);
+				var l = new TcpListener(address, port);
 				l.Start();
 				while (true)
 				{

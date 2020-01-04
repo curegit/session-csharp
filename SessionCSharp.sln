@@ -23,6 +23,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ReverseProtocol", "SessionC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "StackProtocol", "SessionCSharpExamples\StackProtocol\StackProtocol.csproj", "{43FD4D53-3F1A-40AC-BADB-33C4B5D1A431}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AdderServer", "SessionCSharpExamples\AdderServer\AdderServer.csproj", "{8D144611-23DB-4DCE-998A-890B94967427}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -73,6 +75,10 @@ Global
 		{43FD4D53-3F1A-40AC-BADB-33C4B5D1A431}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{43FD4D53-3F1A-40AC-BADB-33C4B5D1A431}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{43FD4D53-3F1A-40AC-BADB-33C4B5D1A431}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8D144611-23DB-4DCE-998A-890B94967427}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8D144611-23DB-4DCE-998A-890B94967427}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8D144611-23DB-4DCE-998A-890B94967427}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8D144611-23DB-4DCE-998A-890B94967427}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

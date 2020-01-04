@@ -38,7 +38,8 @@ namespace Session.Streaming.Net
 
 		public Session<S, Empty, P> Connect()
 		{
-			var c = new TcpClient(new IPEndPoint(address, port));
+			var c = new TcpClient();
+			c.Connect(new IPEndPoint(address, port));
 			var com = new TcpCommunicator(c, serializer, transform);
 			return new Session<S, Empty, P>(com);
 		}
