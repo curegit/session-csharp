@@ -32,6 +32,43 @@ namespace AdderServer
 			ch.Send(1).Send(2).Receive(out var x).Close();
 
 			Console.WriteLine(x);
+
+
+			Thread.Sleep(1000);
+
+
+			var d = new SessionDieList();
+			try
+			{
+				
+
+				var ch1 = sprotocol.ToTcpClient(IPAddress.Loopback, 54000).Connect();
+
+				d.Add(ch1);
+
+				ch1.Send(1).Send(2).Receive(out var x1).Close();
+
+				Console.WriteLine(x1);
+			}
+			catch
+			{
+				d.Dispose();
+			}
+			Thread.Sleep(1000);
+
+			using (var ds = new SessionDieList())
+			{
+				var ch2 = sprotocol.ToTcpClient(IPAddress.Loopback, 54000).Connect();
+				ds.Add(ch2);
+				var ch3 = sprotocol.ToTcpClient(IPAddress.Loopback, 54000).Connect();
+				ds.Add(ch3);
+
+				ch2.Send(1).Send(2).Receive(out var x2).Close();
+				Console.WriteLine(x2);
+				
+				ch3.Send(2).Send(3).Receive(out var x3).Close();
+				Console.WriteLine(x3);
+			}
 		}
 	}
 }

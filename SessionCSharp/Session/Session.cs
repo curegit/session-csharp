@@ -2,7 +2,14 @@ using System.Threading.Tasks;
 
 namespace Session
 {
-	public sealed class Session<S, E, P> where S : SessionType where E : SessionStack where P : ProtocolType
+	public abstract class Session
+	{
+		private protected Session() { }
+
+		internal abstract void Die();
+	}
+
+	public sealed class Session<S, E, P> : Session where S : SessionType where E : SessionStack where P : ProtocolType
 	{
 		private bool used;
 
@@ -142,7 +149,7 @@ namespace Session
 			communicator.Close();
 		}
 
-		internal void Die()
+		internal override void Die()
 		{
 			communicator.Die();
 		}
