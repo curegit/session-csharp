@@ -12,35 +12,35 @@ namespace Session
 		internal Payload() { }
 	}
 
-	public sealed class SerialPayloads<T1, T2>
+	public sealed class PayloadSeries<T1, T2>
 	{
-		internal SerialPayloads() { }
+		internal PayloadSeries() { }
 	}
 
-	public sealed class SerialPayloads<T1, T2, T3>
+	public sealed class PayloadSeries<T1, T2, T3>
 	{
-		internal SerialPayloads() { }
+		internal PayloadSeries() { }
 	}
 
-	public sealed class SerialPayloads<T1, T2, T3, T4>
+	public sealed class PayloadSeries<T1, T2, T3, T4>
 	{
-		internal SerialPayloads() { }
+		internal PayloadSeries() { }
 	}
 
-	public sealed class SerialPayloads<T1, T2, T3, T4, T5>
+	public sealed class PayloadSeries<T1, T2, T3, T4, T5>
 	{
-		internal SerialPayloads() { }
+		internal PayloadSeries() { }
 	}
 
 	public delegate Payload<T> PayloadDelegate<T>();
 
-	public delegate SerialPayloads<T1, T2> SerialPayloadDelegate<T1, T2>();
+	public delegate PayloadSeries<T1, T2> PayloadSeriesDelegate<T1, T2>();
 
-	public delegate SerialPayloads<T1, T2, T3> SerialPayloadDelegate<T1, T2, T3>();
+	public delegate PayloadSeries<T1, T2, T3> PayloadSeriesDelegate<T1, T2, T3>();
 
-	public delegate SerialPayloads<T1, T2, T3, T4> SerialPayloadDelegate<T1, T2, T3, T4>();
+	public delegate PayloadSeries<T1, T2, T3, T4> PayloadSeriesDelegate<T1, T2, T3, T4>();
 
-	public delegate SerialPayloads<T1, T2, T3, T4, T5> SerialPayloadDelegate<T1, T2, T3, T4, T5>();
+	public delegate PayloadSeries<T1, T2, T3, T4, T5> PayloadSeriesDelegate<T1, T2, T3, T4, T5>();
 
 	public static class ProtocolCombinator
 	{
@@ -48,13 +48,13 @@ namespace Session
 
 		public static Payload<T> Value<T>() => new Payload<T>();
 
-		public static SerialPayloads<T1, T2> SerialValues<T1, T2>() => new SerialPayloads<T1, T2>();
+		public static PayloadSeries<T1, T2> ValueSeries<T1, T2>() => new PayloadSeries<T1, T2>();
 
-		public static SerialPayloads<T1, T2, T3> SerialValues<T1, T2, T3>() => new SerialPayloads<T1, T2, T3>();
+		public static PayloadSeries<T1, T2, T3> ValueSeries<T1, T2, T3>() => new PayloadSeries<T1, T2, T3>();
 
-		public static SerialPayloads<T1, T2, T3, T4> SerialValues<T1, T2, T3, T4>() => new SerialPayloads<T1, T2, T3, T4>();
+		public static PayloadSeries<T1, T2, T3, T4> ValueSeries<T1, T2, T3, T4>() => new PayloadSeries<T1, T2, T3, T4>();
 
-		public static SerialPayloads<T1, T2, T3, T4, T5> SerialValues<T1, T2, T3, T4, T5>() => new SerialPayloads<T1, T2, T3, T4, T5>();
+		public static PayloadSeries<T1, T2, T3, T4, T5> ValueSeries<T1, T2, T3, T4, T5>() => new PayloadSeries<T1, T2, T3, T4, T5>();
 
 		public static Payload<Session<S, Empty, P>> Channel<S, P, Z, Q>(Protocol<S, P, Z, Q> protocol) where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
 		{
@@ -90,34 +90,34 @@ namespace Session
 			return new Protocol<Send<T, S>, Send<T, S>, Receive<T, Z>, Receive<T, Z>>();
 		}
 
-		public static Protocol<Send<T1, Send<T2, S>>, Send<T1, Send<T2, S>>, Receive<T1, Receive<T2, Z>>, Receive<T1, Receive<T2, Z>>> Send<T1, T2, S, Z>(SerialPayloadDelegate<T1, T2> payload, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Send<T1, Send<T2, S>>, Send<T1, Send<T2, S>>, Receive<T1, Receive<T2, Z>>, Receive<T1, Receive<T2, Z>>> Send<T1, T2, S, Z>(PayloadSeriesDelegate<T1, T2> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
-			if (payload is null) throw new ArgumentNullException(nameof(payload));
-			if (payload() is null) throw new ArgumentException("Return value cannot be null.", nameof(payload));
+			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
+			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
 			return new Protocol<Send<T1, Send<T2, S>>, Send<T1, Send<T2, S>>, Receive<T1, Receive<T2, Z>>, Receive<T1, Receive<T2, Z>>>();
 		}
 
-		public static Protocol<Send<T1, Send<T2, Send<T3, S>>>, Send<T1, Send<T2, Send<T3, S>>>, Receive<T1, Receive<T2, Receive<T3, Z>>>, Receive<T1, Receive<T2, Receive<T3, Z>>>> Send<T1, T2, T3, S, Z>(SerialPayloadDelegate<T1, T2, T3> payload, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Send<T1, Send<T2, Send<T3, S>>>, Send<T1, Send<T2, Send<T3, S>>>, Receive<T1, Receive<T2, Receive<T3, Z>>>, Receive<T1, Receive<T2, Receive<T3, Z>>>> Send<T1, T2, T3, S, Z>(PayloadSeriesDelegate<T1, T2, T3> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
-			if (payload is null) throw new ArgumentNullException(nameof(payload));
-			if (payload() is null) throw new ArgumentException("Return value cannot be null.", nameof(payload));
+			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
+			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
 			return new Protocol<Send<T1, Send<T2, Send<T3, S>>>, Send<T1, Send<T2, Send<T3, S>>>, Receive<T1, Receive<T2, Receive<T3, Z>>>, Receive<T1, Receive<T2, Receive<T3, Z>>>>();
 		}
 
-		public static Protocol<Send<T1, Send<T2, Send<T3, Send<T4, S>>>>, Send<T1, Send<T2, Send<T3, Send<T4, S>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Z>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Z>>>>> Send<T1, T2, T3, T4, S, Z>(SerialPayloadDelegate<T1, T2, T3, T4> payload, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Send<T1, Send<T2, Send<T3, Send<T4, S>>>>, Send<T1, Send<T2, Send<T3, Send<T4, S>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Z>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Z>>>>> Send<T1, T2, T3, T4, S, Z>(PayloadSeriesDelegate<T1, T2, T3, T4> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
-			if (payload is null) throw new ArgumentNullException(nameof(payload));
-			if (payload() is null) throw new ArgumentException("Return value cannot be null.", nameof(payload));
+			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
+			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
 			return new Protocol<Send<T1, Send<T2, Send<T3, Send<T4, S>>>>, Send<T1, Send<T2, Send<T3, Send<T4, S>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Z>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Z>>>>>();
 		}
 
-		public static Protocol<Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, S>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, S>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, Z>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, Z>>>>>> Send<T1, T2, T3, T4, T5, S, Z>(SerialPayloadDelegate<T1, T2, T3, T4, T5> payload, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, S>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, S>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, Z>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, Z>>>>>> Send<T1, T2, T3, T4, T5, S, Z>(PayloadSeriesDelegate<T1, T2, T3, T4, T5> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
-			if (payload is null) throw new ArgumentNullException(nameof(payload));
-			if (payload() is null) throw new ArgumentException("Return value cannot be null.", nameof(payload));
+			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
+			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
 			return new Protocol<Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, S>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, S>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, Z>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, Z>>>>>>();
 		}
@@ -137,34 +137,34 @@ namespace Session
 			return new Protocol<Receive<T, S>, Receive<T, S>, Send<T, Z>, Send<T, Z>>();
 		}
 
-		public static Protocol<Receive<T1, Receive<T2, S>>, Receive<T1, Receive<T2, S>>, Send<T1, Send<T2, Z>>, Send<T1, Send<T2, Z>>> Receive<T1, T2, S, Z>(SerialPayloadDelegate<T1, T2> payload, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Receive<T1, Receive<T2, S>>, Receive<T1, Receive<T2, S>>, Send<T1, Send<T2, Z>>, Send<T1, Send<T2, Z>>> Receive<T1, T2, S, Z>(PayloadSeriesDelegate<T1, T2> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
-			if (payload is null) throw new ArgumentNullException(nameof(payload));
-			if (payload() is null) throw new ArgumentException("Return value cannot be null.", nameof(payload));
+			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
+			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
 			return new Protocol<Receive<T1, Receive<T2, S>>, Receive<T1, Receive<T2, S>>, Send<T1, Send<T2, Z>>, Send<T1, Send<T2, Z>>>();
 		}
 
-		public static Protocol<Receive<T1, Receive<T2, Receive<T3, S>>>, Receive<T1, Receive<T2, Receive<T3, S>>>, Send<T1, Send<T2, Send<T3, Z>>>, Send<T1, Send<T2, Send<T3, Z>>>> Receive<T1, T2, T3, S, Z>(SerialPayloadDelegate<T1, T2, T3> payload, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Receive<T1, Receive<T2, Receive<T3, S>>>, Receive<T1, Receive<T2, Receive<T3, S>>>, Send<T1, Send<T2, Send<T3, Z>>>, Send<T1, Send<T2, Send<T3, Z>>>> Receive<T1, T2, T3, S, Z>(PayloadSeriesDelegate<T1, T2, T3> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
-			if (payload is null) throw new ArgumentNullException(nameof(payload));
-			if (payload() is null) throw new ArgumentException("Return value cannot be null.", nameof(payload));
+			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
+			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
 			return new Protocol<Receive<T1, Receive<T2, Receive<T3, S>>>, Receive<T1, Receive<T2, Receive<T3, S>>>, Send<T1, Send<T2, Send<T3, Z>>>, Send<T1, Send<T2, Send<T3, Z>>>>();
 		}
 
-		public static Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, S>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, S>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Z>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Z>>>>> Receive<T1, T2, T3, T4, S, Z>(SerialPayloadDelegate<T1, T2, T3, T4> payload, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, S>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, S>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Z>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Z>>>>> Receive<T1, T2, T3, T4, S, Z>(PayloadSeriesDelegate<T1, T2, T3, T4> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
-			if (payload is null) throw new ArgumentNullException(nameof(payload));
-			if (payload() is null) throw new ArgumentException("Return value cannot be null.", nameof(payload));
+			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
+			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
 			return new Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, S>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, S>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Z>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Z>>>>>();
 		}
 
-		public static Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, S>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, S>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, Z>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, Z>>>>>> Receive<T1, T2, T3, T4, T5, S, Z>(SerialPayloadDelegate<T1, T2, T3, T4, T5> payload, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, S>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, S>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, Z>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, Z>>>>>> Receive<T1, T2, T3, T4, T5, S, Z>(PayloadSeriesDelegate<T1, T2, T3, T4, T5> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
-			if (payload is null) throw new ArgumentNullException(nameof(payload));
-			if (payload() is null) throw new ArgumentException("Return value cannot be null.", nameof(payload));
+			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
+			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
 			return new Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, S>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, S>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, Z>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, Z>>>>>>();
 		}
