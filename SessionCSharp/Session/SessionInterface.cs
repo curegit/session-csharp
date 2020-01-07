@@ -610,39 +610,39 @@ namespace Session
 			return depleted.ToNextSession<Z, E>();
 		}
 
-		public static (Session<S, E, P> continuation, Session<Z, Empty, Q> newSession) CastNewChannel<Z, Q, S, E, P>(this Session<Cast<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
+		public static (Session<S, E, P> continuation, Session<Z, Empty, Q> newSession) SendNewChannel<Z, Q, S, E, P>(this Session<SendNewChannel<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			return (session.ToNextSession<S>(), session.CastNewChannel<Z, Q>());
 		}
 
-		public static Session<S, E, P> CastNewChannel<Z, Q, S, E, P>(this Session<Cast<Z, Q, S>, E, P> session, out Session<Z, Empty, Q> newSession) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<S, E, P> SendNewChannel<Z, Q, S, E, P>(this Session<SendNewChannel<Z, Q, S>, E, P> session, out Session<Z, Empty, Q> newSession) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			newSession = session.CastNewChannel<Z, Q>();
 			return session.ToNextSession<S>();
 		}
 
-		public static async Task<(Session<S, E, P> continuation, Session<Z, Empty, Q> newSession)> CastNewChannelAsync<Z, Q, S, E, P>(this Session<Cast<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
+		public static async Task<(Session<S, E, P> continuation, Session<Z, Empty, Q> newSession)> SendNewChannelAsync<Z, Q, S, E, P>(this Session<SendNewChannel<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			return (session.ToNextSession<S>(), await session.CastNewChannelAsync<Z, Q>());
 		}
 
-		public static (Session<S, E, P> continuation, Session<Z, Empty, Q> newSession) AcceptNewChannel<Z, Q, S, E, P>(this Session<Accept<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
+		public static (Session<S, E, P> continuation, Session<Z, Empty, Q> newSession) ReceiveNewChannel<Z, Q, S, E, P>(this Session<ReceiveNewChannel<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			return (session.ToNextSession<S>(), session.AcceptNewChannel<Z, Q>());
 		}
 
-		public static Session<S, E, P> AcceptNewChannel<Z, Q, S, E, P>(this Session<Accept<Z, Q, S>, E, P> session, out Session<Z, Empty, Q> newSession) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<S, E, P> ReceiveNewChannel<Z, Q, S, E, P>(this Session<ReceiveNewChannel<Z, Q, S>, E, P> session, out Session<Z, Empty, Q> newSession) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			newSession = session.AcceptNewChannel<Z, Q>();
 			return session.ToNextSession<S>();
 		}
 
-		public static async Task<(Session<S, E, P> continuation, Session<Z, Empty, Q> newSession)> AcceptNewChannelAsync<Z, Q, S, E, P>(this Session<Accept<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
+		public static async Task<(Session<S, E, P> continuation, Session<Z, Empty, Q> newSession)> ReceiveNewChannelAsync<Z, Q, S, E, P>(this Session<ReceiveNewChannel<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			return (session.ToNextSession<S>(), await session.AcceptNewChannelAsync<Z, Q>());

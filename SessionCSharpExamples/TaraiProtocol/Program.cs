@@ -11,7 +11,7 @@ namespace TaraiProtocol
 	{
 		public static async Task Main(string[] args)
 		{
-			var protocol = Send(Value<int>, Send(Value<int>, Send(Value<int>, AcceptNewChannel(Send(Unit, End), Follow(Receive(Value<int>, End), End)))));
+			var protocol = Send(Value<int>, Send(Value<int>, Send(Value<int>, ReceiveNewChannel(Send(Unit, End), Follow(Receive(Value<int>, End), End)))));
 
 			var client = protocol.ForkThread(async server =>
 			{
@@ -23,7 +23,7 @@ namespace TaraiProtocol
 				}
 
 				var s1 = server.Receive(out var x).Receive(out var y).Receive(out var z);
-				var s2 = s1.CastNewChannel(out var channelForCancel);
+				var s2 = s1.SendNewChannel(out var channelForCancel);
 
 				var waitForCancel = channelForCancel.ReceiveAsync();
 				try
@@ -40,7 +40,7 @@ namespace TaraiProtocol
 			});
 
 			var c1 = client.Send(16).Send(3).Send(2);
-			var c2 = c1.AcceptNewChannel(out var ch);
+			var c2 = c1.ReceiveNewChannel(out var ch);
 			var ret = c2.FollowAsync(left =>
 			{
 				left.Receive(out var ans).Close();

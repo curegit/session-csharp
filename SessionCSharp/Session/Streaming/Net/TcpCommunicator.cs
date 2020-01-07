@@ -88,22 +88,22 @@ namespace Session.Streaming.Net
 			return (Selection)buffer[0];
 		}
 
-		public Session<S, Empty, P> CastNewChannel<S, P>() where S : SessionType where P : ProtocolType
+		public Session<S, Empty, P> SendNewChannel<S, P>() where S : SessionType where P : ProtocolType
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<Session<S, Empty, P>> CastNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType
+		public Task<Session<S, Empty, P>> SendNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType
 		{
 			throw new NotImplementedException();
 		}
 
-		public Session<S, Empty, P> AcceptNewChannel<S, P>() where S : SessionType where P : ProtocolType
+		public Session<S, Empty, P> ReceiveNewChannel<S, P>() where S : SessionType where P : ProtocolType
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<Session<S, Empty, P>> AcceptNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType
+		public Task<Session<S, Empty, P>> ReceiveNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType
 		{
 			throw new NotImplementedException();
 		}

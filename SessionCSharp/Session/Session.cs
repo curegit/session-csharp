@@ -93,25 +93,25 @@ namespace Session
 		internal Session<Z, Empty, Q> CastNewChannel<Z, Q>() where Z : SessionType where Q : ProtocolType
 		{
 			CheckLinearity();
-			return communicator.CastNewChannel<Z, Q>();
+			return communicator.SendNewChannel<Z, Q>();
 		}
 
 		internal Task<Session<Z, Empty, Q>> CastNewChannelAsync<Z, Q>() where Z : SessionType where Q : ProtocolType
 		{
 			CheckLinearity();
-			return communicator.CastNewChannelAsync<Z, Q>();
+			return communicator.SendNewChannelAsync<Z, Q>();
 		}
 
 		internal Session<Z, Empty, Q> AcceptNewChannel<Z, Q>() where Z : SessionType where Q : ProtocolType
 		{
 			CheckLinearity();
-			return communicator.AcceptNewChannel<Z, Q>();
+			return communicator.ReceiveNewChannel<Z, Q>();
 		}
 
 		internal Task<Session<Z, Empty, Q>> AcceptNewChannelAsync<Z, Q>() where Z : SessionType where Q : ProtocolType
 		{
 			CheckLinearity();
-			return communicator.AcceptNewChannelAsync<Z, Q>();
+			return communicator.ReceiveNewChannelAsync<Z, Q>();
 		}
 
 		internal void Select(Selection direction)

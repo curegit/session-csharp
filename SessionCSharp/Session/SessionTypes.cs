@@ -150,14 +150,14 @@ namespace Session
 		private Call9() { }
 	}
 
-	public sealed class Cast<X, P, S> : SessionType where X : SessionType where P : ProtocolType where S : SessionType
+	public sealed class SendNewChannel<X, P, S> : SessionType where X : SessionType where P : ProtocolType where S : SessionType
 	{
-		private Cast() { }
+		private SendNewChannel() { }
 	}
 
-	public sealed class Accept<X, P, S> : SessionType where X : SessionType where P : ProtocolType where S : SessionType
+	public sealed class ReceiveNewChannel<X, P, S> : SessionType where X : SessionType where P : ProtocolType where S : SessionType
 	{
-		private Accept() { }
+		private ReceiveNewChannel() { }
 	}
 
 	public sealed class Eps : SessionType
