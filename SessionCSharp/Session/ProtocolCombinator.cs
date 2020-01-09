@@ -295,20 +295,20 @@ namespace Session
 
 		public static Protocol<Eps, Eps, Eps, Eps> End => new Protocol<Eps, Eps, Eps, Eps>();
 
-		public static Protocol<S0, Cons<S0, Nil>, Z0, Cons<Z0, Nil>> Array<S0, Z0>(Protocol<S0, S0, Z0, Z0> sub0) where S0 : SessionType where Z0 : SessionType
+		public static Protocol<S0, Cons<S0, Nil>, Z0, Cons<Z0, Nil>> Arrange<S0, Z0>(Protocol<S0, S0, Z0, Z0> sub0) where S0 : SessionType where Z0 : SessionType
 		{
 			if (sub0 is null) throw new ArgumentNullException(nameof(sub0));
 			return new Protocol<S0, Cons<S0, Nil>, Z0, Cons<Z0, Nil>>();
 		}
 
-		public static Protocol<S0, Cons<S0, Cons<S1, Nil>>, Z0, Cons<Z0, Cons<Z1, Nil>>> Array<S0, S1, Z0, Z1>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1) where S0 : SessionType where S1 : SessionType where Z0 : SessionType where Z1 : SessionType
+		public static Protocol<S0, Cons<S0, Cons<S1, Nil>>, Z0, Cons<Z0, Cons<Z1, Nil>>> Arrange<S0, S1, Z0, Z1>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1) where S0 : SessionType where S1 : SessionType where Z0 : SessionType where Z1 : SessionType
 		{
 			if (sub0 is null) throw new ArgumentNullException(nameof(sub0));
 			if (sub1 is null) throw new ArgumentNullException(nameof(sub1));
 			return new Protocol<S0, Cons<S0, Cons<S1, Nil>>, Z0, Cons<Z0, Cons<Z1, Nil>>>();
 		}
 
-		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Nil>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Nil>>>> Array<S0, S1, S2, Z0, Z1, Z2>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType
+		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Nil>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Nil>>>> Arrange<S0, S1, S2, Z0, Z1, Z2>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType
 		{
 			if (sub0 is null) throw new ArgumentNullException(nameof(sub0));
 			if (sub1 is null) throw new ArgumentNullException(nameof(sub1));
@@ -316,7 +316,7 @@ namespace Session
 			return new Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Nil>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Nil>>>>();
 		}
 
-		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Nil>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Nil>>>>> Array<S0, S1, S2, S3, Z0, Z1, Z2, Z3>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType
+		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Nil>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Nil>>>>> Arrange<S0, S1, S2, S3, Z0, Z1, Z2, Z3>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType
 		{
 			if (sub0 is null) throw new ArgumentNullException(nameof(sub0));
 			if (sub1 is null) throw new ArgumentNullException(nameof(sub1));
@@ -325,7 +325,7 @@ namespace Session
 			return new Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Nil>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Nil>>>>>();
 		}
 
-		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Nil>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Nil>>>>>> Array<S0, S1, S2, S3, S4, Z0, Z1, Z2, Z3, Z4>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3, Protocol<S4, S4, Z4, Z4> sub4) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType where S4 : SessionType where Z4 : SessionType
+		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Nil>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Nil>>>>>> Arrange<S0, S1, S2, S3, S4, Z0, Z1, Z2, Z3, Z4>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3, Protocol<S4, S4, Z4, Z4> sub4) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType where S4 : SessionType where Z4 : SessionType
 		{
 			if (sub0 is null) throw new ArgumentNullException(nameof(sub0));
 			if (sub1 is null) throw new ArgumentNullException(nameof(sub1));
@@ -335,7 +335,7 @@ namespace Session
 			return new Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Nil>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Nil>>>>>>();
 		}
 
-		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Nil>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Nil>>>>>>> Array<S0, S1, S2, S3, S4, S5, Z0, Z1, Z2, Z3, Z4, Z5>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3, Protocol<S4, S4, Z4, Z4> sub4, Protocol<S5, S5, Z5, Z5> sub5) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType where S4 : SessionType where Z4 : SessionType where S5 : SessionType where Z5 : SessionType
+		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Nil>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Nil>>>>>>> Arrange<S0, S1, S2, S3, S4, S5, Z0, Z1, Z2, Z3, Z4, Z5>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3, Protocol<S4, S4, Z4, Z4> sub4, Protocol<S5, S5, Z5, Z5> sub5) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType where S4 : SessionType where Z4 : SessionType where S5 : SessionType where Z5 : SessionType
 		{
 			if (sub0 is null) throw new ArgumentNullException(nameof(sub0));
 			if (sub1 is null) throw new ArgumentNullException(nameof(sub1));
@@ -346,7 +346,7 @@ namespace Session
 			return new Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Nil>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Nil>>>>>>>();
 		}
 
-		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Cons<S6, Nil>>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Cons<Z6, Nil>>>>>>>> Array<S0, S1, S2, S3, S4, S5, S6, Z0, Z1, Z2, Z3, Z4, Z5, Z6>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3, Protocol<S4, S4, Z4, Z4> sub4, Protocol<S5, S5, Z5, Z5> sub5, Protocol<S6, S6, Z6, Z6> sub6) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType where S4 : SessionType where Z4 : SessionType where S5 : SessionType where Z5 : SessionType where S6 : SessionType where Z6 : SessionType
+		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Cons<S6, Nil>>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Cons<Z6, Nil>>>>>>>> Arrange<S0, S1, S2, S3, S4, S5, S6, Z0, Z1, Z2, Z3, Z4, Z5, Z6>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3, Protocol<S4, S4, Z4, Z4> sub4, Protocol<S5, S5, Z5, Z5> sub5, Protocol<S6, S6, Z6, Z6> sub6) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType where S4 : SessionType where Z4 : SessionType where S5 : SessionType where Z5 : SessionType where S6 : SessionType where Z6 : SessionType
 		{
 			if (sub0 is null) throw new ArgumentNullException(nameof(sub0));
 			if (sub1 is null) throw new ArgumentNullException(nameof(sub1));
@@ -358,7 +358,7 @@ namespace Session
 			return new Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Cons<S6, Nil>>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Cons<Z6, Nil>>>>>>>>();
 		}
 
-		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Cons<S6, Cons<S7, Nil>>>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Cons<Z6, Cons<Z7, Nil>>>>>>>>> Array<S0, S1, S2, S3, S4, S5, S6, S7, Z0, Z1, Z2, Z3, Z4, Z5, Z6, Z7>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3, Protocol<S4, S4, Z4, Z4> sub4, Protocol<S5, S5, Z5, Z5> sub5, Protocol<S6, S6, Z6, Z6> sub6, Protocol<S7, S7, Z7, Z7> sub7) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType where S4 : SessionType where Z4 : SessionType where S5 : SessionType where Z5 : SessionType where S6 : SessionType where Z6 : SessionType where S7 : SessionType where Z7 : SessionType
+		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Cons<S6, Cons<S7, Nil>>>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Cons<Z6, Cons<Z7, Nil>>>>>>>>> Arrange<S0, S1, S2, S3, S4, S5, S6, S7, Z0, Z1, Z2, Z3, Z4, Z5, Z6, Z7>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3, Protocol<S4, S4, Z4, Z4> sub4, Protocol<S5, S5, Z5, Z5> sub5, Protocol<S6, S6, Z6, Z6> sub6, Protocol<S7, S7, Z7, Z7> sub7) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType where S4 : SessionType where Z4 : SessionType where S5 : SessionType where Z5 : SessionType where S6 : SessionType where Z6 : SessionType where S7 : SessionType where Z7 : SessionType
 		{
 			if (sub0 is null) throw new ArgumentNullException(nameof(sub0));
 			if (sub1 is null) throw new ArgumentNullException(nameof(sub1));
@@ -371,7 +371,7 @@ namespace Session
 			return new Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Cons<S6, Cons<S7, Nil>>>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Cons<Z6, Cons<Z7, Nil>>>>>>>>>();
 		}
 
-		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Cons<S6, Cons<S7, Cons<S8, Nil>>>>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Cons<Z6, Cons<Z7, Cons<Z8, Nil>>>>>>>>>> Array<S0, S1, S2, S3, S4, S5, S6, S7, S8, Z0, Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3, Protocol<S4, S4, Z4, Z4> sub4, Protocol<S5, S5, Z5, Z5> sub5, Protocol<S6, S6, Z6, Z6> sub6, Protocol<S7, S7, Z7, Z7> sub7, Protocol<S8, S8, Z8, Z8> sub8) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType where S4 : SessionType where Z4 : SessionType where S5 : SessionType where Z5 : SessionType where S6 : SessionType where Z6 : SessionType where S7 : SessionType where Z7 : SessionType where S8 : SessionType where Z8 : SessionType
+		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Cons<S6, Cons<S7, Cons<S8, Nil>>>>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Cons<Z6, Cons<Z7, Cons<Z8, Nil>>>>>>>>>> Arrange<S0, S1, S2, S3, S4, S5, S6, S7, S8, Z0, Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3, Protocol<S4, S4, Z4, Z4> sub4, Protocol<S5, S5, Z5, Z5> sub5, Protocol<S6, S6, Z6, Z6> sub6, Protocol<S7, S7, Z7, Z7> sub7, Protocol<S8, S8, Z8, Z8> sub8) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType where S4 : SessionType where Z4 : SessionType where S5 : SessionType where Z5 : SessionType where S6 : SessionType where Z6 : SessionType where S7 : SessionType where Z7 : SessionType where S8 : SessionType where Z8 : SessionType
 		{
 			if (sub0 is null) throw new ArgumentNullException(nameof(sub0));
 			if (sub1 is null) throw new ArgumentNullException(nameof(sub1));
@@ -385,7 +385,7 @@ namespace Session
 			return new Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Cons<S6, Cons<S7, Cons<S8, Nil>>>>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Cons<Z6, Cons<Z7, Cons<Z8, Nil>>>>>>>>>>();
 		}
 
-		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Cons<S6, Cons<S7, Cons<S8, Cons<S9, Nil>>>>>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Cons<Z6, Cons<Z7, Cons<Z8, Cons<Z9, Nil>>>>>>>>>>> Array<S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, Z0, Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3, Protocol<S4, S4, Z4, Z4> sub4, Protocol<S5, S5, Z5, Z5> sub5, Protocol<S6, S6, Z6, Z6> sub6, Protocol<S7, S7, Z7, Z7> sub7, Protocol<S8, S8, Z8, Z8> sub8, Protocol<S9, S9, Z9, Z9> sub9) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType where S4 : SessionType where Z4 : SessionType where S5 : SessionType where Z5 : SessionType where S6 : SessionType where Z6 : SessionType where S7 : SessionType where Z7 : SessionType where S8 : SessionType where Z8 : SessionType where S9 : SessionType where Z9 : SessionType
+		public static Protocol<S0, Cons<S0, Cons<S1, Cons<S2, Cons<S3, Cons<S4, Cons<S5, Cons<S6, Cons<S7, Cons<S8, Cons<S9, Nil>>>>>>>>>>, Z0, Cons<Z0, Cons<Z1, Cons<Z2, Cons<Z3, Cons<Z4, Cons<Z5, Cons<Z6, Cons<Z7, Cons<Z8, Cons<Z9, Nil>>>>>>>>>>> Arrange<S0, S1, S2, S3, S4, S5, S6, S7, S8, S9, Z0, Z1, Z2, Z3, Z4, Z5, Z6, Z7, Z8, Z9>(Protocol<S0, S0, Z0, Z0> sub0, Protocol<S1, S1, Z1, Z1> sub1, Protocol<S2, S2, Z2, Z2> sub2, Protocol<S3, S3, Z3, Z3> sub3, Protocol<S4, S4, Z4, Z4> sub4, Protocol<S5, S5, Z5, Z5> sub5, Protocol<S6, S6, Z6, Z6> sub6, Protocol<S7, S7, Z7, Z7> sub7, Protocol<S8, S8, Z8, Z8> sub8, Protocol<S9, S9, Z9, Z9> sub9) where S0 : SessionType where S1 : SessionType where S2 : SessionType where Z0 : SessionType where Z1 : SessionType where Z2 : SessionType where S3 : SessionType where Z3 : SessionType where S4 : SessionType where Z4 : SessionType where S5 : SessionType where Z5 : SessionType where S6 : SessionType where Z6 : SessionType where S7 : SessionType where Z7 : SessionType where S8 : SessionType where Z8 : SessionType where S9 : SessionType where Z9 : SessionType
 		{
 			if (sub0 is null) throw new ArgumentNullException(nameof(sub0));
 			if (sub1 is null) throw new ArgumentNullException(nameof(sub1));
