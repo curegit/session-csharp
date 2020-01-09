@@ -38,6 +38,6 @@ namespace Session
 
 		public void Close();
 
-		public void Die();
+		public void Cancel();
 	}
 }
