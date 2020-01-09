@@ -51,26 +51,26 @@ namespace Session.Threading
 
 
 
-		public Session<S, Empty, P> SendNewChannel<S, P>() where S : SessionType where P : ProtocolType
+		public Session<S, Empty, P> ThrowNewChannel<S, P>() where S : SessionType where P : ProtocolType
 		{
 			var (c, s) = ChannelFactory.Create();
 			Send(s);
 			return new Session<S, Empty, P>(c);
 		}
 
-		public async Task<Session<S, Empty, P>> SendNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType
+		public async Task<Session<S, Empty, P>> ThrowNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType
 		{
 			var (c, s) = ChannelFactory.Create();
 			await SendAsync(s);
 			return new Session<S, Empty, P>(c);
 		}
 
-		public Session<S, Empty, P> ReceiveNewChannel<S, P>() where S : SessionType where P : ProtocolType
+		public Session<S, Empty, P> CatchNewChannel<S, P>() where S : SessionType where P : ProtocolType
 		{
 			return new Session<S, Empty, P>(Receive<ChannelCommunicator>());
 		}
 
-		public async Task<Session<S, Empty, P>> ReceiveNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType
+		public async Task<Session<S, Empty, P>> CatchNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType
 		{
 			return new Session<S, Empty, P>(await ReceiveAsync<ChannelCommunicator>());
 		}

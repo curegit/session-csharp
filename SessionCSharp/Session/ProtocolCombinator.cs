@@ -279,18 +279,18 @@ namespace Session
 			return new Protocol<Call9<S>, Call9<S>, Call9<Z>, Call9<Z>>();
 		}
 
-		public static Protocol<SendNewChannel<X, P, S>, SendNewChannel<X, P, S>, ReceiveNewChannel<Y, Q, Z>, ReceiveNewChannel<Y, Q, Z>> SendNewChannel<X, P, Y, Q, Z, S>(Protocol<X, P, Y, Q> protocol, Protocol<S, S, Z, Z> continuation) where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType where Z : SessionType
+		public static Protocol<ThrowNewChannel<X, P, S>, ThrowNewChannel<X, P, S>, CatchNewChannel<Y, Q, Z>, CatchNewChannel<Y, Q, Z>> ThrowNewChannel<X, P, Y, Q, Z, S>(Protocol<X, P, Y, Q> protocol, Protocol<S, S, Z, Z> continuation) where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType where Z : SessionType
 		{
 			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<SendNewChannel<X, P, S>, SendNewChannel<X, P, S>, ReceiveNewChannel<Y, Q, Z>, ReceiveNewChannel<Y, Q, Z>>();
+			return new Protocol<ThrowNewChannel<X, P, S>, ThrowNewChannel<X, P, S>, CatchNewChannel<Y, Q, Z>, CatchNewChannel<Y, Q, Z>>();
 		}
 
-		public static Protocol<ReceiveNewChannel<X, P, S>, ReceiveNewChannel<X, P, S>, SendNewChannel<Y, Q, Z>, SendNewChannel<Y, Q, Z>> ReceiveNewChannel<X, P, Y, Q, Z, S>(Protocol<X, P, Y, Q> protocol, Protocol<S, S, Z, Z> continuation) where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType where Z : SessionType
+		public static Protocol<CatchNewChannel<X, P, S>, CatchNewChannel<X, P, S>, ThrowNewChannel<Y, Q, Z>, ThrowNewChannel<Y, Q, Z>> CatchNewChannel<X, P, Y, Q, Z, S>(Protocol<X, P, Y, Q> protocol, Protocol<S, S, Z, Z> continuation) where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType where Z : SessionType
 		{
 			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<ReceiveNewChannel<X, P, S>, ReceiveNewChannel<X, P, S>, SendNewChannel<Y, Q, Z>, SendNewChannel<Y, Q, Z>>();
+			return new Protocol<CatchNewChannel<X, P, S>, CatchNewChannel<X, P, S>, ThrowNewChannel<Y, Q, Z>, ThrowNewChannel<Y, Q, Z>>();
 		}
 
 		public static Protocol<Eps, Eps, Eps, Eps> End => new Protocol<Eps, Eps, Eps, Eps>();

@@ -81,28 +81,28 @@ namespace Session
 			return communicator.ReceiveAsync<T>();
 		}
 
-		internal Session<Z, Empty, Q> CastNewChannel<Z, Q>() where Z : SessionType where Q : ProtocolType
+		internal Session<Z, Empty, Q> ThrowNewChannel<Z, Q>() where Z : SessionType where Q : ProtocolType
 		{
 			TrySpendLinearity();
-			return communicator.SendNewChannel<Z, Q>();
+			return communicator.ThrowNewChannel<Z, Q>();
 		}
 
-		internal Task<Session<Z, Empty, Q>> CastNewChannelAsync<Z, Q>() where Z : SessionType where Q : ProtocolType
+		internal Task<Session<Z, Empty, Q>> ThrowNewChannelAsync<Z, Q>() where Z : SessionType where Q : ProtocolType
 		{
 			TrySpendLinearity();
-			return communicator.SendNewChannelAsync<Z, Q>();
+			return communicator.ThrowNewChannelAsync<Z, Q>();
 		}
 
-		internal Session<Z, Empty, Q> AcceptNewChannel<Z, Q>() where Z : SessionType where Q : ProtocolType
+		internal Session<Z, Empty, Q> CatchNewChannel<Z, Q>() where Z : SessionType where Q : ProtocolType
 		{
 			TrySpendLinearity();
-			return communicator.ReceiveNewChannel<Z, Q>();
+			return communicator.CatchNewChannel<Z, Q>();
 		}
 
-		internal Task<Session<Z, Empty, Q>> AcceptNewChannelAsync<Z, Q>() where Z : SessionType where Q : ProtocolType
+		internal Task<Session<Z, Empty, Q>> CatchNewChannelAsync<Z, Q>() where Z : SessionType where Q : ProtocolType
 		{
 			TrySpendLinearity();
-			return communicator.ReceiveNewChannelAsync<Z, Q>();
+			return communicator.CatchNewChannelAsync<Z, Q>();
 		}
 
 		internal void Select(Selection direction)

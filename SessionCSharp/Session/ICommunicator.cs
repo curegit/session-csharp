@@ -28,13 +28,13 @@ namespace Session
 
 		public Task<Selection> FollowAsync();
 
-		public Session<S, Empty, P> SendNewChannel<S, P>() where S : SessionType where P : ProtocolType;
+		public Session<S, Empty, P> ThrowNewChannel<S, P>() where S : SessionType where P : ProtocolType;
 
-		public Task<Session<S, Empty, P>> SendNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType;
+		public Task<Session<S, Empty, P>> ThrowNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType;
 
-		public Session<S, Empty, P> ReceiveNewChannel<S, P>() where S : SessionType where P : ProtocolType;
+		public Session<S, Empty, P> CatchNewChannel<S, P>() where S : SessionType where P : ProtocolType;
 
-		public Task<Session<S, Empty, P>> ReceiveNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType;
+		public Task<Session<S, Empty, P>> CatchNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType;
 
 		public void Close();
 
