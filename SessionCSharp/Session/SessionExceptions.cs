@@ -4,15 +4,15 @@ using System.Runtime.Serialization;
 namespace Session
 {
 	[Serializable]
-	public sealed class LinearityException : InvalidOperationException
+	public sealed class LinearityViolationException : InvalidOperationException
 	{
-		public LinearityException() : base() { }
+		public LinearityViolationException() : base() { }
 
-		public LinearityException(string message) : base(message) { }
+		public LinearityViolationException(string message) : base(message) { }
 
-		public LinearityException(string message, Exception inner) : base(message, inner) { }
+		public LinearityViolationException(string message, Exception inner) : base(message, inner) { }
 
-		private LinearityException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+		private LinearityViolationException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 
 	[Serializable]

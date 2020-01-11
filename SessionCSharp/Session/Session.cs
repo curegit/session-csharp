@@ -144,7 +144,7 @@ namespace Session
 		{
 			if (used)
 			{
-				throw new LinearityException();
+				throw new LinearityViolationException();
 			}
 			else
 			{
