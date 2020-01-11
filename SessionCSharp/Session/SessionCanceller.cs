@@ -11,6 +11,10 @@ namespace Session
 
 		public void Register(Session session)
 		{
+			if (session is null)
+			{
+				throw new ArgumentNullException(nameof(session));
+			}
 			if (open)
 			{
 				sessions.Add(session);
