@@ -1,26 +1,43 @@
 using System;
 using System.IO;
+using System.Threading.Tasks;
 using Google.Protobuf;
-using Google.Protobuf.Reflection;
 
 namespace Session.Streaming.Serializers
 {
-	public sealed class ProtobufSerializer : ISerializer
+	public sealed class ProtobufSerializer : ISpecialSerializer
 	{
-		public ProtobufSerializer() { }
-
 		public void Serialize<T>(Stream stream, T value)
 		{
-			throw new NotImplementedException();
-			//var a = new Google.Protobuf.MessageParser<int>();
-			//a.ParseFrom(,)
+			if (stream is null) throw new ArgumentNullException(nameof(stream));
+			if (value is null) throw new ArgumentNullException(nameof(value));
+			(value as IMessage ?? throw new Exception()).WriteDelimitedTo(stream);
+		}
+
+		public Task SerializeAsync<T>(Stream stream, T value)
+		{
+			if (stream is null) throw new ArgumentNullException(nameof(stream));
+			if (value is null) throw new ArgumentNullException(nameof(value));
+			return Task.Run(() => Serialize(stream, value));
 		}
 
 		public T Deserialize<T>(Stream stream)
 		{
-			throw new NotImplementedException();
-			//Google.Protobuf.MessageParser<T>
-			//(IMessage<T>)T;
+			if (stream is null) throw new ArgumentNullException(nameof(stream));
+			var instance = (IMessage)Activator.CreateInstance(typeof(T));
+			instance.MergeDelimitedFrom(stream);
+			return (T)instance;
+		}
+
+		public Task<T> DeserializeAsync<T>(Stream stream)
+		{
+			if (stream is null) throw new ArgumentNullException(nameof(stream));
+			return Task.Run(() => Deserialize<T>(stream));
+		}
+
+		public bool CanSerialize<T>(T value)
+		{
+			return value is null ? false : value is IMessage;
 		}
 	}
 }
