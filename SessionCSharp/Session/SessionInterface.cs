@@ -152,7 +152,7 @@ namespace Session
 					rightAction(session.ToNextSession<R>());
 					break;
 				default:
-					throw new UnknownChoiceException();
+					throw new InvalidSelectionException();
 			}
 		}
 
@@ -170,7 +170,7 @@ namespace Session
 					rightAction(session.ToNextSession<R>());
 					break;
 				default:
-					throw new UnknownChoiceException();
+					throw new InvalidSelectionException();
 			}
 		}
 
@@ -188,7 +188,7 @@ namespace Session
 					await rightAction(session.ToNextSession<R>());
 					break;
 				default:
-					throw new UnknownChoiceException();
+					throw new InvalidSelectionException();
 			}
 		}
 
@@ -206,7 +206,7 @@ namespace Session
 					await rightAction(session.ToNextSession<R>());
 					break;
 				default:
-					throw new UnknownChoiceException();
+					throw new InvalidSelectionException();
 			}
 		}
 
@@ -222,7 +222,7 @@ namespace Session
 				case Selection.Right:
 					return rightFunc(session.ToNextSession<R>());
 				default:
-					throw new UnknownChoiceException();
+					throw new InvalidSelectionException();
 			}
 		}
 
@@ -238,7 +238,7 @@ namespace Session
 				case Selection.Right:
 					return rightFunc(session.ToNextSession<R>());
 				default:
-					throw new UnknownChoiceException();
+					throw new InvalidSelectionException();
 			}
 		}
 
@@ -254,7 +254,7 @@ namespace Session
 				case Selection.Right:
 					return await rightFunc(session.ToNextSession<R>());
 				default:
-					throw new UnknownChoiceException();
+					throw new InvalidSelectionException();
 			}
 		}
 
@@ -270,7 +270,7 @@ namespace Session
 				case Selection.Right:
 					return await rightFunc(session.ToNextSession<R>());
 				default:
-					throw new UnknownChoiceException();
+					throw new InvalidSelectionException();
 			}
 		}
 
@@ -288,7 +288,7 @@ namespace Session
 					rightAction(session.ToNextSession<R>());
 					break;
 				default:
-					throw new UnknownChoiceException();
+					throw new InvalidSelectionException();
 			}
 		}
 
@@ -306,7 +306,7 @@ namespace Session
 					rightAction(session.ToNextSession<R>());
 					break;
 				default:
-					throw new UnknownChoiceException();
+					throw new InvalidSelectionException();
 			}
 		}
 
@@ -324,7 +324,7 @@ namespace Session
 					await rightAction(session.ToNextSession<R>());
 					break;
 				default:
-					throw new UnknownChoiceException();
+					throw new InvalidSelectionException();
 			}
 		}
 
@@ -342,7 +342,7 @@ namespace Session
 					await rightAction(session.ToNextSession<R>());
 					break;
 				default:
-					throw new UnknownChoiceException();
+					throw new InvalidSelectionException();
 			}
 		}
 

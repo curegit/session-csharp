@@ -6,24 +6,24 @@ namespace Session
 	[Serializable]
 	public sealed class LinearityViolationException : InvalidOperationException
 	{
-		public LinearityViolationException() : base() { }
+		internal LinearityViolationException() : base() { }
 
-		public LinearityViolationException(string message) : base(message) { }
+		internal LinearityViolationException(string message) : base(message) { }
 
-		public LinearityViolationException(string message, Exception inner) : base(message, inner) { }
+		internal LinearityViolationException(string message, Exception inner) : base(message, inner) { }
 
 		private LinearityViolationException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 
 	[Serializable]
-	public sealed class UnknownChoiceException : InvalidOperationException
+	public sealed class InvalidSelectionException : Exception
 	{
-		public UnknownChoiceException() : base() { }
+		internal InvalidSelectionException() : base() { }
 
-		public UnknownChoiceException(string message) : base(message) { }
+		internal InvalidSelectionException(string message) : base(message) { }
 
-		public UnknownChoiceException(string message, Exception inner) : base(message, inner) { }
+		internal InvalidSelectionException(string message, Exception inner) : base(message, inner) { }
 
-		private UnknownChoiceException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+		private InvalidSelectionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 }
