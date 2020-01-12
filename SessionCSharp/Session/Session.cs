@@ -105,16 +105,16 @@ namespace Session
 			return communicator.CatchNewChannelAsync<Z, Q>();
 		}
 
-		internal void Select(Selection direction)
+		internal void Select(Selection selection)
 		{
 			TrySpendLinearity();
-			communicator.Select(direction);
+			communicator.Select(selection);
 		}
 
-		internal Task SelectAsync(Selection direction)
+		internal Task SelectAsync(Selection selection)
 		{
 			TrySpendLinearity();
-			return communicator.SelectAsync(direction);
+			return communicator.SelectAsync(selection);
 		}
 
 		internal Selection Follow()
