@@ -14,7 +14,7 @@ namespace Session
 			return session.ToNextSession<S>();
 		}
 
-		public static Session<S, E, P> Send<T, S, E, P>(this Session<Send<T, S>, E, P> session, T value) where S : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<S, E, P> Send<S, E, P, T>(this Session<Send<T, S>, E, P> session, T value) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			session.Send(value);
@@ -28,7 +28,7 @@ namespace Session
 			return session.ToNextSession<S>();
 		}
 
-		public static async Task<Session<S, E, P>> SendAsync<T, S, E, P>(this Session<Send<T, S>, E, P> session, T value) where S : SessionType where E : SessionStack where P : ProtocolType
+		public static async Task<Session<S, E, P>> SendAsync<S, E, P, T>(this Session<Send<T, S>, E, P> session, T value) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			await session.SendAsync(value);
@@ -42,13 +42,13 @@ namespace Session
 			return session.ToNextSession<S>();
 		}
 
-		public static (Session<S, E, P> continuation, T value) Receive<T, S, E, P>(this Session<Receive<T, S>, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
+		public static (Session<S, E, P> continuation, T value) Receive<S, E, P, T>(this Session<Receive<T, S>, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			return (session.ToNextSession<S>(), session.Receive<T>());
 		}
 
-		public static Session<S, E, P> Receive<T, S, E, P>(this Session<Receive<T, S>, E, P> session, out T value) where S : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<S, E, P> Receive<S, E, P, T>(this Session<Receive<T, S>, E, P> session, out T value) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			value = session.Receive<T>();
@@ -62,7 +62,7 @@ namespace Session
 			return session.ToNextSession<S>();
 		}
 
-		public static async Task<(Session<S, E, P> continuation, T value)> ReceiveAsync<T, S, E, P>(this Session<Receive<T, S>, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
+		public static async Task<(Session<S, E, P> continuation, T value)> ReceiveAsync<S, E, P, T>(this Session<Receive<T, S>, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			return (session.ToNextSession<S>(), await session.ReceiveAsync<T>());
@@ -610,39 +610,39 @@ namespace Session
 			return depleted.ToNextSession<Z, E>();
 		}
 
-		public static (Session<S, E, P> continuation, Session<Z, Empty, Q> newSession) ThrowNewChannel<Z, Q, S, E, P>(this Session<ThrowNewChannel<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
+		public static (Session<S, E, P> continuation, Session<Z, Empty, Q> newSession) ThrowNewChannel<S, E, P, Z, Q>(this Session<ThrowNewChannel<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			return (session.ToNextSession<S>(), session.ThrowNewChannel<Z, Q>());
 		}
 
-		public static Session<S, E, P> ThrowNewChannel<Z, Q, S, E, P>(this Session<ThrowNewChannel<Z, Q, S>, E, P> session, out Session<Z, Empty, Q> newSession) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<S, E, P> ThrowNewChannel<S, E, P, Z, Q>(this Session<ThrowNewChannel<Z, Q, S>, E, P> session, out Session<Z, Empty, Q> newSession) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			newSession = session.ThrowNewChannel<Z, Q>();
 			return session.ToNextSession<S>();
 		}
 
-		public static async Task<(Session<S, E, P> continuation, Session<Z, Empty, Q> newSession)> ThrowNewChannelAsync<Z, Q, S, E, P>(this Session<ThrowNewChannel<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
+		public static async Task<(Session<S, E, P> continuation, Session<Z, Empty, Q> newSession)> ThrowNewChannelAsync<S, E, P, Z, Q>(this Session<ThrowNewChannel<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			return (session.ToNextSession<S>(), await session.ThrowNewChannelAsync<Z, Q>());
 		}
 
-		public static (Session<S, E, P> continuation, Session<Z, Empty, Q> newSession) CatchNewChannel<Z, Q, S, E, P>(this Session<CatchNewChannel<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
+		public static (Session<S, E, P> continuation, Session<Z, Empty, Q> newSession) CatchNewChannel<S, E, P, Z, Q>(this Session<CatchNewChannel<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			return (session.ToNextSession<S>(), session.CatchNewChannel<Z, Q>());
 		}
 
-		public static Session<S, E, P> CatchNewChannel<Z, Q, S, E, P>(this Session<CatchNewChannel<Z, Q, S>, E, P> session, out Session<Z, Empty, Q> newSession) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<S, E, P> CatchNewChannel<S, E, P, Z, Q>(this Session<CatchNewChannel<Z, Q, S>, E, P> session, out Session<Z, Empty, Q> newSession) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			newSession = session.CatchNewChannel<Z, Q>();
 			return session.ToNextSession<S>();
 		}
 
-		public static async Task<(Session<S, E, P> continuation, Session<Z, Empty, Q> newSession)> CatchNewChannelAsync<Z, Q, S, E, P>(this Session<CatchNewChannel<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
+		public static async Task<(Session<S, E, P> continuation, Session<Z, Empty, Q> newSession)> CatchNewChannelAsync<S, E, P, Z, Q>(this Session<CatchNewChannel<Z, Q, S>, E, P> session) where Z : SessionType where Q : ProtocolType where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			return (session.ToNextSession<S>(), await session.CatchNewChannelAsync<Z, Q>());
