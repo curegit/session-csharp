@@ -62,10 +62,24 @@ namespace Session
 			return session.ToNextSession<S>();
 		}
 
+		public static Task<Session<S, E, P>> ReceiveAsync<S, E, P>(this Session<Receive<S>, E, P> session, out Task future) where S : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			future = session.ReceiveAsync();
+			return future.ContinueWith(task => task.IsFaulted ? throw task.Exception : session.ToNextSession<S>());
+		}
+
 		public static async Task<(Session<S, E, P> continuation, T value)> ReceiveAsync<S, E, P, T>(this Session<Receive<T, S>, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			return (session.ToNextSession<S>(), await session.ReceiveAsync<T>());
+		}
+
+		public static Task<Session<S, E, P>> ReceiveAsync<S, E, P, T>(this Session<Receive<T, S>, E, P> session, out Task<T> future) where S : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			future = session.ReceiveAsync<T>();
+			return future.ContinueWith(task => task.IsFaulted ? throw task.Exception : session.ToNextSession<S>());
 		}
 
 		public static Session<L, E, P> SelectLeft<L, R, E, P>(this Session<Select<L, R>, E, P> session) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
