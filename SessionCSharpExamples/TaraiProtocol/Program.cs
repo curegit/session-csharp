@@ -13,31 +13,31 @@ namespace TaraiProtocol
 		{
 			var protocol = Send(Value<int>, Send(Value<int>, Send(Value<int>, CatchNewChannel(Send(Unit, End), Follow(Receive(Value<int>, End), End)))));
 
-			var client = protocol.ForkThread(async ch1 =>
+			var client = protocol.ForkThread(ch1 =>
 			{
-				static int Tarai(int x, int y, int z, Func<bool> cancelled)
+				static int Tarai(int x, int y, int z, Task futureCancel)
 				{
-					if (cancelled()) throw new OperationCanceledException();
+					if (futureCancel.IsCompleted) throw new OperationCanceledException();
 					if (x <= y) return y;
-					return Tarai(Tarai(x - 1, y, z, cancelled), Tarai(y - 1, z, x, cancelled), Tarai(z - 1, x, y, cancelled), cancelled);
+					return Tarai(Tarai(x - 1, y, z, futureCancel), Tarai(y - 1, z, x, futureCancel), Tarai(z - 1, x, y, futureCancel), futureCancel);
 				}
 
 				var ch2 = ch1.Receive(out var x).Receive(out var y).Receive(out var z);
 				var ch3 = ch2.ThrowNewChannel(out var channelForCancel);
 
-				var waitForCancel = channelForCancel.ReceiveAsync();
+				var waitForCancel = channelForCancel.ReceiveAsync(out var futureCancel);
 				try
 				{
-					var result = Tarai(x, y, z, () => waitForCancel.IsCompleted);
+					var result = Tarai(x, y, z, futureCancel);
 					ch3.SelectLeft().Send(result).Close();
 				}
-				catch
+				catch (OperationCanceledException)
 				{
 					ch3.SelectRight().Close();
 				}
 				finally
 				{
-					(await waitForCancel).Close();
+					waitForCancel.Result.Close();
 				}
 			});
 
