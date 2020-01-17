@@ -16,7 +16,7 @@ namespace AdderServer
 		{
 			Console.WriteLine("Hello World!");
 
-			var protocol = Send(Value<int>, Send(Value<int>, Receive(Value<int>, End)));
+			var protocol = Send(Val<int>, Send(Val<int>, Receive(Val<int>, End)));
 
 			var sprotocol = protocol.OnStream(new BinarySerializer());
 

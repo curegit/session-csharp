@@ -55,6 +55,24 @@ namespace Session
 			return session.ToNextSession<S>();
 		}
 
+		public static Session<S, E, P> Receive<S, E, P, T1, T2>(this Session<Receive<Tuple<T1,T2>, S>, E, P> session, out T1 v1, out T2 v2) where S : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			var val = session.Receive<Tuple<T1,T2>>();
+			v1 = val.Item1;
+			v2 = val.Item2;
+			return session.ToNextSession<S>();
+		}
+		public static Session<S, E, P> Receive<S, E, P, T1, T2, T3>(this Session<Receive<Tuple<T1, T2, T3>, S>, E, P> session, out T1 v1, out T2 v2, out T3 v3) where S : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			var val = session.Receive<Tuple<T1, T2, T3>>();
+			v1 = val.Item1;
+			v2 = val.Item2;
+			v3 = val.Item3;
+			return session.ToNextSession<S>();
+		}
+
 		public static async Task<Session<S, E, P>> ReceiveAsync<S, E, P>(this Session<Receive<S>, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));

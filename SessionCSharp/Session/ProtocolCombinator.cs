@@ -46,7 +46,7 @@ namespace Session
 	{
 		public static UnitPayload Unit => new UnitPayload();
 
-		public static Payload<T> Value<T>() => new Payload<T>();
+		public static Payload<T> Val<T>() => new Payload<T>();
 
 		public static PayloadSeries<T1, T2> ValueSeries<T1, T2>() => new PayloadSeries<T1, T2>();
 
