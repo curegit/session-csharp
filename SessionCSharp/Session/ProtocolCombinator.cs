@@ -48,6 +48,8 @@ namespace Session
 
 		public static Payload<T> Val<T>() => new Payload<T>();
 
+		public static Payload<T> Value<T>() => new Payload<T>();
+
 		public static PayloadSeries<T1, T2> ValueSeries<T1, T2>() => new PayloadSeries<T1, T2>();
 
 		public static PayloadSeries<T1, T2, T3> ValueSeries<T1, T2, T3>() => new PayloadSeries<T1, T2, T3>();
@@ -55,6 +57,14 @@ namespace Session
 		public static PayloadSeries<T1, T2, T3, T4> ValueSeries<T1, T2, T3, T4>() => new PayloadSeries<T1, T2, T3, T4>();
 
 		public static PayloadSeries<T1, T2, T3, T4, T5> ValueSeries<T1, T2, T3, T4, T5>() => new PayloadSeries<T1, T2, T3, T4, T5>();
+
+		public static Payload<(T1, T2)> Tuple<T1, T2>() => new Payload<(T1, T2)>();
+
+		public static Payload<(T1, T2, T3)> Tuple<T1, T2, T3>() => new Payload<(T1, T2, T3)>();
+
+		public static Payload<(T1, T2, T3, T4)> Tuple<T1, T2, T3, T4>() => new Payload<(T1, T2, T3, T4)>();
+
+		public static Payload<(T1, T2, T3, T4, T5)> Tuple<T1, T2, T3, T4, T5>() => new Payload<(T1, T2, T3, T4, T5)>();
 
 		public static Payload<Session<S, Empty, P>> Channel<S, P, Z, Q>(Protocol<S, P, Z, Q> protocol) where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
 		{

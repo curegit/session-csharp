@@ -21,17 +21,31 @@ namespace Session
 			return session.ToNextSession<S>();
 		}
 
-		public static async Task<Session<S, E, P>> SendAsync<S, E, P>(this Session<Send<S>, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<S, E, P> SendAsync<S, E, P>(this Session<Send<S>, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
-			await session.SendAsync();
+			session.SendAsync();
 			return session.ToNextSession<S>();
 		}
 
-		public static async Task<Session<S, E, P>> SendAsync<S, E, P, T>(this Session<Send<T, S>, E, P> session, T value) where S : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<S, E, P> SendAsync<S, E, P>(this Session<Send<S>, E, P> session, out Task task) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
-			await session.SendAsync(value);
+			task = session.SendAsync();
+			return session.ToNextSession<S>();
+		}
+
+		public static Session<S, E, P> SendAsync<S, E, P, T>(this Session<Send<T, S>, E, P> session, T value) where S : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			session.SendAsync(value);
+			return session.ToNextSession<S>();
+		}
+
+		public static Session<S, E, P> SendAsync<S, E, P, T>(this Session<Send<T, S>, E, P> session, T value, out Task task) where S : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			task = session.SendAsync(value);
 			return session.ToNextSession<S>();
 		}
 
@@ -42,12 +56,6 @@ namespace Session
 			return session.ToNextSession<S>();
 		}
 
-		public static (Session<S, E, P> continuation, T value) Receive<S, E, P, T>(this Session<Receive<T, S>, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
-		{
-			if (session is null) throw new ArgumentNullException(nameof(session));
-			return (session.ToNextSession<S>(), session.Receive<T>());
-		}
-
 		public static Session<S, E, P> Receive<S, E, P, T>(this Session<Receive<T, S>, E, P> session, out T value) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
@@ -55,28 +63,31 @@ namespace Session
 			return session.ToNextSession<S>();
 		}
 
-		public static Session<S, E, P> Receive<S, E, P, T1, T2>(this Session<Receive<Tuple<T1,T2>, S>, E, P> session, out T1 v1, out T2 v2) where S : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<S, E, P> Receive<S, E, P, T1, T2>(this Session<Receive<(T1, T2), S>, E, P> session, out T1 value1, out T2 value2) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
-			var val = session.Receive<Tuple<T1,T2>>();
-			v1 = val.Item1;
-			v2 = val.Item2;
-			return session.ToNextSession<S>();
-		}
-		public static Session<S, E, P> Receive<S, E, P, T1, T2, T3>(this Session<Receive<Tuple<T1, T2, T3>, S>, E, P> session, out T1 v1, out T2 v2, out T3 v3) where S : SessionType where E : SessionStack where P : ProtocolType
-		{
-			if (session is null) throw new ArgumentNullException(nameof(session));
-			var val = session.Receive<Tuple<T1, T2, T3>>();
-			v1 = val.Item1;
-			v2 = val.Item2;
-			v3 = val.Item3;
+			(value1, value2) = session.Receive<(T1, T2)>();
 			return session.ToNextSession<S>();
 		}
 
-		public static async Task<Session<S, E, P>> ReceiveAsync<S, E, P>(this Session<Receive<S>, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<S, E, P> Receive<S, E, P, T1, T2, T3>(this Session<Receive<(T1, T2, T3), S>, E, P> session, out T1 value1, out T2 value2, out T3 value3) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
-			await session.ReceiveAsync();
+			(value1, value2, value3) = session.Receive<(T1, T2, T3)>();
+			return session.ToNextSession<S>();
+		}
+
+		public static Session<S, E, P> Receive<S, E, P, T1, T2, T3, T4>(this Session<Receive<(T1, T2, T3, T4), S>, E, P> session, out T1 value1, out T2 value2, out T3 value3, out T4 value4) where S : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			(value1, value2, value3, value4) = session.Receive<(T1, T2, T3, T4)>();
+			return session.ToNextSession<S>();
+		}
+
+		public static Session<S, E, P> Receive<S, E, P, T1, T2, T3, T4, T5>(this Session<Receive<(T1, T2, T3, T4, T5), S>, E, P> session, out T1 value1, out T2 value2, out T3 value3, out T4 value4, out T5 value5) where S : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			(value1, value2, value3, value4, value5) = session.Receive<(T1, T2, T3, T4, T5)>();
 			return session.ToNextSession<S>();
 		}
 
@@ -85,12 +96,6 @@ namespace Session
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			future = session.ReceiveAsync();
 			return session.ToNextSession<S>();
-		}
-
-		public static async Task<(Session<S, E, P> continuation, T value)> ReceiveAsync<S, E, P, T>(this Session<Receive<T, S>, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
-		{
-			if (session is null) throw new ArgumentNullException(nameof(session));
-			return (session.ToNextSession<S>(), await session.ReceiveAsync<T>());
 		}
 
 		public static Session<S, E, P> ReceiveAsync<S, E, P, T>(this Session<Receive<T, S>, E, P> session, out Task<T> future) where S : SessionType where E : SessionStack where P : ProtocolType
@@ -135,38 +140,73 @@ namespace Session
 			return session.ToNextSession<R>();
 		}
 
-		public static async Task<Session<L, E, P>> SelectLeftAsync<L, R, E, P>(this Session<Select<L, R>, E, P> session) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<L, E, P> SelectLeftAsync<L, R, E, P>(this Session<Select<L, R>, E, P> session) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
-			await session.SelectAsync(Selection.Left);
+			session.SelectAsync(Selection.Left);
 			return session.ToNextSession<L>();
 		}
 
-		public static async Task<Session<R, E, P>> SelectRightAsync<L, R, E, P>(this Session<Select<L, R>, E, P> session) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<L, E, P> SelectLeftAsync<L, R, E, P>(this Session<Select<L, R>, E, P> session, out Task task) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
-			await session.SelectAsync(Selection.Right);
+			task = session.SelectAsync(Selection.Left);
+			return session.ToNextSession<L>();
+		}
+
+		public static Session<R, E, P> SelectRightAsync<L, R, E, P>(this Session<Select<L, R>, E, P> session) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			session.SelectAsync(Selection.Right);
 			return session.ToNextSession<R>();
 		}
 
-		public static async Task<Session<L, E, P>> SelectLeftAsync<L, C, R, E, P>(this Session<Select<L, C, R>, E, P> session) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<R, E, P> SelectRightAsync<L, R, E, P>(this Session<Select<L, R>, E, P> session, out Task task) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
-			await session.SelectAsync(Selection.Left);
+			task = session.SelectAsync(Selection.Right);
+			return session.ToNextSession<R>();
+		}
+
+		public static Session<L, E, P> SelectLeftAsync<L, C, R, E, P>(this Session<Select<L, C, R>, E, P> session) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			session.SelectAsync(Selection.Left);
 			return session.ToNextSession<L>();
 		}
 
-		public static async Task<Session<C, E, P>> SelectCenterAsync<L, C, R, E, P>(this Session<Select<L, C, R>, E, P> session) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<L, E, P> SelectLeftAsync<L, C, R, E, P>(this Session<Select<L, C, R>, E, P> session, out Task task) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
-			await session.SelectAsync(Selection.Center);
+			task = session.SelectAsync(Selection.Left);
+			return session.ToNextSession<L>();
+		}
+
+		public static Session<C, E, P> SelectCenterAsync<L, C, R, E, P>(this Session<Select<L, C, R>, E, P> session) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			session.SelectAsync(Selection.Center);
 			return session.ToNextSession<C>();
 		}
 
-		public static async Task<Session<R, E, P>> SelectRightAsync<L, C, R, E, P>(this Session<Select<L, C, R>, E, P> session) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<C, E, P> SelectCenterAsync<L, C, R, E, P>(this Session<Select<L, C, R>, E, P> session, out Task task) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
-			await session.SelectAsync(Selection.Right);
+			task = session.SelectAsync(Selection.Center);
+			return session.ToNextSession<C>();
+		}
+
+		public static Session<R, E, P> SelectRightAsync<L, C, R, E, P>(this Session<Select<L, C, R>, E, P> session) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			session.SelectAsync(Selection.Right);
+			return session.ToNextSession<R>();
+		}
+
+		public static Session<R, E, P> SelectRightAsync<L, C, R, E, P>(this Session<Select<L, C, R>, E, P> session, out Task task) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			task = session.SelectAsync(Selection.Right);
 			return session.ToNextSession<R>();
 		}
 
