@@ -75,225 +75,225 @@ namespace Session
 			return new Payload<Session<S, E, P>>();
 		}
 
-		public static Protocol<Send<S>, Send<S>, Receive<Z>, Receive<Z>> Send<S, Z>(UnitPayload unit, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Send<S>, Receive<Z>> Send<S, Z>(UnitPayload unit, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (unit is null) throw new ArgumentNullException(nameof(unit));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Send<S>, Send<S>, Receive<Z>, Receive<Z>>();
+			return new Protocol<Send<S>, Receive<Z>>();
 		}
 
-		public static Protocol<Send<T, S>, Send<T, S>, Receive<T, Z>, Receive<T, Z>> Send<T, S, Z>(PayloadDelegate<T> payload, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Send<T, S>, Receive<T, Z>> Send<T, S, Z>(PayloadDelegate<T> payload, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (payload is null) throw new ArgumentNullException(nameof(payload));
 			if (payload() is null) throw new ArgumentException("Return value cannot be null.", nameof(payload));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Send<T, S>, Send<T, S>, Receive<T, Z>, Receive<T, Z>>();
+			return new Protocol<Send<T, S>, Receive<T, Z>>();
 		}
 
-		public static Protocol<Send<T1, Send<T2, S>>, Send<T1, Send<T2, S>>, Receive<T1, Receive<T2, Z>>, Receive<T1, Receive<T2, Z>>> Send<T1, T2, S, Z>(PayloadSeriesDelegate<T1, T2> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Send<T1, Send<T2, S>>, Receive<T1, Receive<T2, Z>>> Send<T1, T2, S, Z>(PayloadSeriesDelegate<T1, T2> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
 			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Send<T1, Send<T2, S>>, Send<T1, Send<T2, S>>, Receive<T1, Receive<T2, Z>>, Receive<T1, Receive<T2, Z>>>();
+			return new Protocol<Send<T1, Send<T2, S>>, Receive<T1, Receive<T2, Z>>>();
 		}
 
-		public static Protocol<Send<T1, Send<T2, Send<T3, S>>>, Send<T1, Send<T2, Send<T3, S>>>, Receive<T1, Receive<T2, Receive<T3, Z>>>, Receive<T1, Receive<T2, Receive<T3, Z>>>> Send<T1, T2, T3, S, Z>(PayloadSeriesDelegate<T1, T2, T3> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Send<T1, Send<T2, Send<T3, S>>>, Receive<T1, Receive<T2, Receive<T3, Z>>>> Send<T1, T2, T3, S, Z>(PayloadSeriesDelegate<T1, T2, T3> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
 			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Send<T1, Send<T2, Send<T3, S>>>, Send<T1, Send<T2, Send<T3, S>>>, Receive<T1, Receive<T2, Receive<T3, Z>>>, Receive<T1, Receive<T2, Receive<T3, Z>>>>();
+			return new Protocol<Send<T1, Send<T2, Send<T3, S>>>, Receive<T1, Receive<T2, Receive<T3, Z>>>>();
 		}
 
-		public static Protocol<Send<T1, Send<T2, Send<T3, Send<T4, S>>>>, Send<T1, Send<T2, Send<T3, Send<T4, S>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Z>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Z>>>>> Send<T1, T2, T3, T4, S, Z>(PayloadSeriesDelegate<T1, T2, T3, T4> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Send<T1, Send<T2, Send<T3, Send<T4, S>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Z>>>>> Send<T1, T2, T3, T4, S, Z>(PayloadSeriesDelegate<T1, T2, T3, T4> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
 			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Send<T1, Send<T2, Send<T3, Send<T4, S>>>>, Send<T1, Send<T2, Send<T3, Send<T4, S>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Z>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Z>>>>>();
+			return new Protocol<Send<T1, Send<T2, Send<T3, Send<T4, S>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Z>>>>>();
 		}
 
-		public static Protocol<Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, S>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, S>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, Z>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, Z>>>>>> Send<T1, T2, T3, T4, T5, S, Z>(PayloadSeriesDelegate<T1, T2, T3, T4, T5> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, S>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, Z>>>>>> Send<T1, T2, T3, T4, T5, S, Z>(PayloadSeriesDelegate<T1, T2, T3, T4, T5> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
 			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, S>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, S>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, Z>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, Z>>>>>>();
+			return new Protocol<Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, S>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, Z>>>>>>();
 		}
 
-		public static Protocol<Receive<S>, Receive<S>, Send<Z>, Send<Z>> Receive<S, Z>(UnitPayload unit, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Receive<S>, Send<Z>> Receive<S, Z>(UnitPayload unit, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (unit is null) throw new ArgumentNullException(nameof(unit));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Receive<S>, Receive<S>, Send<Z>, Send<Z>>();
+			return new Protocol<Receive<S>, Send<Z>>();
 		}
 
-		public static Protocol<Receive<T, S>, Receive<T, S>, Send<T, Z>, Send<T, Z>> Receive<T, S, Z>(PayloadDelegate<T> payload, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Receive<T, S>, Send<T, Z>> Receive<T, S, Z>(PayloadDelegate<T> payload, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (payload is null) throw new ArgumentNullException(nameof(payload));
 			if (payload() is null) throw new ArgumentException("Return value cannot be null.", nameof(payload));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Receive<T, S>, Receive<T, S>, Send<T, Z>, Send<T, Z>>();
+			return new Protocol<Receive<T, S>, Send<T, Z>>();
 		}
 
-		public static Protocol<Receive<T1, Receive<T2, S>>, Receive<T1, Receive<T2, S>>, Send<T1, Send<T2, Z>>, Send<T1, Send<T2, Z>>> Receive<T1, T2, S, Z>(PayloadSeriesDelegate<T1, T2> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Receive<T1, Receive<T2, S>>, Send<T1, Send<T2, Z>>> Receive<T1, T2, S, Z>(PayloadSeriesDelegate<T1, T2> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
 			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Receive<T1, Receive<T2, S>>, Receive<T1, Receive<T2, S>>, Send<T1, Send<T2, Z>>, Send<T1, Send<T2, Z>>>();
+			return new Protocol<Receive<T1, Receive<T2, S>>, Send<T1, Send<T2, Z>>>();
 		}
 
-		public static Protocol<Receive<T1, Receive<T2, Receive<T3, S>>>, Receive<T1, Receive<T2, Receive<T3, S>>>, Send<T1, Send<T2, Send<T3, Z>>>, Send<T1, Send<T2, Send<T3, Z>>>> Receive<T1, T2, T3, S, Z>(PayloadSeriesDelegate<T1, T2, T3> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Receive<T1, Receive<T2, Receive<T3, S>>>, Send<T1, Send<T2, Send<T3, Z>>>> Receive<T1, T2, T3, S, Z>(PayloadSeriesDelegate<T1, T2, T3> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
 			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Receive<T1, Receive<T2, Receive<T3, S>>>, Receive<T1, Receive<T2, Receive<T3, S>>>, Send<T1, Send<T2, Send<T3, Z>>>, Send<T1, Send<T2, Send<T3, Z>>>>();
+			return new Protocol<Receive<T1, Receive<T2, Receive<T3, S>>>, Send<T1, Send<T2, Send<T3, Z>>>>();
 		}
 
-		public static Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, S>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, S>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Z>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Z>>>>> Receive<T1, T2, T3, T4, S, Z>(PayloadSeriesDelegate<T1, T2, T3, T4> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, S>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Z>>>>> Receive<T1, T2, T3, T4, S, Z>(PayloadSeriesDelegate<T1, T2, T3, T4> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
 			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, S>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, S>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Z>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Z>>>>>();
+			return new Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, S>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Z>>>>>();
 		}
 
-		public static Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, S>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, S>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, Z>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, Z>>>>>> Receive<T1, T2, T3, T4, T5, S, Z>(PayloadSeriesDelegate<T1, T2, T3, T4, T5> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, S>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, Z>>>>>> Receive<T1, T2, T3, T4, T5, S, Z>(PayloadSeriesDelegate<T1, T2, T3, T4, T5> payloads, Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (payloads is null) throw new ArgumentNullException(nameof(payloads));
 			if (payloads() is null) throw new ArgumentException("Return value cannot be null.", nameof(payloads));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, S>>>>>, Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, S>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, Z>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, Z>>>>>>();
+			return new Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, S>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, Z>>>>>>();
 		}
 
-		public static Protocol<Select<L, R>, Select<L, R>, Follow<X, Y>, Follow<X, Y>> Select<L, R, X, Y>(Protocol<L, L, X, X> left, Protocol<R, R, Y, Y> right) where L : SessionType where R : SessionType where X : SessionType where Y : SessionType
+		public static Protocol<Select<L, R>, Follow<X, Y>> Select<L, R, X, Y>(Protocol<L, L, X, X> left, Protocol<R, R, Y, Y> right) where L : SessionType where R : SessionType where X : SessionType where Y : SessionType
 		{
 			if (left is null) throw new ArgumentNullException(nameof(left));
 			if (right is null) throw new ArgumentNullException(nameof(right));
-			return new Protocol<Select<L, R>, Select<L, R>, Follow<X, Y>, Follow<X, Y>>();
+			return new Protocol<Select<L, R>, Follow<X, Y>>();
 		}
 
-		public static Protocol<Select<L, C, R>, Select<L, C, R>, Follow<X, W, Y>, Follow<X, W, Y>> Select<L, C, R, X, W, Y>(Protocol<L, L, X, X> left, Protocol<C, C, W, W> center, Protocol<R, R, Y, Y> right) where L : SessionType where C : SessionType where R : SessionType where X : SessionType where W : SessionType where Y : SessionType
-		{
-			if (left is null) throw new ArgumentNullException(nameof(left));
-			if (center is null) throw new ArgumentNullException(nameof(center));
-			if (right is null) throw new ArgumentNullException(nameof(right));
-			return new Protocol<Select<L, C, R>, Select<L, C, R>, Follow<X, W, Y>, Follow<X, W, Y>>();
-		}
-
-		public static Protocol<Follow<L, R>, Follow<L, R>, Select<X, Y>, Select<X, Y>> Follow<L, R, X, Y>(Protocol<L, L, X, X> left, Protocol<R, R, Y, Y> right) where L : SessionType where R : SessionType where X : SessionType where Y : SessionType
-		{
-			if (left is null) throw new ArgumentNullException(nameof(left));
-			if (right is null) throw new ArgumentNullException(nameof(right));
-			return new Protocol<Follow<L, R>, Follow<L, R>, Select<X, Y>, Select<X, Y>>();
-		}
-
-		public static Protocol<Follow<L, C, R>, Follow<L, C, R>, Select<X, W, Y>, Select<X, W, Y>> Follow<L, C, R, X, W, Y>(Protocol<L, L, X, X> left, Protocol<C, C, W, W> center, Protocol<R, R, Y, Y> right) where L : SessionType where C : SessionType where R : SessionType where X : SessionType where W : SessionType where Y : SessionType
+		public static Protocol<Select<L, C, R>, Follow<X, W, Y>> Select<L, C, R, X, W, Y>(Protocol<L, L, X, X> left, Protocol<C, C, W, W> center, Protocol<R, R, Y, Y> right) where L : SessionType where C : SessionType where R : SessionType where X : SessionType where W : SessionType where Y : SessionType
 		{
 			if (left is null) throw new ArgumentNullException(nameof(left));
 			if (center is null) throw new ArgumentNullException(nameof(center));
 			if (right is null) throw new ArgumentNullException(nameof(right));
-			return new Protocol<Follow<L, C, R>, Follow<L, C, R>, Select<X, W, Y>, Select<X, W, Y>>();
+			return new Protocol<Select<L, C, R>, Follow<X, W, Y>>();
 		}
 
-		public static Protocol<Call0, Call0, Call0, Call0> Goto0 => new Protocol<Call0, Call0, Call0, Call0>();
+		public static Protocol<Follow<L, R>, Select<X, Y>> Follow<L, R, X, Y>(Protocol<L, L, X, X> left, Protocol<R, R, Y, Y> right) where L : SessionType where R : SessionType where X : SessionType where Y : SessionType
+		{
+			if (left is null) throw new ArgumentNullException(nameof(left));
+			if (right is null) throw new ArgumentNullException(nameof(right));
+			return new Protocol<Follow<L, R>, Select<X, Y>>();
+		}
 
-		public static Protocol<Call1, Call1, Call1, Call1> Goto1 => new Protocol<Call1, Call1, Call1, Call1>();
+		public static Protocol<Follow<L, C, R>, Select<X, W, Y>> Follow<L, C, R, X, W, Y>(Protocol<L, L, X, X> left, Protocol<C, C, W, W> center, Protocol<R, R, Y, Y> right) where L : SessionType where C : SessionType where R : SessionType where X : SessionType where W : SessionType where Y : SessionType
+		{
+			if (left is null) throw new ArgumentNullException(nameof(left));
+			if (center is null) throw new ArgumentNullException(nameof(center));
+			if (right is null) throw new ArgumentNullException(nameof(right));
+			return new Protocol<Follow<L, C, R>, Select<X, W, Y>>();
+		}
 
-		public static Protocol<Call2, Call2, Call2, Call2> Goto2 => new Protocol<Call2, Call2, Call2, Call2>();
+		public static Protocol<Call0, Call0> Goto0 => new Protocol<Call0, Call0>();
 
-		public static Protocol<Call3, Call3, Call3, Call3> Goto3 => new Protocol<Call3, Call3, Call3, Call3>();
+		public static Protocol<Call1, Call1> Goto1 => new Protocol<Call1, Call1>();
 
-		public static Protocol<Call4, Call4, Call4, Call4> Goto4 => new Protocol<Call4, Call4, Call4, Call4>();
+		public static Protocol<Call2, Call2> Goto2 => new Protocol<Call2, Call2>();
 
-		public static Protocol<Call5, Call5, Call5, Call5> Goto5 => new Protocol<Call5, Call5, Call5, Call5>();
+		public static Protocol<Call3, Call3> Goto3 => new Protocol<Call3, Call3>();
 
-		public static Protocol<Call6, Call6, Call6, Call6> Goto6 => new Protocol<Call6, Call6, Call6, Call6>();
+		public static Protocol<Call4, Call4> Goto4 => new Protocol<Call4, Call4>();
 
-		public static Protocol<Call7, Call7, Call7, Call7> Goto7 => new Protocol<Call7, Call7, Call7, Call7>();
+		public static Protocol<Call5, Call5> Goto5 => new Protocol<Call5, Call5>();
 
-		public static Protocol<Call8, Call8, Call8, Call8> Goto8 => new Protocol<Call8, Call8, Call8, Call8>();
+		public static Protocol<Call6, Call6> Goto6 => new Protocol<Call6, Call6>();
 
-		public static Protocol<Call9, Call9, Call9, Call9> Goto9 => new Protocol<Call9, Call9, Call9, Call9>();
+		public static Protocol<Call7, Call7> Goto7 => new Protocol<Call7, Call7>();
 
-		public static Protocol<Call0<S>, Call0<S>, Call0<Z>, Call0<Z>> Call0<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Call8, Call8> Goto8 => new Protocol<Call8, Call8>();
+
+		public static Protocol<Call9, Call9> Goto9 => new Protocol<Call9, Call9>();
+
+		public static Protocol<Call0<S>, Call0<Z>> Call0<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Call0<S>, Call0<S>, Call0<Z>, Call0<Z>>();
+			return new Protocol<Call0<S>, Call0<Z>>();
 		}
 
-		public static Protocol<Call1<S>, Call1<S>, Call1<Z>, Call1<Z>> Call1<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Call1<S>, Call1<Z>> Call1<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Call1<S>, Call1<S>, Call1<Z>, Call1<Z>>();
+			return new Protocol<Call1<S>, Call1<Z>>();
 		}
 
-		public static Protocol<Call2<S>, Call2<S>, Call2<Z>, Call2<Z>> Call2<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Call2<S>, Call2<Z>> Call2<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Call2<S>, Call2<S>, Call2<Z>, Call2<Z>>();
+			return new Protocol<Call2<S>, Call2<Z>>();
 		}
 
-		public static Protocol<Call3<S>, Call3<S>, Call3<Z>, Call3<Z>> Call3<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Call3<S>, Call3<Z>> Call3<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Call3<S>, Call3<S>, Call3<Z>, Call3<Z>>();
+			return new Protocol<Call3<S>, Call3<Z>>();
 		}
 
-		public static Protocol<Call4<S>, Call4<S>, Call4<Z>, Call4<Z>> Call4<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Call4<S>, Call4<Z>> Call4<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Call4<S>, Call4<S>, Call4<Z>, Call4<Z>>();
+			return new Protocol<Call4<S>, Call4<Z>>();
 		}
 
-		public static Protocol<Call5<S>, Call5<S>, Call5<Z>, Call5<Z>> Call5<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Call5<S>, Call5<Z>> Call5<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Call5<S>, Call5<S>, Call5<Z>, Call5<Z>>();
+			return new Protocol<Call5<S>, Call5<Z>>();
 		}
 
-		public static Protocol<Call6<S>, Call6<S>, Call6<Z>, Call6<Z>> Call6<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Call6<S>, Call6<Z>> Call6<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Call6<S>, Call6<S>, Call6<Z>, Call6<Z>>();
+			return new Protocol<Call6<S>, Call6<Z>>();
 		}
 
-		public static Protocol<Call7<S>, Call7<S>, Call7<Z>, Call7<Z>> Call7<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Call7<S>, Call7<Z>> Call7<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Call7<S>, Call7<S>, Call7<Z>, Call7<Z>>();
+			return new Protocol<Call7<S>, Call7<Z>>();
 		}
 
-		public static Protocol<Call8<S>, Call8<S>, Call8<Z>, Call8<Z>> Call8<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Call8<S>, Call8<Z>> Call8<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Call8<S>, Call8<S>, Call8<Z>, Call8<Z>>();
+			return new Protocol<Call8<S>, Call8<Z>>();
 		}
 
-		public static Protocol<Call9<S>, Call9<S>, Call9<Z>, Call9<Z>> Call9<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
+		public static Protocol<Call9<S>, Call9<Z>> Call9<S, Z>(Protocol<S, S, Z, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<Call9<S>, Call9<S>, Call9<Z>, Call9<Z>>();
+			return new Protocol<Call9<S>, Call9<Z>>();
 		}
 
-		public static Protocol<ThrowNewChannel<X, P, S>, ThrowNewChannel<X, P, S>, CatchNewChannel<Y, Q, Z>, CatchNewChannel<Y, Q, Z>> ThrowNewChannel<X, P, Y, Q, Z, S>(Protocol<X, P, Y, Q> protocol, Protocol<S, S, Z, Z> continuation) where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType where Z : SessionType
+		public static Protocol<ThrowNewChannel<X, P, S>, CatchNewChannel<Y, Q, Z>> ThrowNewChannel<X, P, Y, Q, Z, S>(Protocol<X, P, Y, Q> protocol, Protocol<S, S, Z, Z> continuation) where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType where Z : SessionType
 		{
 			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<ThrowNewChannel<X, P, S>, ThrowNewChannel<X, P, S>, CatchNewChannel<Y, Q, Z>, CatchNewChannel<Y, Q, Z>>();
+			return new Protocol<ThrowNewChannel<X, P, S>, CatchNewChannel<Y, Q, Z>>();
 		}
 
-		public static Protocol<CatchNewChannel<X, P, S>, CatchNewChannel<X, P, S>, ThrowNewChannel<Y, Q, Z>, ThrowNewChannel<Y, Q, Z>> CatchNewChannel<X, P, Y, Q, Z, S>(Protocol<X, P, Y, Q> protocol, Protocol<S, S, Z, Z> continuation) where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType where Z : SessionType
+		public static Protocol<CatchNewChannel<X, P, S>, ThrowNewChannel<Y, Q, Z>> CatchNewChannel<X, P, Y, Q, Z, S>(Protocol<X, P, Y, Q> protocol, Protocol<S, S, Z, Z> continuation) where X : SessionType where P : ProtocolType where Y : SessionType where Q : ProtocolType where S : SessionType where Z : SessionType
 		{
 			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
 			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
-			return new Protocol<CatchNewChannel<X, P, S>, CatchNewChannel<X, P, S>, ThrowNewChannel<Y, Q, Z>, ThrowNewChannel<Y, Q, Z>>();
+			return new Protocol<CatchNewChannel<X, P, S>, ThrowNewChannel<Y, Q, Z>>();
 		}
 
-		public static Protocol<Eps, Eps, Eps, Eps> End => new Protocol<Eps, Eps, Eps, Eps>();
+		public static Protocol<Eps, Eps> End => new Protocol<Eps, Eps>();
 
 		public static Protocol<S0, Cons<S0, Nil>, Z0, Cons<Z0, Nil>> Arrange<S0, Z0>(Protocol<S0, S0, Z0, Z0> sub0) where S0 : SessionType where Z0 : SessionType
 		{
