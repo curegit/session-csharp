@@ -11,38 +11,45 @@ namespace TaraiProtocol
 	{
 		public static async Task Main(string[] args)
 		{
-			var protocol = Send(Value<int>, Send(Value<int>, Send(Value<int>, CatchNewChannel(Send(Unit, End), Follow(Receive(Value<int>, End), End)))));
+			void f(out int x, out int y)
+			{
+				x = 0;
+				y = 0;
+			}
+			f(out int x, out int y);
+
+
+			var protocol = Send(Val<Tuple<int,int,int>>, ThrowNewChannel(Send(Unit, End), Follow(Receive(Val<int>, End), End)));
 
 			var client = protocol.ForkThread(ch1 =>
 			{
-				static int Tarai(int x, int y, int z, Task futureCancel)
-				{
-					if (futureCancel.IsCompleted) throw new OperationCanceledException();
-					if (x <= y) return y;
-					return Tarai(Tarai(x - 1, y, z, futureCancel), Tarai(y - 1, z, x, futureCancel), Tarai(z - 1, x, y, futureCancel), futureCancel);
-				}
+				var ch2 = ch1.Receive(out var x, out var y, out var z).CatchNewChannel(out var channelForCancel);
 
-				var ch2 = ch1.Receive(out var x).Receive(out var y).Receive(out var z);
-				var ch3 = ch2.ThrowNewChannel(out var channelForCancel);
-
-				var waitForCancel = channelForCancel.ReceiveAsync(out var futureCancel);
+				var waitForCancel = channelForCancel.ReceiveAsync(out Task futureCancel);
 				try
 				{
-					var result = Tarai(x, y, z, futureCancel);
-					ch3.SelectLeft().Send(result).Close();
+					var result = Tarai(x, y, z);
+					ch2.SelectLeft().Send(result).Close();
 				}
 				catch (OperationCanceledException)
 				{
-					ch3.SelectRight().Close();
+					ch2.SelectRight().Close();
 				}
 				finally
 				{
 					waitForCancel.Result.Close();
 				}
+
+				int Tarai(int x, int y, int z)
+				{
+					if (futureCancel.IsCompleted) throw new OperationCanceledException();
+					return x <= y ? y :
+						Tarai(Tarai(x - 1, y, z), Tarai(y - 1, z, x), Tarai(z - 1, x, y));
+				}
 			});
 
-			var c1 = client.Send(16).Send(3).Send(2);
-			var c2 = c1.CatchNewChannel(out var ch);
+			var c1 = client.Send(new Tuple<int,int,int>(16, 3, 2));
+			var c2 = c1.ThrowNewChannel(out var ch);
 			var ret = c2.FollowAsync(left =>
 			{
 				left.Receive(out var ans).Close();
