@@ -15,12 +15,7 @@ namespace TaraiProtocol
 
 			var client = protocol.ForkThread(ch1 =>
 			{
-				static int Tarai(int x, int y, int z, Task futureCancel)
-				{
-					if (futureCancel.IsCompleted) throw new OperationCanceledException();
-					if (x <= y) return y;
-					return Tarai(Tarai(x - 1, y, z, futureCancel), Tarai(y - 1, z, x, futureCancel), Tarai(z - 1, x, y, futureCancel), futureCancel);
-				}
+				
 
 				var ch2 = ch1.Receive(out var x).Receive(out var y).Receive(out var z);
 				var ch3 = ch2.ThrowNewChannel(out var channelForCancel);
@@ -28,7 +23,7 @@ namespace TaraiProtocol
 				var waitForCancel = channelForCancel.ReceiveAsync(out var futureCancel);
 				try
 				{
-					var result = Tarai(x, y, z, futureCancel);
+					var result = Tak(x, y, z);
 					ch3.SelectLeft().Send(result).Close();
 				}
 				catch (OperationCanceledException)
@@ -38,6 +33,13 @@ namespace TaraiProtocol
 				finally
 				{
 					waitForCancel.Result.Close();
+				}
+
+				int Tak(int x, int y, int z)
+				{
+					if (futureCancel.IsCompleted) throw new OperationCanceledException();
+					if (x <= y) return y;
+					return Tak(Tak(x - 1, y, z), Tak(y - 1, z, x), Tak(z - 1, x, y));
 				}
 			});
 
@@ -53,7 +55,7 @@ namespace TaraiProtocol
 				right.Close();
 				Console.WriteLine("Canceled");
 			});
-			var timeout = Task.Delay(11500);
+			var timeout = Task.Delay(10500);
 			var task = await Task.WhenAny(ret, timeout);
 			if (task == ret)
 			{

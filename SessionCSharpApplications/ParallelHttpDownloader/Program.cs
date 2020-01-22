@@ -4,16 +4,16 @@ using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
-using SessionTypes;
-using SessionTypes.Threading;
-using SessionTypes.Serialization;
+using Session;
+using Session.Threading;
+using Session.Threading.Tasks;
+//using Session.Serialization;
 
 namespace ParallelHttpDownloader
 {
 	//using static 
 
 	using static ProtocolCombinator;
-	using static ProtocolBuffers;
 
 	//delegate Session<S, P> SendDeleg<T, S, P>(Session<Send<T, S>, P> s) where S:SessionType where P: ProtocolType;
 
@@ -66,7 +66,7 @@ namespace ParallelHttpDownloader
 
 			var ids = Enumerable.Range(1, n).ToArray();
 
-			var protocol = AtC(C2S(P<string>, S2C(P<byte[]>, Goto0)), End);
+			var protocol = Select(Send(Value<string>, Receive(Value<byte[]>, Goto0)), End);
 
 			var clients = protocol.Distribute((server, id) =>
 			{

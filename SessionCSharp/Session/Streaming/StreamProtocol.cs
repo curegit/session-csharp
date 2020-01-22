@@ -9,7 +9,7 @@ namespace Session.Streaming
 			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
 			if (serializer is null) throw new ArgumentNullException(nameof(serializer));
 			//if (transforms is null) throw new ArgumentNullException(nameof(transforms));
-			return new StreamedProtocol<S, P, Z, Q>(serializer, new TransformChain());
+			return new StreamedProtocol<S, P, Z, Q>(serializer, null);
 		}
 	}
 

@@ -4,8 +4,8 @@ namespace Session.Streaming
 {
 	public interface ITransform
 	{
-		public Stream DecorateIncomingStream(Stream incomingStream);
+		public Stream DecorateIncomingStream(Stream stream);
 
-		public Stream DecorateOutgoingStream(Stream outgoingStream);
+		public Stream DecorateOutgoingStream(Stream stream);
 	}
 }

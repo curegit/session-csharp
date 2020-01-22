@@ -12,7 +12,7 @@ namespace StackProtocol
 		{
 			var entry = Call1(End);
 			var node = Select(Send(Value<int>, Call1(Receive(Value<int>, Goto1))), End);
-			var protocol = Array(entry, node);
+			var protocol = Arrange(entry, node);
 
 			var client = protocol.ForkThread(server =>
 			{
@@ -21,6 +21,15 @@ namespace StackProtocol
 					end => end)
 				).Close();
 			});
+
+
+			client.Call()
+				.SelectLeft().Send(1).Call()
+				.SelectLeft().Send(2).Call()
+				.SelectRight().Return().Receive(out var one).Goto()
+				.SelectRight().Return().Receive(out var two).Goto()
+				.SelectRight().Return().Close();
+
 
 			var counter = 0;
 			var random = new Random();
