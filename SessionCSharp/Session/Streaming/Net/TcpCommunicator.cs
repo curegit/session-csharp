@@ -29,6 +29,7 @@ namespace Session.Streaming.Net
 		public void Send()
 		{
 			outgoingStream.WriteByte(unit);
+			outgoingStream.Flush();
 		}
 
 		public void Send<T>(T value)
@@ -73,7 +74,7 @@ namespace Session.Streaming.Net
 
 		public Task SelectAsync(Selection selection)
 		{
-			return outgoingStream.WriteAsync(new byte[] { (byte)selection }, 0, 1);
+			return outgoingStream.WriteAsync(new byte[] { selection.ToByte() }, 0, 1);
 		}
 
 		public Selection Follow()
@@ -85,7 +86,7 @@ namespace Session.Streaming.Net
 		{
 			var buffer = new byte[1];
 			await incomingStream.ReadAsync(buffer, 0, 1);
-			return (Selection)buffer[0];
+			return buffer[0].ToSelection();
 		}
 
 		public Session<S, Empty, P> ThrowNewChannel<S, P>() where S : SessionType where P : ProtocolType
@@ -115,7 +116,7 @@ namespace Session.Streaming.Net
 			tcpClient.Close();
 		}
 
-		public void Die()
+		public void Cancel()
 		{
 			incomingStream.Dispose();
 			outgoingStream.Dispose();

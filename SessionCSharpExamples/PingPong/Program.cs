@@ -12,7 +12,7 @@ namespace PingPong
 		{
 			var ping = Select(Send(Unit, Goto1), End);
 			var pong = Follow(Receive(Unit, Goto0), End);
-			var protocol = Array(ping, pong);
+			var protocol = Arrange(ping, pong);
 
 			var client = protocol.ForkThread(ch =>
 			{

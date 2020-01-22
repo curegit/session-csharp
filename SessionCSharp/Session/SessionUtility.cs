@@ -18,6 +18,20 @@ namespace Session
 			return received.session;
 		}
 
+		public static Session<S, E, P> Wait<S, E, P>(this Session<S, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
+		{
+			session.Call();
+			session.WaitForLastTask();
+			return session.Duplicate();
+		}
+
+		public static async Task<Session<S, E, P>> Synchronize<S, E, P>(this Session<S, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
+		{
+			session.Call();
+			await session.AwaitLastTask();
+			return session.Duplicate();
+		}
+
 		/*
 		public static void Do<S, P>(this IEnumerable<Session<S, P>> sessions, Action<Session<S, P>> action) where S : ProtocolType where P : ProtocolType
 		{
@@ -40,12 +54,12 @@ namespace Session
 		}
 
 		// TODO: async Task version
-
+		*/
 		// TODO: Task
-		public static (IEnumerable<Session<SN, P>> s, IEnumerable<Session<S, P>> rs, IEnumerable<T> rargs) ZipArgs<S, P, SN, T>(this IEnumerable<Session<S, P>> sessions, IEnumerable<T> args, Func<Session<S, P>, T, Session<SN, P>> f) where S : SessionType where P : ProtocolType where SN : SessionType
+		public static (IEnumerable<Session<SN, E, P>> s, IEnumerable<Session<S, E, P>> rs, IEnumerable<T> rargs) ZipWith<S, E, P, SN, T>(this IEnumerable<Session<S, E, P>> sessions, IEnumerable<T> args, Func<Session<S, E, P>, T, Session<SN, E, P>> f) where S : SessionType where E : SessionStack where P : ProtocolType where SN : SessionType
 		{
-			List<Session<SN, P>> a = new List<Session<SN, P>>();
-			List<Session<S, P>> b = new List<Session<S, P>>();
+			var a = new List<Session<SN, E, P>>();
+			var b = new List<Session<S, E, P>>();
 			List<T> c = new List<T>();
 			//var i = 0;
 			var t = sessions.GetEnumerator();
@@ -56,6 +70,5 @@ namespace Session
 			}
 			return (a, b, c);
 		}
-		*/
 	}
 }

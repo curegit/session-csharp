@@ -100,7 +100,7 @@ namespace Session.Threading
 			writer.Complete();
 		}
 
-		public void Die()
+		public void Cancel()
 		{
 			writer.Complete();
 		}
