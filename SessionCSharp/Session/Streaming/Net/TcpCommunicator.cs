@@ -122,10 +122,5 @@ namespace Session.Streaming.Net
 			outgoingStream.Dispose();
 			tcpClient.Dispose();
 		}
-
-		public void Cancel()
-		{
-
-		}
 	}
 }

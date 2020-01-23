@@ -13,6 +13,7 @@ namespace Session.Threading
 			};
 			var upstream = Channel.CreateUnbounded<object>(options);
 			var downstream = Channel.CreateUnbounded<object>(options);
+			
 			return (new ChannelCommunicator(downstream.Reader, upstream.Writer), new ChannelCommunicator(upstream.Reader, downstream.Writer));
 		}
 

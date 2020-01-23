@@ -104,10 +104,5 @@ namespace Session.Threading
 		{
 			writer.Complete();
 		}
-
-		public void Cancel()
-		{
-
-		}
 	}
 }
