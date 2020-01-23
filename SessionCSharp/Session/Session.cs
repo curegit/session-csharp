@@ -198,7 +198,7 @@ namespace Session
 			return ContinueAsync(() => communicator.FollowAsync());
 		}
 
-		internal void Call()
+		internal void CallSimply()
 		{
 			TrySpendLinearity();
 		}

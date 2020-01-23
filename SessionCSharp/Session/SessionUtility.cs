@@ -20,14 +20,14 @@ namespace Session
 
 		public static Session<S, E, P> Wait<S, E, P>(this Session<S, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
-			session.Call();
+			session.CallSimply();
 			session.WaitForLastTask();
 			return session.Duplicate();
 		}
 
 		public static async Task<Session<S, E, P>> Synchronize<S, E, P>(this Session<S, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
-			session.Call();
+			session.CallSimply();
 			await session.AwaitLastTask();
 			return session.Duplicate();
 		}
