@@ -9,8 +9,9 @@ namespace Session
 		public static Session<S, E, P> Let<S, E, P, T>(this Session<S, E, P> session, out T variable, T value) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
+			session.CallSimply();
 			variable = value;
-			return session;
+			return session.Duplicate();
 		}
 
 		public static Session<S, E, P> Wait<S, E, P>(this Session<S, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
