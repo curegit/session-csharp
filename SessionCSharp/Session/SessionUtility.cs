@@ -25,7 +25,7 @@ namespace Session
 			return session.Duplicate();
 		}
 
-		public static async Task<Session<S, E, P>> Synchronize<S, E, P>(this Session<S, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
+		public static async Task<Session<S, E, P>> Sync<S, E, P>(this Session<S, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			session.CallSimply();
 			await session.AwaitLastTask();
