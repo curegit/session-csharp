@@ -8,12 +8,14 @@ namespace Session
 	{
 		public static Session<S, E, P> Let<S, E, P, T>(this Session<S, E, P> session, out T variable, T value) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
 			variable = value;
 			return session;
 		}
 
 		public static Session<S, E, P> Wait<S, E, P>(this Session<S, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
 			session.CallSimply();
 			session.WaitForLastTask();
 			return session.Duplicate();
@@ -21,6 +23,7 @@ namespace Session
 
 		public static async Task<Session<S, E, P>> Sync<S, E, P>(this Session<S, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
 			session.CallSimply();
 			await session.AwaitLastTask();
 			return session.Duplicate();
