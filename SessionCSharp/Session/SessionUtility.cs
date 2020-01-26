@@ -12,12 +12,6 @@ namespace Session
 			return session;
 		}
 
-		public static Session<S, E, P> Assign<S, E, P, T>(this (Session<S, E, P> session, T value) received, out T variable) where S : SessionType where E : SessionStack where P : ProtocolType
-		{
-			variable = received.value;
-			return received.session;
-		}
-
 		public static Session<S, E, P> Wait<S, E, P>(this Session<S, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			session.CallSimply();
