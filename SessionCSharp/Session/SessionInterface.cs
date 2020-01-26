@@ -96,10 +96,10 @@ namespace Session
 			return session.ToNextSession<S>();
 		}
 
-		public static Session<S, E, P> ReceiveAsync<S, E, P, T>(this Session<Receive<T, S>, E, P> session, out Task<T> future) where S : SessionType where E : SessionStack where P : ProtocolType
+		public static Session<S, E, P> ReceiveAsync<S, E, P, T>(this Session<Receive<T, S>, E, P> session, out Task<T> futureValue) where S : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
-			future = session.ReceiveAsync<T>();
+			futureValue = session.ReceiveAsync<T>();
 			return session.ToNextSession<S>();
 		}
 
