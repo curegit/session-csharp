@@ -83,7 +83,7 @@ namespace Session
 			return session.ToNextSession<S9>();
 		}
 
-		public static Session<S, Push<Z, E>, S> Call<S, Z, E, L>(this Session<Call0<Z>, E, S> session) where S : SessionType where Z : SessionType where E : SessionStack
+		public static Session<S, Push<Z, E>, S> Call<S, Z, E>(this Session<Call0<Z>, E, S> session) where S : SessionType where Z : SessionType where E : SessionStack
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			session.CallSimply();
@@ -160,7 +160,7 @@ namespace Session
 			return session.ToNextSession<S9, Push<Z, E>>();
 		}
 
-		public static Session<Z, E, S> Call<S, Z, E, L>(this Session<Call0<Z>, E, S> session, DepletionFunc<S, S> depletion) where S : SessionType where Z : SessionType where E : SessionStack where L : SessionList
+		public static Session<Z, E, S> Call<S, Z, E>(this Session<Call0<Z>, E, S> session, DepletionFunc<S, S> depletion) where S : SessionType where Z : SessionType where E : SessionStack
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			if (depletion is null) throw new ArgumentNullException(nameof(depletion));
