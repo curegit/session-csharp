@@ -1,4 +1,5 @@
 using System;
+using System.ComponentModel;
 using System.Threading.Tasks;
 
 namespace Session
@@ -68,6 +69,24 @@ namespace Session
 			var task = AppendContinuation();
 			lastTask = task;
 			return task;
+		}
+
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public override string ToString()
+		{
+			return base.ToString();
+		}
+
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public override bool Equals(object obj)
+		{
+			return base.Equals(obj);
+		}
+
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public override int GetHashCode()
+		{
+			return base.GetHashCode();
 		}
 	}
 
