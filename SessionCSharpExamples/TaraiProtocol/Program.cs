@@ -11,15 +11,7 @@ namespace TaraiProtocol
 	{
 		public static async Task Main(string[] args)
 		{
-			void f(out int x, out int y)
-			{
-				x = 0;
-				y = 0;
-			}
-			f(out int x, out int y);
-
-
-			var protocol = Send(Val<Tuple<int,int,int>>, ThrowNewChannel(Send(Unit, End), Follow(Receive(Val<int>, End), End)));
+			var protocol = Send(Tuple<int,int,int>, ThrowNewChannel(Send(Unit, End), Follow(Receive(Val<int>, End), End)));
 
 			var client = protocol.ForkThread(ch1 =>
 			{
@@ -29,7 +21,7 @@ namespace TaraiProtocol
 				try
 				{
 					var result = Tak(x, y, z);
-					ch3.SelectLeft().Send(result).Close();
+					ch2.SelectLeft().Send(result).Close();
 				}
 				catch (OperationCanceledException)
 				{
@@ -37,7 +29,7 @@ namespace TaraiProtocol
 				}
 				finally
 				{
-					waitForCancel.Result.Close();
+					waitForCancel.Close();
 				}
 
 				int Tak(int x, int y, int z)
@@ -48,7 +40,7 @@ namespace TaraiProtocol
 				}
 			});
 
-			var c1 = client.Send(new Tuple<int,int,int>(16, 3, 2));
+			var c1 = client.Send((16, 3, 2));
 			var c2 = c1.ThrowNewChannel(out var ch);
 			var ret = c2.FollowAsync(left =>
 			{
