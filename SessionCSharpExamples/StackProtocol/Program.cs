@@ -23,15 +23,6 @@ namespace StackProtocol
 				).Close();
 			});
 
-
-			client.Call()
-				.SelectLeft().Send(1).Call()
-				.SelectLeft().Send(2).Call()
-				.SelectRight().Return().Receive(out var one).Goto()
-				.SelectRight().Return().Receive(out var two).Goto()
-				.SelectRight().Return().Close();
-
-
 			var counter = 0;
 			var random = new Random();
 			client.Call((session, func) =>
