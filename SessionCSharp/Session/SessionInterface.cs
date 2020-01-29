@@ -226,60 +226,6 @@ namespace Session
 			}
 		}
 
-		public static async Task Follow<L, R, E, P>(this Session<Follow<L, R>, E, P> session, Func<Session<L, E, P>, Task> leftAction, Action<Session<R, E, P>> rightAction) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
-		{
-			if (session is null) throw new ArgumentNullException(nameof(session));
-			if (leftAction is null) throw new ArgumentNullException(nameof(leftAction));
-			if (rightAction is null) throw new ArgumentNullException(nameof(rightAction));
-			switch (session.Follow())
-			{
-				case Selection.Left:
-					await leftAction(session.ToNextSession<L>());
-					break;
-				case Selection.Right:
-					rightAction(session.ToNextSession<R>());
-					break;
-				default:
-					throw new InvalidSelectionException();
-			}
-		}
-
-		public static async Task Follow<L, R, E, P>(this Session<Follow<L, R>, E, P> session, Action<Session<L, E, P>> leftAction, Func<Session<R, E, P>, Task> rightAction) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
-		{
-			if (session is null) throw new ArgumentNullException(nameof(session));
-			if (leftAction is null) throw new ArgumentNullException(nameof(leftAction));
-			if (rightAction is null) throw new ArgumentNullException(nameof(rightAction));
-			switch (session.Follow())
-			{
-				case Selection.Left:
-					leftAction(session.ToNextSession<L>());
-					break;
-				case Selection.Right:
-					await rightAction(session.ToNextSession<R>());
-					break;
-				default:
-					throw new InvalidSelectionException();
-			}
-		}
-
-		public static async Task Follow<L, R, E, P>(this Session<Follow<L, R>, E, P> session, Func<Session<L, E, P>, Task> leftAction, Func<Session<R, E, P>, Task> rightAction) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
-		{
-			if (session is null) throw new ArgumentNullException(nameof(session));
-			if (leftAction is null) throw new ArgumentNullException(nameof(leftAction));
-			if (rightAction is null) throw new ArgumentNullException(nameof(rightAction));
-			switch (session.Follow())
-			{
-				case Selection.Left:
-					await leftAction(session.ToNextSession<L>());
-					break;
-				case Selection.Right:
-					await rightAction(session.ToNextSession<R>());
-					break;
-				default:
-					throw new InvalidSelectionException();
-			}
-		}
-
 		public static T Follow<L, R, E, P, T>(this Session<Follow<L, R>, E, P> session, Func<Session<L, E, P>, T> leftFunc, Func<Session<R, E, P>, T> rightFunc) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
@@ -291,54 +237,6 @@ namespace Session
 					return leftFunc(session.ToNextSession<L>());
 				case Selection.Right:
 					return rightFunc(session.ToNextSession<R>());
-				default:
-					throw new InvalidSelectionException();
-			}
-		}
-
-		public static async Task<T> Follow<L, R, E, P, T>(this Session<Follow<L, R>, E, P> session, Func<Session<L, E, P>, Task<T>> leftFunc, Func<Session<R, E, P>, T> rightFunc) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
-		{
-			if (session is null) throw new ArgumentNullException(nameof(session));
-			if (leftFunc is null) throw new ArgumentNullException(nameof(leftFunc));
-			if (rightFunc is null) throw new ArgumentNullException(nameof(rightFunc));
-			switch (session.Follow())
-			{
-				case Selection.Left:
-					return await leftFunc(session.ToNextSession<L>());
-				case Selection.Right:
-					return rightFunc(session.ToNextSession<R>());
-				default:
-					throw new InvalidSelectionException();
-			}
-		}
-
-		public static async Task<T> Follow<L, R, E, P, T>(this Session<Follow<L, R>, E, P> session, Func<Session<L, E, P>, T> leftFunc, Func<Session<R, E, P>, Task<T>> rightFunc) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
-		{
-			if (session is null) throw new ArgumentNullException(nameof(session));
-			if (leftFunc is null) throw new ArgumentNullException(nameof(leftFunc));
-			if (rightFunc is null) throw new ArgumentNullException(nameof(rightFunc));
-			switch (session.Follow())
-			{
-				case Selection.Left:
-					return leftFunc(session.ToNextSession<L>());
-				case Selection.Right:
-					return await rightFunc(session.ToNextSession<R>());
-				default:
-					throw new InvalidSelectionException();
-			}
-		}
-
-		public static async Task<T> Follow<L, R, E, P, T>(this Session<Follow<L, R>, E, P> session, Func<Session<L, E, P>, Task<T>> leftFunc, Func<Session<R, E, P>, Task<T>> rightFunc) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
-		{
-			if (session is null) throw new ArgumentNullException(nameof(session));
-			if (leftFunc is null) throw new ArgumentNullException(nameof(leftFunc));
-			if (rightFunc is null) throw new ArgumentNullException(nameof(rightFunc));
-			switch (session.Follow())
-			{
-				case Selection.Left:
-					return await leftFunc(session.ToNextSession<L>());
-				case Selection.Right:
-					return await rightFunc(session.ToNextSession<R>());
 				default:
 					throw new InvalidSelectionException();
 			}
@@ -362,15 +260,35 @@ namespace Session
 			}
 		}
 
-		public static async Task FollowAsync<L, R, E, P>(this Session<Follow<L, R>, E, P> session, Func<Session<L, E, P>, Task> leftAction, Action<Session<R, E, P>> rightAction) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static async Task<T> FollowAsync<L, R, E, P, T>(this Session<Follow<L, R>, E, P> session, Func<Session<L, E, P>, T> leftFunc, Func<Session<R, E, P>, T> rightFunc) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
-			if (leftAction is null) throw new ArgumentNullException(nameof(leftAction));
-			if (rightAction is null) throw new ArgumentNullException(nameof(rightAction));
+			if (leftFunc is null) throw new ArgumentNullException(nameof(leftFunc));
+			if (rightFunc is null) throw new ArgumentNullException(nameof(rightFunc));
 			switch (await session.FollowAsync())
 			{
 				case Selection.Left:
-					await leftAction(session.ToNextSession<L>());
+					return leftFunc(session.ToNextSession<L>());
+				case Selection.Right:
+					return rightFunc(session.ToNextSession<R>());
+				default:
+					throw new InvalidSelectionException();
+			}
+		}
+
+		public static void Follow<L, C, R, E, P>(this Session<Follow<L, C, R>, E, P> session, Action<Session<L, E, P>> leftAction, Action<Session<C, E, P>> centerAction, Action<Session<R, E, P>> rightAction) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			if (leftAction is null) throw new ArgumentNullException(nameof(leftAction));
+			if (centerAction is null) throw new ArgumentNullException(nameof(centerAction));
+			if (rightAction is null) throw new ArgumentNullException(nameof(rightAction));
+			switch (session.Follow())
+			{
+				case Selection.Left:
+					leftAction(session.ToNextSession<L>());
+					break;
+				case Selection.Center:
+					centerAction(session.ToNextSession<C>());
 					break;
 				case Selection.Right:
 					rightAction(session.ToNextSession<R>());
@@ -380,37 +298,61 @@ namespace Session
 			}
 		}
 
-		public static async Task FollowAsync<L, R, E, P>(this Session<Follow<L, R>, E, P> session, Action<Session<L, E, P>> leftAction, Func<Session<R, E, P>, Task> rightAction) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static T Follow<L, C, R, E, P, T>(this Session<Follow<L, C, R>, E, P> session, Func<Session<L, E, P>, T> leftFunc, Func<Session<C, E, P>, T> centerFunc, Func<Session<R, E, P>, T> rightFunc) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			if (leftFunc is null) throw new ArgumentNullException(nameof(leftFunc));
+			if (centerFunc is null) throw new ArgumentNullException(nameof(centerFunc));
+			if (rightFunc is null) throw new ArgumentNullException(nameof(rightFunc));
+			switch (session.Follow())
+			{
+				case Selection.Left:
+					return leftFunc(session.ToNextSession<L>());
+				case Selection.Center:
+					return centerFunc(session.ToNextSession<C>());
+				case Selection.Right:
+					return rightFunc(session.ToNextSession<R>());
+				default:
+					throw new InvalidSelectionException();
+			}
+		}
+
+		public static async Task FollowAsync<L, C, R, E, P>(this Session<Follow<L, C, R>, E, P> session, Action<Session<L, E, P>> leftAction, Action<Session<C, E, P>> centerAction, Action<Session<R, E, P>> rightAction) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			if (leftAction is null) throw new ArgumentNullException(nameof(leftAction));
+			if (centerAction is null) throw new ArgumentNullException(nameof(centerAction));
 			if (rightAction is null) throw new ArgumentNullException(nameof(rightAction));
 			switch (await session.FollowAsync())
 			{
 				case Selection.Left:
 					leftAction(session.ToNextSession<L>());
 					break;
+				case Selection.Center:
+					centerAction(session.ToNextSession<C>());
+					break;
 				case Selection.Right:
-					await rightAction(session.ToNextSession<R>());
+					rightAction(session.ToNextSession<R>());
 					break;
 				default:
 					throw new InvalidSelectionException();
 			}
 		}
 
-		public static async Task FollowAsync<L, R, E, P>(this Session<Follow<L, R>, E, P> session, Func<Session<L, E, P>, Task> leftAction, Func<Session<R, E, P>, Task> rightAction) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static async Task<T> FollowAsync<L, C, R, E, P, T>(this Session<Follow<L, C, R>, E, P> session, Func<Session<L, E, P>, T> leftFunc, Func<Session<C, E, P>, T> centerFunc, Func<Session<R, E, P>, T> rightFunc) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
-			if (leftAction is null) throw new ArgumentNullException(nameof(leftAction));
-			if (rightAction is null) throw new ArgumentNullException(nameof(rightAction));
+			if (leftFunc is null) throw new ArgumentNullException(nameof(leftFunc));
+			if (centerFunc is null) throw new ArgumentNullException(nameof(centerFunc));
+			if (rightFunc is null) throw new ArgumentNullException(nameof(rightFunc));
 			switch (await session.FollowAsync())
 			{
 				case Selection.Left:
-					await leftAction(session.ToNextSession<L>());
-					break;
+					return leftFunc(session.ToNextSession<L>());
+				case Selection.Center:
+					return centerFunc(session.ToNextSession<C>());
 				case Selection.Right:
-					await rightAction(session.ToNextSession<R>());
-					break;
+					return rightFunc(session.ToNextSession<R>());
 				default:
 					throw new InvalidSelectionException();
 			}
