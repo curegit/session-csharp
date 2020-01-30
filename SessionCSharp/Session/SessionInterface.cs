@@ -358,6 +358,21 @@ namespace Session
 			}
 		}
 
+		public static Session<S, E, P> DelegSendNew<S, E, P, X, Y>(this Session<DelegSend<X, Y, S>, E, P> session, out Session<Y, Empty, Cons<Y,Nil>> newSession) where S : SessionType where E : SessionStack where P : SessionList where X : SessionType where Y : SessionType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			newSession = session.ThrowNewChannel<Y, Cons<Y, Nil>>();
+			return session.ToNextSession<S>();
+		}
+
+		public static Session<S, E, P> DelegRecv<S, E, P, X>(this Session<DelegRecv<X, S>, E, P> session, out Session<X, Empty, Cons<X, Nil>> newSession) where S : SessionType where E : SessionStack where P : SessionList where X : SessionType
+		{
+			if (session is null) throw new ArgumentNullException(nameof(session));
+			newSession = session.CatchNewChannel<X, Cons<X, Nil>>();
+			return session.ToNextSession<S>();
+		}
+
+
 		public static Session<S, E, P> ThrowNewChannel<S, E, P, Z, Q>(this Session<ThrowNewChannel<Z, Q, S>, E, P> session, out Session<Z, Empty, Q> newSession) where S : SessionType where E : SessionStack where P : SessionList where Z : SessionType where Q : SessionList
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));

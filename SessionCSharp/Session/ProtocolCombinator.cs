@@ -289,6 +289,27 @@ namespace Session
 			return new Protocol<Call9<S>, Call9<Z>>();
 		}
 
+		public static Protocol<DelegSend<P, Q, S>, DelegRecv<P, Z>> DelegSend<P, Q, S, Z>(Protocol<P, Q> delegated, Protocol<S, Z> continuation)
+			where P : ProtocolType
+			where Q : ProtocolType
+			where S : SessionType
+			where Z : SessionType
+		{
+			if (delegated is null) throw new ArgumentNullException(nameof(delegated));
+			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
+			return new Protocol<DelegSend<P, Q, S>, DelegRecv<P, Z>>();
+		}
+		public static Protocol<DelegRecv<P, S>, DelegSend<P, Q, Z>> DelegRecv<P, Q, S, Z>(Protocol<P, Q> delegated, Protocol<S, Z> continuation)
+			where P : ProtocolType
+			where Q : ProtocolType
+			where S : SessionType
+			where Z : SessionType
+		{
+			if (delegated is null) throw new ArgumentNullException(nameof(delegated));
+			if (continuation is null) throw new ArgumentNullException(nameof(continuation));
+			return new Protocol<DelegRecv<P, S>, DelegSend<P, Q, Z>>();
+		}
+
 		public static Protocol<ThrowNewChannel<X, Cons<X,Nil>, S>, CatchNewChannel<Y, Cons<Y,Nil>, Z>> ThrowNewChannel<X, Y, Z, S>(Protocol<X, Y> protocol, Protocol<S, Z> continuation) where X : SessionType where Y : SessionType where S : SessionType where Z : SessionType
 		{
 			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
