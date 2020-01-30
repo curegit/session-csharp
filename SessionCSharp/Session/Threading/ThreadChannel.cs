@@ -7,13 +7,20 @@ using System.Collections.Generic;
 
 namespace Session.Threading
 {
+	using static ProtocolCombinator;
+
 	public static class ThreadChannel
 	{
-		public static Session<S, Empty, P> ForkThread<S, P, Z, Q>(this Protocol<S, P, Z, Q> protocol, Action<Session<Z, Empty, Q>> threadFunc) where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
+		public static Session<S, Empty, Cons<S, Nil>> ForkThread<S, Z>(this Protocol<S, Z> protocol, Action<Session<Z, Empty, Cons<Z, Nil>>> threadFunc) where S : SessionType where Z : SessionType
+		{
+			return ForkThread<S, Nil, Z, Nil>(Arrange<S, Z>(protocol), threadFunc);
+		}
+
+		public static Session<S, Empty, Cons<S,SS>> ForkThread<S, SS, Z, ZZ>(this Protocol<Cons<S,SS>, Cons<Z,ZZ>> protocol, Action<Session<Z, Empty, Cons<Z,ZZ>>> threadFunc) where S : SessionType where SS : SessionList where Z : SessionType where ZZ : SessionList
 		{
 			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
 			if (threadFunc is null) throw new ArgumentNullException(nameof(threadFunc));
-			var (client, server) = ChannelFactory.CreateWithSession<S, P, Z, Q>();
+			var (client, server) = ChannelFactory.CreateWithSession<S, Cons<S,SS>, Z, Cons<Z,ZZ>>();
 			var threadStart = new ThreadStart(() => threadFunc(server));
 			var serverThread = new Thread(threadStart);
 			serverThread.Start();

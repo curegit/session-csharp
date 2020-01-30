@@ -150,12 +150,12 @@ namespace Session
 		private Call9() { }
 	}
 
-	public sealed class ThrowNewChannel<X, P, S> : SessionType where X : SessionType where P : ProtocolType where S : SessionType
+	public sealed class ThrowNewChannel<X, P, S> : SessionType where X : SessionType where P : SessionList where S : SessionType
 	{
 		private ThrowNewChannel() { }
 	}
 
-	public sealed class CatchNewChannel<X, P, S> : SessionType where X : SessionType where P : ProtocolType where S : SessionType
+	public sealed class CatchNewChannel<X, P, S> : SessionType where X : SessionType where P : SessionList where S : SessionType
 	{
 		private CatchNewChannel() { }
 	}
