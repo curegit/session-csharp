@@ -8,14 +8,14 @@ namespace Session.Threading.Tasks
 {
 	public static class TaskChannel
 	{
-		public static Session<S, Empty, P> Fork<S, P, Z, Q>(this Protocol<S, P, Z, Q> protocol, Action<Session<Z, Empty, Q>> threadFunc) where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
+		/*public static Session<S, Empty, P> Fork<S, P, Z, Q>(this Protocol<S, P, Z, Q> protocol, Action<Session<Z, Empty, Q>> threadFunc) where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
 		{
 			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
 			if (threadFunc is null) throw new ArgumentNullException(nameof(threadFunc));
 			var (client, server) = ChannelFactory.CreateWithSession<S, P, Z, Q>();
 			Task.Run(() => threadFunc(server));
 			return client;
-		}
+		}*/
 
 		/*
 		public static IEnumerable<Session<C, C>> DistributeTask<T, C, S, A>(this Protocol<T, C, S> protocol, Action<Session<S, S>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
