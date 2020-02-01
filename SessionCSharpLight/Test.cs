@@ -38,7 +38,7 @@ namespace SessionTest
 					}
 				});
 
-				cliCh.Send(100).Receive(out string str).Goto1().Send("100")
+				cliCh.Send(100).Receive(out string str2).Goto1().Send("100")
 					.Offer(left => {
 						left.Receive(out int i).Close();
 					}, right => {
