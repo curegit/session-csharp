@@ -10,16 +10,27 @@ namespace Session
 		{ }
 		public class SessionType : Protocol
 		{ }
-		public class SessionList<S0, S1> : Protocol
+		public class SessionEnv : Protocol
+		{ }
+
+		/// <summary>
+		/// A utility class for SessionList<S0,..> which let pick the first out of the list.
+		/// Will be removed -- this was only for the sake of ForkThread, which doesn't work in this way.
+		/// </summary>
+		public class EnvHead<S0> : SessionEnv
+			where S0 : SessionType
+		{ }
+
+		public class Env<S0, S1> : EnvHead<S0>
 			where S0 : SessionType
 			where S1 : SessionType
 		{ }
-		public class SessionList<S0, S1, S2> : Protocol
+		public class Env<S0, S1, S2> : EnvHead<S0>
 			where S0 : SessionType
 			where S1 : SessionType
 			where S2 : SessionType
 		{ }
-		public class SessionList<S0, S1, S2, S3> : Protocol
+		public class Env<S0, S1, S2, S3> : EnvHead<S0>
 			where S0 : SessionType
 			where S1 : SessionType
 			where S2 : SessionType
@@ -31,9 +42,12 @@ namespace Session
 		public class Recv<V, S> : SessionType { }
 
 		public class Select<SL, SR> : SessionType { }
+		public class Select<SL, SM, SR> : SessionType { }
+		public class Select<S0, S1, S2, S3> : SessionType { }
 
 		public class Offer<SL, SR> : SessionType { }
-
+		public class Offer<SL, SM, SR> : SessionType { }
+		public class Offer<S0, S1, S2, S3> : SessionType { }
 
 		public class Eps : SessionType { }
 
@@ -47,8 +61,12 @@ namespace Session
 		public class DelegRecv<S0, S> : SessionType { }
 
 		public class Dual<S, T>
-			where S : Protocol
-			where T : Protocol
+			where S : SessionType
+			where T : SessionType
+		{ }
+		public class DualEnv<S, T>
+			where S : SessionEnv
+			where T : SessionEnv
 		{ }
 
 		public class Val<V> { }
