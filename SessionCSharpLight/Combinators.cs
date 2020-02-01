@@ -8,7 +8,7 @@ namespace Session
 
 	public static class ProtocolCombinators
 	{
-		public static Val<V> Val<V>() => new Val<V>();
+		public static Val<V> Val<V>() { return new Val<V>(); }
 
 		public static Dual<Eps, Eps> Eps = new Dual<Eps, Eps>();
 		public static Dual<Goto0, Goto0> Goto0 = new Dual<Goto0, Goto0>();
@@ -87,7 +87,7 @@ namespace Session
 			where S : SessionType
 			where T : SessionType
 		{ throw new NotImplementedException(); }
-		public static Dual<DelegRecv<S0, S>, DelegRecv<S0, T>> DelegRecv<S0, T0, S, T>(Dual<S0, T0> deleg, Dual<S, T> cont)
+		public static Dual<DelegRecv<S0, S>, Deleg<S0, T0, T>> DelegRecv<S0, T0, S, T>(Dual<S0, T0> deleg, Dual<S, T> cont)
 			where S0 : SessionType
 			where T0 : SessionType
 			where S : SessionType

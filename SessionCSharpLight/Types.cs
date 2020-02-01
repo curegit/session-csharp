@@ -6,6 +6,11 @@ namespace Session
 {
 	namespace Types
 	{
+		public sealed class Unit
+		{
+			public static Unit unit = new Unit();
+		}
+
 		public class Protocol
 		{ }
 		public class SessionType : Protocol

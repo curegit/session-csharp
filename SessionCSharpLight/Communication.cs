@@ -71,6 +71,13 @@ namespace Session
 		{
 			throw new NotImplementedException();
 		}
+		// Send() for unit
+		public static Session<S, E> Send<S, E>(this Session<Send<Unit, S>, E> p)
+			where S : SessionType
+			where E : Protocol
+		{
+			throw new NotImplementedException();
+		}
 
 		public static Session<S, E> Receive<V, S, E>(this Session<Recv<V, S>, E> p, out V v)
 			where S : SessionType
@@ -78,7 +85,38 @@ namespace Session
 		{
 			throw new NotImplementedException();
 		}
+		// Recv() for unit
+		public static Session<S, E> Receive<V, S, E>(this Session<Recv<V, S>, E> p)
+			where S : SessionType
+			where E : Protocol
+		{
+			throw new NotImplementedException();
+		}
+
+		// convenient overloading for tuples
+		public static Session<S, E> Receive<V1, V2, S, E>(this Session<Recv<(V1,V2), S>, E> p, out V1 v1, out V2 v2)
+			where S : SessionType
+			where E : Protocol
+		{
+			throw new NotImplementedException();
+		}
+		public static Session<S, E> Receive<V1, V2, V3, S, E>(this Session<Recv<(V1,V2,V3), S>, E> p, out V1 v1, out V2 v2, out V3 v3)
+			where S : SessionType
+			where E : Protocol
+		{
+			throw new NotImplementedException();
+		}
+
+		// ReceiveAsync
+
 		public static Session<S, E> ReceiveAsync<V, S, E>(this Session<Recv<V, S>, E> p, out Task<V> v)
+			where S : SessionType
+			where E : Protocol
+		{
+			throw new NotImplementedException();
+		}
+		// RecvAsync() for unit
+		public static Session<S, E> ReceiveAsync<S, E>(this Session<Recv<Unit, S>, E> p, out Task v)
 			where S : SessionType
 			where E : Protocol
 		{
@@ -176,7 +214,15 @@ namespace Session
 		}
 
 		// Offer ====
+
 		public static void Offer<SL, SR, E>(this Session<Offer<SL, SR>, E> session, Action<Session<SL, E>> left, Action<Session<SR, E>> right)
+			where SL : SessionType
+			where SR : SessionType
+			where E : Protocol
+		{
+			throw new NotImplementedException();
+		}
+		public static T Offer<SL, SR, E, T>(this Session<Offer<SL, SR>, E> session, Func<Session<SL, E>, T> left, Func<Session<SR, E>, T> right)
 			where SL : SessionType
 			where SR : SessionType
 			where E : Protocol
@@ -203,21 +249,21 @@ namespace Session
 
 		// delegation ====
 
-		public static Session<S, E> DSend<S, S0, T0, E>(this Session<Deleg<S0, T0, S>, E> session, Session<S0, E> deleg)
+		public static Session<S, E> Deleg<S, S0, T0, E>(this Session<Deleg<S0, T0, S>, E> session, Session<S0, E> deleg)
 			where S0 : SessionType
 			where S : SessionType
 			where E : Protocol
 		{
 			throw new NotImplementedException();
 		}
-		public static Session<S, E> DSendNew<S, S0, T0, E>(this Session<Deleg<S0, T0, S>, E> session, out Session<T0, E> deleg)
+		public static Session<S, E> DelegNew<S, S0, T0, E>(this Session<Deleg<S0, T0, S>, E> session, out Session<T0, E> deleg)
 			where T0 : SessionType
 			where S : SessionType
 			where E : Protocol
 		{
 			throw new NotImplementedException();
 		}
-		public static Session<S, E> DRecv<S, S0, E>(this Session<DelegRecv<S0, S>, E> session, out Session<S0, E> deleg)
+		public static Session<S, E> DelegRecv<S, S0, E>(this Session<DelegRecv<S0, S>, E> session, out Session<S0, E> deleg)
 			where S0 : SessionType
 			where S : SessionType
 			where E : Protocol
