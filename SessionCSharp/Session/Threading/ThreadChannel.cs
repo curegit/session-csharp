@@ -45,16 +45,34 @@ namespace Session.Threading
 				}
 			}
 		}
-
-		public static Session<C, C>[] Distribute<T, C, S, A>(this Protocol<T, C, S> protocol, Action<Session<S, S>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
+		*/
+		public static Session<S, Empty, P>[] Parallel<S, P, Z, Q>(this Protocol<S, P, Z, Q> protocol, int n, Action<Session<Z, Empty, Q>> threadFunction) where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
 		{
-			int n = args.Length;
-			var clients = new Session<C, C>[n];
-			var servers = new Session<S, S>[n];
+			var clients = new Session<S, Empty, P>[n];
+			var servers = new Session<Z, Empty, Q>[n];
 			for (int i = 0; i < n; i++)
 			{
 				var threadNumber = i;
-				var (c, s) = NewChannel<C, S>();
+				var (c, s) = ChannelFactory.CreateWithSession<S, P, Z, Q>();
+				clients[threadNumber] = c;
+				servers[threadNumber] = s;
+				var threadStart = new ThreadStart(() => threadFunction(servers[threadNumber]));
+				var thread = new Thread(threadStart);
+				thread.Start();
+			}
+			return clients;
+		}
+
+
+		public static Session<S, Empty, P>[] Distribute<S, P, Z, Q, T>(this Protocol<S, P, Z, Q> protocol, T[] args, Action<Session<Z, Empty, Q>, T> threadFunction) where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
+		{
+			int n = args.Length;
+			var clients = new Session<S, Empty, P>[n];
+			var servers = new Session<Z, Empty, Q>[n];
+			for (int i = 0; i < n; i++)
+			{
+				var threadNumber = i;
+				var (c, s) = ChannelFactory.CreateWithSession<S, P, Z, Q>();
 				clients[threadNumber] = c;
 				servers[threadNumber] = s;
 				var threadStart = new ThreadStart(() => threadFunction(servers[threadNumber], args[threadNumber]));
@@ -63,7 +81,7 @@ namespace Session.Threading
 			}
 			return clients;
 		}
-
+		/*
 		public static (Session<C, C>, Session<S, S>) Pipeline<T, C, S, A>(this Protocol<T, C, S> protocol, Action<Session<S, S>, Session<C, C>, A> threadFunction, A[] args) where C : ProtocolType where S : ProtocolType
 		{
 			int n = args.Length + 1;
