@@ -30,7 +30,7 @@ namespace Session
 			return session.Duplicate();
 		}
 
-		public static void ForEach<S, P>(this IEnumerable<S> sessions, Action<S> action) where S : Session
+		public static void ForEach<S>(this IEnumerable<S> sessions, Action<S> action) where S : Session
 		{
 			foreach (var session in sessions)
 			{

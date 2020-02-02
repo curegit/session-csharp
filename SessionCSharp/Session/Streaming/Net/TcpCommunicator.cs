@@ -22,8 +22,10 @@ namespace Session.Streaming.Net
 			this.tcpClient = tcpClient;
 			this.serializer = serializer;
 			var networkStream = tcpClient.GetStream();
-			incomingStream = transform.DecorateIncomingStream(networkStream);
-			outgoingStream = transform.DecorateOutgoingStream(networkStream);
+			//incomingStream = transform.DecorateIncomingStream(networkStream);
+			//outgoingStream = transform.DecorateOutgoingStream(networkStream);
+			incomingStream = networkStream;
+			outgoingStream = networkStream;
 		}
 
 		public void Send()
