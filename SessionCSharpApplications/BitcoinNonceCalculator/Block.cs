@@ -29,14 +29,11 @@ namespace BitcoinNonceCalculator
 			Bits = bits;
 		}
 
-		public BigInteger Target
+		public BigInteger CalculateTarget()
 		{
-			get
-			{
-				var exponent = (int)(Bits >> 24);
-				var significand = Bits << 8 >> 8;
-				return significand * BigInteger.Pow(2, 8 * (exponent - 3));
-			}
+			var exponent = (int)(Bits >> 24);
+			var significand = Bits << 8 >> 8;
+			return significand * BigInteger.Pow(2, 8 * (exponent - 3));
 		}
 
 		public IEnumerable<byte> GetHeader()
@@ -52,10 +49,24 @@ namespace BitcoinNonceCalculator
 			return versionBytes.Concat(hashBytes).Concat(markleBytes).Concat(timeBytes).Concat(bitsBytes);
 		}
 
+		public override string ToString()
+		{
+			var eol = Environment.NewLine;
+			return $"Version: 0x{Version:x}{eol}Previous Hash: {PreviousHash}{eol}Markle Root: {MarkleRoot}{eol}Time: {DateTime}{eol}Bits: 0x{Bits:x}";
+		}
+
 		public static Block[] GetSampleBlocks()
 		{
 			return new Block[]
 			{
+				new Block
+				(
+					version: 0x01,
+					previousHash: "00000000ec989ed4909499b92e9d3eb900d75dd1fab455315916e3d45924d456",
+					markleRoot: "382501ac2d50c5944465c2c316dbe2c70f23dd0de73ea86d339ea5f2bca7b648",
+					dateTime: new DateTimeOffset(2009, 1, 10, 23, 57, 02, TimeSpan.Zero),
+					bits: 0x1d00ffffu
+				),
 				new Block
 				(
 					version: 0x01,

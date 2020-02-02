@@ -9,17 +9,21 @@ namespace BitcoinNonceCalculator
 
 	public class Miner
 	{
+		private uint current;
+
+		private readonly uint increment;
+
 		private readonly BigInteger target;
 
 		private readonly byte[] header;
 
-		private readonly Random random = new Random();
-
 		private readonly SHA256 sha256 = new SHA256Managed();
 
-		public Miner(Block block)
+		public Miner(Block block, uint start, uint step)
 		{
-			target = block.Target;
+			current = start;
+			increment = step;
+			target = block.CalculateTarget();
 			header = block.GetHeader().ToArray();
 		}
 
@@ -35,12 +39,9 @@ namespace BitcoinNonceCalculator
 			return ComputeHashWith(nonce) <= target;
 		}
 
-		public bool TestRandomNonce(out uint nonce)
+		public bool TestNextNonce(out uint nonce)
 		{
-			var buffer = new byte[4];
-			random.NextBytes(buffer);
-			nonce = ToUInt32(buffer);
-			return TestNonce(nonce);
+			return TestNonce(nonce = unchecked(current += increment));
 		}
 	}
 }
