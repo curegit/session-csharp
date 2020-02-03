@@ -1,79 +1,43 @@
 using System;
-using System.IO;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using System.Net.Http;
 using Session;
 using Session.Threading;
-using Session.Threading.Tasks;
-//using Session.Serialization;
 
 namespace ParallelHttpDownloader
 {
-	//using static 
-
 	using static ProtocolCombinator;
-
-	//delegate Session<S, P> SendDeleg<T, S, P>(Session<Send<T, S>, P> s) where S:SessionType where P: ProtocolType;
 
 	public class Program
 	{
-		private static void Main(string[] args)
+		private static async Task Main(string[] args)
 		{
-			//var a = new SendDeleg(s => { s.Send(1)});
+			// Protocol specification
+			var prot = Select(Send(Value<string>, Receive(Value<byte[]?>, Goto0)), End);
 
-			//Fuc.SedSome(sbyt);
-
-			Console.WriteLine("Parallel HTTP Downloader");
-			var n = Environment.ProcessorCount;
-			Console.WriteLine($"{n} Threads");
-			args = new string[]
+			var ch1s = prot.Parallel(Environment.ProcessorCount, ch1 =>
 			{
-				"http://www.toei-anim.co.jp/tv/precure/images/special/wallpaper/01_sp1080_1920.jpg",
-				"http://www.toei-anim.co.jp/tv/precure/images/special/wallpaper/01_pc1920_1080.jpg",
-				"https://www.asahi.co.jp/precure/maho/img/enjoyment/wallpaper/04/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/maho/img/enjoyment/wallpaper/06/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/maho/img/enjoyment/wallpaper/12/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/maho/img/enjoyment/wallpaper/01_sdwu/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/maho/img/enjoyment/wallpaper/05dmck/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/maho/img/enjoyment/wallpaper/09/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/maho/img/enjoyment/wallpaper/10/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/maho/img/enjoyment/wallpaper/11/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/maho/img/enjoyment/wallpaper/12/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/kirakira/img/enjoyment/wallpaper/01/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/kirakira/img/enjoyment/wallpaper/02/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/kirakira/img/enjoyment/wallpaper/03/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/kirakira/img/enjoyment/wallpaper/04/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/kirakira/img/enjoyment/wallpaper/05/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/kirakira/img/enjoyment/wallpaper/06/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/kirakira/img/enjoyment/wallpaper/07/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/kirakira/img/enjoyment/wallpaper/08/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/kirakira/img/enjoyment/wallpaper/09/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/kirakira/img/enjoyment/wallpaper/10/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/kirakira/img/enjoyment/wallpaper/11/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/kirakira/img/enjoyment/wallpaper/12/1920_1080_2.jpg",
-				"https://www.asahi.co.jp/precure/princess/img/enjoyment/wallpaper/precure091_1920.jpg",
-				"https://www.asahi.co.jp/precure/princess/img/enjoyment/wallpaper/precure081_1920.jpg",
-				"https://www.asahi.co.jp/precure/princess/img/enjoyment/wallpaper/precure071_1920.jpg",
-				"https://www.asahi.co.jp/precure/princess/img/enjoyment/wallpaper/precure061_1920.jpg",
-				"https://www.asahi.co.jp/precure/princess/img/enjoyment/wallpaper/precure051_1920.jpg",
-				"https://www.asahi.co.jp/precure/princess/img/enjoyment/wallpaper/precure041_1920.jpg",
-				"https://www.asahi.co.jp/precure/princess/img/enjoyment/wallpaper/precure031_1920.jpg",
-				"https://www.asahi.co.jp/precure/princess/img/enjoyment/wallpaper/precure021_1920.jpg",
-				"https://www.asahi.co.jp/precure/princess/img/enjoyment/wallpaper/precure12_1920.jpg",
-			};
-
-			var ids = Enumerable.Range(1, n).ToArray();
-
-			var protocol = Select(Send(Value<string>, Receive(Value<byte[]>, Goto0)), End);
-
-			var clients = protocol.Distribute((server, id) =>
-			{
-				//
+				// Init http client
 				var http = new HttpClient();
-				//
-				byte[] Download(HttpClient client, string url)
+				// Work...
+				for (var loop = true; loop;)
+				{
+					ch1.Follow(
+					left =>
+					{
+						var ch2 = left.Receive(out var url);
+						var data = Download(http, url);
+						ch1 = ch2.Send(data).Goto();
+					},
+					right =>
+					{
+						right.Close();
+						loop = false;
+					});
+				}
+				// Download function
+				byte[]? Download(HttpClient client, string url)
 				{
 					try
 					{
@@ -84,58 +48,40 @@ namespace ParallelHttpDownloader
 						return null;
 					}
 				}
-				//
-				for (var loop = true; loop;)
-				{
-					server.Follow(
-					left =>
-					{
-						var s3 = left.Receive(out var url);
-						var d = Download(http, url);
-						// TODO: byte? or choice
-						server = s3.Send(d).Goto();
-					},
-					right =>
-					{
-						right.Close();
-						loop = false;
-					});
-				}
-			},
-			ids);
+			});
 
-			var (s, unusedSessios, remainigArgs) = clients.ZipArgs(args.AsEnumerable(), (c, u) => c.SelectLeft().Send(u).ReceiveAsync());
+			// Pass jobs to each thread
+			var (ch2s, ch1s_rest, args_rest) = ch1s.ZipWith(args, (ch1, arg) => {
+				var ch3 = ch1.SelectLeft().Send(arg).ReceiveAsync(out var data);
+				return (ch3.Sync(), data);
+			});
 
-			//var (cs1, rem, ss) = clients.Zip(args, (c, u) => c.SelectLeft().Send(u).ReceiveAsync()).ToList();
+			// Close unneeded channels
+			ch1s_rest.ForEach(c => c.SelectRight().Close());
 
-			//var rem = args.Skip(cs1.Count()).ToList();
-			var us = unusedSessios.ToList();
-			var ss = s.ToList();
+			var (working, results) = ch2s.Unzip();
+			var working_list = working.ToList();
+			var result_list = results.ToList();
 
-			var data = new List<byte[]>();
-
-			us.Do(s1 => s1.SelectRight().Close());
-
-			//us.Select(s1 => { s1.SelectRight().Close(); return 0; });
-
-			foreach (var r in args)
+			// Wait for a single worker finish and pass a new job
+			foreach (var url in args_rest)
 			{
-				int i = Task.WaitAny(ss.ToArray());
-				var s2 = ss[i].Result.Bind(out var d).Goto();
-				ss.RemoveAt(i);
-				data.Add(d);
-				ss.Add(s2.SelectLeft().Send(r).ReceiveAsync());
+				var finished = await Task.WhenAny(working_list);
+				working_list.Remove(finished);
+				var ch3 = (await finished).Goto().SelectLeft().Send(url).ReceiveAsync(out var data);
+				working_list.Add(ch3.Sync());
+				result_list.Add(data);
 			}
-			ss.Select(s2 => { s2.Result.Bind(out var a).Goto().SelectRight().Close(); data.Add(a); return 0; });
 
-
-			for (int i = 0; i < data.Count; i++)
+			// Wait for still working threads
+			while(working_list.Any())
 			{
-				if (data[i] != null)
-				{
-					File.WriteAllBytes($@"{i}.jpg", data[i]);
-				}
+				var finished = await Task.WhenAny(working_list);
+				working_list.Remove(finished);
+				(await finished).Goto().SelectRight().Close();
 			}
+
+			// Save to files or something...
 		}
 	}
 }
