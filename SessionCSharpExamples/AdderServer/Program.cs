@@ -43,7 +43,13 @@ namespace AdderServer
 			var sprot_C_A = prot_C_A.OnStream(new BinarySerializer());
 			var sprot_A_S = prot_A_S.OnStream(new BinarySerializer());
 
-			sprot_C_A.ToTcpServer(IPAddress.Loopback, 8888).Listen(
+			// Service
+			sprot_A_S.ToTcpServer(IPAddress.Any, 9999).Listen(
+				ch1 => ch1.Receive(out var dest).Send(DateTime.Now).Close()
+				);
+
+			// Agency
+			sprot_C_A.ToTcpServer(IPAddress.Any, 8888).Listen(
 				ch1 =>
 				{
 					using var c = new SessionCanceller();
@@ -80,6 +86,22 @@ namespace AdderServer
 					}
 				}
 			);
+
+			// Customer
+			var  ch1 = sprot_C_A.CreateTcpClient().Connect(IPAddress.Loopback, 8888);
+
+			var ch12 = ch1.SelectLeft().Send("London").Receive(out var price);
+			if (price < 100)
+			{
+				ch12.SelectLeft().Receive(out var date).Close();
+
+				Console.WriteLine(price);
+				Console.WriteLine(date);
+			}
+			else
+			{
+				ch12.SelectRight().Goto().SelectRight().Close();
+			}
 		}
 	}
 }
