@@ -1,12 +1,11 @@
 using System;
-using System.Threading.Tasks;
 using System.Collections.Generic;
-using SessionTypes;
-using SessionTypes.Threading;
+using Session;
+using Session.Threading;
 
 namespace PolygonClippingPipeline
 {
-	using static SessionTypes.ProtocolCombinator;
+	using static ProtocolCombinator;
 
 	/// <summary>
 	/// Sutherland–Hodgman の Polygon Clipping Algorithm をセッション型を用いたパイプライン処理によって行う応用例
@@ -14,7 +13,7 @@ namespace PolygonClippingPipeline
 	public class Program
 	{
 		// エントリポイント
-		public static async Task Main(string[] args)
+		public static void Main(string[] args)
 		{
 			// 入力データ：クリップされるポリゴン
 			var vertices = new Vector[]
@@ -58,27 +57,24 @@ namespace PolygonClippingPipeline
 				edges[i] = (clipper[i], clipper[(i + 1) % clipper.Length]);
 			}
 
-			var d = SessionList(AtC(C2S(P<Vector>, Goto0), End));
+			// Protocol specification
+			var protocol = Select(Send(Val<Vector>, Goto0), End);
 
 			// 本命のパイプライン処理
-			var (argc, retc) = d.Pipeline
-			(
+			var (in_ch, out_ch) = protocol.Pipeline(edges,
 				// それぞれのパイプラインスレッドの処理
-				async (prev, next, edge) =>
+				(prev1, next1, edge) =>
 				{
-					var prev1 = prev.Enter();
-					var next1 = next.Enter();
 					Vector? first = null;
 					Vector from = default;
 					Vector to = default;
-					while (true)
+					for (var loop = true; loop;)
 					{
-						bool breakFlag = false;
-						await prev1.FollowAsync
+						prev1.Follow
 						(
-							async left =>
+							left =>
 							{
-								var (prev2, vertex) = await left.ReceiveAsync();
+								var prev2 = left.Receive(out var vertex);
 								from = to;
 								to = vertex;
 								if (first == null)
@@ -90,68 +86,53 @@ namespace PolygonClippingPipeline
 									var clipped = Clip((from, to), edge);
 									foreach (var v in clipped)
 									{
-										var next2 = next1.ChooseLeft();
+										var next2 = next1.SelectLeft();
 										var next3 = next2.Send(v);
-										next1 = next3.Jump();
+										next1 = next3.Goto();
 									}
 								}
-								prev1 = prev2.Jump();
+								prev1 = prev2.Goto();
 							},
 							right =>
 							{
 								var clipped = Clip((to, first.Value), edge);
 								foreach (var v in clipped)
 								{
-									var next2 = next1.ChooseLeft();
+									var next2 = next1.SelectLeft();
 									var next3 = next2.Send(v);
-									next1 = next3.Jump();
+									next1 = next3.Goto();
 								}
-								next1.ChooseRight();
-								breakFlag = true;
+								next1.SelectRight();
+								loop = false;
 							});
-						if (breakFlag)
-						{
-							break;
-						}
 					}
-				},
-			// 各スレッドに担当する辺を渡す
-			edges
+				}
 			);
 
 			// メインスレッドから最初のスレッドへ入力を送信
-			var argc1 = argc.Enter();
 			foreach (var v in vertices)
 			{
-				var argc2 = argc1.ChooseLeft();
-				var argc3 = argc2.Send(v);
-				argc1 = argc3.Jump();
+				in_ch = in_ch.SelectLeft().Send(v).Goto();
 			}
-			argc1.ChooseRight();
+			in_ch.SelectRight().Close();
 
 			// メインスレッドで受信した結果を回収する
 			var result = new List<Vector>();
-			var retc1 = retc.Enter();
-			while (true)
+			for (var loop = true; loop;)
 			{
-				bool breakFlag = false;
-				await retc1.FollowAsync
+				out_ch.Follow
 				(
-					async left =>
+					left =>
 					{
-						var (retc2, vertex) = await left.ReceiveAsync();
+						out_ch = left.Receive(out var vertex).Goto();
 						result.Add(vertex);
-						retc1 = retc2.Jump();
 					},
 					right =>
 					{
-						breakFlag = true;
+						right.Close();
+						loop = false;
 					}
 				);
-				if (breakFlag)
-				{
-					break;
-				}
 			}
 
 			// 標準出力する
