@@ -69,10 +69,9 @@ namespace BitcoinNonceCalculator
 			// Client implementation (main thread)
 			foreach (var block in Block.GetSampleBlocks())
 			{
-				Console.WriteLine("Start mining");
 				Console.WriteLine("===== Mining Target Block =====");
 				Console.WriteLine(block);
-				Console.WriteLine("===== =================== =====");
+				Console.WriteLine("-------------------------------");
 
 				// Send a block to each thread
 				var ch2s = ch1s.Map(ch1 => ch1.SelectLeft().Send(block));
@@ -116,7 +115,6 @@ namespace BitcoinNonceCalculator
 					{
 						Console.WriteLine($"Thread {index} found: None");
 					}
-					Console.WriteLine();
 				}
 
 				// Assign and recurse
