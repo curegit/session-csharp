@@ -9,7 +9,7 @@ Prepare one environment below.
 - Visual Studio 2019 (Windows or macOS)
 - .NET Core SDK >= 3.0 (Windows, macOS or Linux)
 
-## Example
+## Examples
 
 - [Tak calculation](./SessionCSharpExamples/TaraiProtocol/Program.cs)
 - [A Travel Agency](./SessionCSharpExamples/TravelAgency/Program.cs)
