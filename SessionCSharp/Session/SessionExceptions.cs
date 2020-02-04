@@ -1,0 +1,29 @@
+using System;
+using System.Runtime.Serialization;
+
+namespace Session
+{
+	[Serializable]
+	public sealed class LinearityViolationException : InvalidOperationException
+	{
+		internal LinearityViolationException() : base() { }
+
+		internal LinearityViolationException(string message) : base(message) { }
+
+		internal LinearityViolationException(string message, Exception inner) : base(message, inner) { }
+
+		private LinearityViolationException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+	}
+
+	[Serializable]
+	public sealed class InvalidSelectionException : Exception
+	{
+		internal InvalidSelectionException() : base() { }
+
+		internal InvalidSelectionException(string message) : base(message) { }
+
+		internal InvalidSelectionException(string message, Exception inner) : base(message, inner) { }
+
+		private InvalidSelectionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
+	}
+}
