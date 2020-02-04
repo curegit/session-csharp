@@ -1,6 +1,6 @@
 # SessionC#
 
-
+An implementation of session types in C#
 
 ## Requirements
 
