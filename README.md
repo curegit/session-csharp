@@ -18,4 +18,4 @@ Prepare one environment below.
 
 - [A Bitcoin miner](./SessionCSharpApplications/BitcoinNonceCalculator/Program.cs)
 - [A parallel http downloader](./SessionCSharpApplications/ParallelHttpDownloader/Program.cs)
-- [A parallel polygon clipping](./SessionCSharpApplications/PolygonClippingPipeline/Program.cs)
+- [Parallel polygon clipping](./SessionCSharpApplications/PolygonClippingPipeline/Program.cs)
