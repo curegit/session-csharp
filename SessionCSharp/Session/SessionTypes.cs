@@ -150,12 +150,38 @@ namespace Session
 		private Call9() { }
 	}
 
-	public sealed class ThrowNewChannel<X, P, S> : SessionType where X : SessionType where P : ProtocolType where S : SessionType
+	public sealed class Throw<P, Q, S> : SessionType where P : SessionList where Q : SessionList where S : SessionType
+	{
+		private Throw() { }
+	}
+
+	/// <summary>
+	/// Protocol combinator to declare a delegation of session P then continue to S. Q is dual to P
+	/// </summary>
+	/// <typeparam name="P">Type of delegated session(s)</typeparam>
+	/// <typeparam name="Q">Dual of the delegated session</typeparam>
+	/// <typeparam name="S">Continuation</typeparam>
+	public sealed class DelegSend<P, Q, S> : SessionType where P : ProtocolType where Q : ProtocolType where S : SessionType
+	{
+		private DelegSend() { }
+	}
+
+	/// <summary>
+	/// Protocol combinator to declare an acceptance of delegation of session P then continue to S. Q is dual to P
+	/// </summary>
+	/// <typeparam name="P">Type of delegated session(s)</typeparam>
+	/// <typeparam name="S">Continuation</typeparam>
+	public sealed class DelegRecv<P, S> : SessionType where P : ProtocolType where S : SessionType
+	{
+		private DelegRecv() { }
+	}
+
+	public sealed class ThrowNewChannel<X, P, S> : SessionType where X : SessionType where P : SessionList where S : SessionType
 	{
 		private ThrowNewChannel() { }
 	}
 
-	public sealed class CatchNewChannel<X, P, S> : SessionType where X : SessionType where P : ProtocolType where S : SessionType
+	public sealed class CatchNewChannel<X, P, S> : SessionType where X : SessionType where P : SessionList where S : SessionType
 	{
 		private CatchNewChannel() { }
 	}
