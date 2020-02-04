@@ -38,7 +38,7 @@ namespace TaraiProtocol
 			var ret =
 			 cliCh.Send((16, 3, 2))
 			      .DelegRecv(out var ch)
-				  .FollowAsync(
+				  .OfferAsync(
 					left => {
 						left.Receive(out var ans).Close();
 						Console.WriteLine($"Tarai = {ans}");
@@ -48,7 +48,7 @@ namespace TaraiProtocol
 						right.Close();
 						Console.WriteLine("Canceled");
 					});
-			var timeout = Task.Delay(10500);
+			var timeout = Task.Delay(10000);
 			var task = await Task.WhenAny(ret, timeout);
 			if (task == ret)
 			{

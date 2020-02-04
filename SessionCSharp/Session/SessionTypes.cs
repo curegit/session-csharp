@@ -40,14 +40,14 @@ namespace Session
 		private Select() { }
 	}
 
-	public sealed class Follow<L, R> : SessionType where L : SessionType where R : SessionType
+	public sealed class Offer<L, R> : SessionType where L : SessionType where R : SessionType
 	{
-		private Follow() { }
+		private Offer() { }
 	}
 
-	public sealed class Follow<L, C, R> : SessionType where L : SessionType where C : SessionType where R : SessionType
+	public sealed class Offer<L, C, R> : SessionType where L : SessionType where C : SessionType where R : SessionType
 	{
-		private Follow() { }
+		private Offer() { }
 	}
 
 	public sealed class Call0 : SessionType

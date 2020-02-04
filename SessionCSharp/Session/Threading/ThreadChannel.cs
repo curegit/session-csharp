@@ -16,25 +16,30 @@ namespace Session.Threading
 			return ForkThread<S, Nil, Z, Nil>(Arrange<S, Z>(protocol), threadFunc);
 		}
 
-		public static Session<S, Empty, Cons<S,SS>> ForkThread<S, SS, Z, ZZ>(this Protocol<Cons<S,SS>, Cons<Z,ZZ>> protocol, Action<Session<Z, Empty, Cons<Z,ZZ>>> threadFunc) where S : SessionType where SS : SessionList where Z : SessionType where ZZ : SessionList
+		public static Session<S, Empty, Cons<S, SS>> ForkThread<S, SS, Z, ZZ>(this Protocol<Cons<S, SS>, Cons<Z, ZZ>> protocol, Action<Session<Z, Empty, Cons<Z, ZZ>>> threadFunc) where S : SessionType where SS : SessionList where Z : SessionType where ZZ : SessionList
 		{
 			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
 			if (threadFunc is null) throw new ArgumentNullException(nameof(threadFunc));
-			var (client, server) = ChannelFactory.CreateWithSession<S, Cons<S,SS>, Z, Cons<Z,ZZ>>();
+			var (client, server) = ChannelFactory.CreateWithSession<S, Cons<S, SS>, Z, Cons<Z, ZZ>>();
 			var threadStart = new ThreadStart(() => threadFunc(server));
 			var serverThread = new Thread(threadStart);
 			serverThread.Start();
 			return client;
 		}
 
-		public static Session<S, Empty, P>[] Parallel<S, P, Z, Q>(this Protocol<S, P, Z, Q> protocol, int n, Action<Session<Z, Empty, Q>> threadFunction) where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
+		public static IEnumerable<Session<S, Empty, Cons<S, Nil>>> Parallel<S, Z>(this Protocol<S, Z> protocol, int n, Action<Session<Z, Empty, Cons<Z, Nil>>> threadFunction) where S : SessionType where Z : SessionType
 		{
-			var clients = new Session<S, Empty, P>[n];
-			var servers = new Session<Z, Empty, Q>[n];
+			return Parallel<S, Nil, Z, Nil>(Arrange<S, Z>(protocol), n, threadFunction);
+		}
+
+		public static IEnumerable<Session<S, Empty, Cons<S, SS>>> Parallel<S, SS, Z, ZZ>(this Protocol<Cons<S, SS>, Cons<Z, ZZ>> protocol, int n, Action<Session<Z, Empty, Cons<Z, ZZ>>> threadFunction) where S : SessionType where SS : SessionList where Z : SessionType where ZZ : SessionList
+		{
+			var clients = new Session<S, Empty, Cons<S, SS>>[n];
+			var servers = new Session<Z, Empty, Cons<Z, ZZ>>[n];
 			for (int i = 0; i < n; i++)
 			{
 				var threadNumber = i;
-				var (c, s) = ChannelFactory.CreateWithSession<S, P, Z, Q>();
+				var (c, s) = ChannelFactory.CreateWithSession<S, Cons<S, SS>, Z, Cons<Z, ZZ>>();
 				clients[threadNumber] = c;
 				servers[threadNumber] = s;
 				var threadStart = new ThreadStart(() => threadFunction(servers[threadNumber]));
@@ -44,16 +49,20 @@ namespace Session.Threading
 			return clients;
 		}
 
-
-		public static IEnumerable<Session<S, Empty, P>> Parallel<S, P, Z, Q, T>(this Protocol<S, P, Z, Q> protocol, IEnumerable<T> args, Action<Session<Z, Empty, Q>, T> threadFunction) where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
+		public static IEnumerable<Session<S, Empty, Cons<S, Nil>>> Parallel<S, Z, T>(this Protocol<S, Z> protocol, IEnumerable<T> args, Action<Session<Z, Empty, Cons<Z, Nil>>, T> threadFunction) where S : SessionType where Z : SessionType
 		{
-			var clients = new List<Session<S, Empty, P>>();
-			var servers = new List<Session<Z, Empty, Q>>();
+			return Parallel<S, Nil, Z, Nil, T>(Arrange(protocol), args, threadFunction);
+		}
+
+		public static IEnumerable<Session<S, Empty, Cons<S, SS>>> Parallel<S, SS, Z, ZZ, T>(this Protocol<Cons<S, SS>, Cons<Z, ZZ>> protocol, IEnumerable<T> args, Action<Session<Z, Empty, Cons<Z, ZZ>>, T> threadFunction) where S : SessionType where SS : SessionList where Z : SessionType where ZZ : SessionList
+		{
+			var clients = new List<Session<S, Empty, Cons<S, SS>>>();
+			var servers = new List<Session<Z, Empty, Cons<Z, ZZ>>>();
 			int i = 0;
 			foreach (var arg in args)
 			{
 				var threadNumber = i;
-				var (c, s) = ChannelFactory.CreateWithSession<S, P, Z, Q>();
+				var (c, s) = ChannelFactory.CreateWithSession<S, Cons<S, SS>, Z, Cons<Z, ZZ>>();
 				clients.Add(c);
 				servers.Add(s);
 				var threadStart = new ThreadStart(() => threadFunction(servers[threadNumber], arg));
@@ -64,15 +73,20 @@ namespace Session.Threading
 			return clients;
 		}
 
-		public static (Session<S, Empty, P>, Session<Z, Empty, Q>) Pipeline<S, P, Z, Q, T>(this Protocol<S, P, Z, Q> protocol, IEnumerable<T> args, Action<Session<Z, Empty, Q>, Session<S, Empty, P>, T> threadFunction) where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
+		public static (Session<S, Empty, Cons<S, Nil>>, Session<Z, Empty, Cons<Z, Nil>>) Pipeline<S, Z, T>(this Protocol<S, Z> protocol, IEnumerable<T> args, Action<Session<Z, Empty, Cons<Z, Nil>>, Session<S, Empty, Cons<S, Nil>>, T> threadFunction) where S : SessionType where Z : SessionType
+		{
+			return Pipeline(Arrange(protocol), args, threadFunction);
+		}
+
+		public static (Session<S, Empty, Cons<S, SS>>, Session<Z, Empty, Cons<Z, ZZ>>) Pipeline<S, SS, Z, ZZ, T>(this Protocol<Cons<S, SS>, Cons<Z, ZZ>> protocol, IEnumerable<T> args, Action<Session<Z, Empty, Cons<Z, ZZ>>, Session<S, Empty, Cons<S, SS>>, T> threadFunction) where S : SessionType where SS : SessionList where Z : SessionType where ZZ : SessionList
 		{
 			var argArray = args.ToArray();
 			var n = argArray.Length;
-			var clients = new Session<S, Empty, P>[n];
-			var servers = new Session<Z, Empty, Q>[n];
+			var clients = new Session<S, Empty, Cons<S, SS>>[n];
+			var servers = new Session<Z, Empty, Cons<Z, ZZ>>[n];
 			for (int i = 0; i < n; i++)
 			{
-				var (c, s) = ChannelFactory.CreateWithSession<S, P, Z, Q>();
+				var (c, s) = ChannelFactory.CreateWithSession<S, Cons<S, SS>, Z, Cons<Z, ZZ>>();
 				clients[i] = c;
 				servers[(i + 1) % n] = s;
 			}

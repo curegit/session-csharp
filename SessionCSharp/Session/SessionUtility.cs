@@ -67,6 +67,7 @@ namespace Session
 					}
 					else
 					{
+						ss.Add(se.Current);
 						while (se.MoveNext())
 						{
 							ss.Add(se.Current);
@@ -78,6 +79,7 @@ namespace Session
 				{
 					if (ae.MoveNext())
 					{
+						ts.Add(ae.Current);
 						while (ae.MoveNext())
 						{
 							ts.Add(ae.Current);

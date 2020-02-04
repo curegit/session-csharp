@@ -70,7 +70,7 @@ namespace PolygonClippingPipeline
 					Vector to = default;
 					for (var loop = true; loop;)
 					{
-						prev1.Follow
+						prev1.Offer
 						(
 							left =>
 							{
@@ -120,7 +120,7 @@ namespace PolygonClippingPipeline
 			var result = new List<Vector>();
 			for (var loop = true; loop;)
 			{
-				out_ch.Follow
+				out_ch.Offer
 				(
 					left =>
 					{

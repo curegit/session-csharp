@@ -17,7 +17,7 @@ namespace Session.Streaming.Net
 
 		private static readonly byte unit = 0x00;
 
-		public TcpCommunicator(TcpClient tcpClient, ISerializer serializer, ITransform transform)
+		public TcpCommunicator(TcpClient tcpClient, ISerializer serializer)
 		{
 			this.tcpClient = tcpClient;
 			this.serializer = serializer;

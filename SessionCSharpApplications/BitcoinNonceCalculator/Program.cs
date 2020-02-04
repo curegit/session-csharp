@@ -26,7 +26,7 @@ namespace BitcoinNonceCalculator
 				// Server thread implementation
 				for (var loop = true; loop;)
 				{
-					ch1.Follow
+					ch1.Offer
 					(
 						cont =>
 						{
@@ -79,7 +79,7 @@ namespace BitcoinNonceCalculator
 				//  external choice
 				var (ch3s, cancelChs) = ch2s.Map(ch2 =>
 				{
-					var followTask = ch2.CatchNewChannel(out var cancalCh).FollowAsync
+					var followTask = ch2.CatchNewChannel(out var cancalCh).OfferAsync
 					(
 						some =>
 						{

@@ -5,7 +5,7 @@ using Google.Protobuf;
 
 namespace Session.Streaming.Serializers
 {
-	public sealed class ProtobufSerializer : ISpecialSerializer
+	public sealed class ProtobufSerializer : ISerializer
 	{
 		public void Serialize<T>(Stream stream, T value)
 		{
@@ -33,11 +33,6 @@ namespace Session.Streaming.Serializers
 		{
 			if (stream is null) throw new ArgumentNullException(nameof(stream));
 			return Task.Run(() => Deserialize<T>(stream));
-		}
-
-		public bool CanSerialize<T>(T value)
-		{
-			return value is null ? false : value is IMessage;
 		}
 	}
 }

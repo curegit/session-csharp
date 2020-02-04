@@ -225,7 +225,6 @@ namespace Session
 		internal void Close()
 		{
 			TrySpendLinearity();
-			WaitForLastTask();
 			communicator.Close();
 		}
 

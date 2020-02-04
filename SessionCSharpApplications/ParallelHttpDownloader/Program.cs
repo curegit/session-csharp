@@ -11,6 +11,7 @@ namespace ParallelHttpDownloader
 
 	public class Program
 	{
+		// Pass URLs to download by command line args
 		private static async Task Main(string[] args)
 		{
 			// Protocol specification
@@ -23,7 +24,7 @@ namespace ParallelHttpDownloader
 				// Work...
 				for (var loop = true; loop;)
 				{
-					ch1.Follow(
+					ch1.Offer(
 					left =>
 					{
 						var ch2 = left.Receive(out var url);

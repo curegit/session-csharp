@@ -7,9 +7,14 @@ namespace Session.Streaming.Net
 {
 	public static class TcpServer
 	{
-		public static TcpServer<Z, Q> ToTcpServer<S, P, Z, Q>(this StreamedProtocol<S, P, Z, Q> protocol, IPAddress address, int port) where S :SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
+		public static TcpServer<Z, Cons<Z, Nil>> ToTcpServer<S, Z>(this StreamedProtocol<S, Z> protocol, IPAddress address, int port) where S : SessionType where Z : SessionType
 		{
-			return new TcpServer<Z, Q>(address, port, protocol.Serializer, protocol.Transform);
+			return new TcpServer<Z, Cons<Z, Nil>>(address, port, protocol.Serializer);
+		}
+
+		public static TcpServer<Z, Cons<Z, ZZ>> ToTcpServer<S, SS, Z, ZZ>(this StreamedProtocol<Cons<S, SS>, Cons<Z, ZZ>> protocol, IPAddress address, int port) where S : SessionType where SS : SessionList where Z : SessionType where ZZ : SessionList
+		{
+			return new TcpServer<Z, Cons<Z, ZZ>>(address, port, protocol.Serializer);
 		}
 	}
 
@@ -21,14 +26,11 @@ namespace Session.Streaming.Net
 
 		private readonly ISerializer serializer;
 
-		private readonly ITransform transform;
-
-		internal TcpServer(IPAddress address, int port, ISerializer serializer, ITransform transform)
+		internal TcpServer(IPAddress address, int port, ISerializer serializer)
 		{
 			this.address = address;
 			this.port = port;
 			this.serializer = serializer;
-			this.transform = transform;
 		}
 
 		public Task Listen(Action<Session<S, Empty, P>> action)
@@ -40,10 +42,10 @@ namespace Session.Streaming.Net
 				while (true)
 				{
 					var c = await l.AcceptTcpClientAsync();
-					
+
 					var t = Task.Run(() =>
 					{
-						var com = new TcpCommunicator(c, serializer, transform);
+						var com = new TcpCommunicator(c, serializer);
 						action(new Session<S, Empty, P>(com));
 					});
 				}

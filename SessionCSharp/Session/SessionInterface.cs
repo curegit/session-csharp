@@ -208,7 +208,7 @@ namespace Session
 			return session.ToNextSession<R>();
 		}
 
-		public static void Follow<L, R, E, P>(this Session<Follow<L, R>, E, P> session, Action<Session<L, E, P>> leftAction, Action<Session<R, E, P>> rightAction) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static void Offer<L, R, E, P>(this Session<Offer<L, R>, E, P> session, Action<Session<L, E, P>> leftAction, Action<Session<R, E, P>> rightAction) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			if (leftAction is null) throw new ArgumentNullException(nameof(leftAction));
@@ -226,7 +226,7 @@ namespace Session
 			}
 		}
 
-		public static T Follow<L, R, E, P, T>(this Session<Follow<L, R>, E, P> session, Func<Session<L, E, P>, T> leftFunc, Func<Session<R, E, P>, T> rightFunc) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static T Offer<L, R, E, P, T>(this Session<Offer<L, R>, E, P> session, Func<Session<L, E, P>, T> leftFunc, Func<Session<R, E, P>, T> rightFunc) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			if (leftFunc is null) throw new ArgumentNullException(nameof(leftFunc));
@@ -242,7 +242,7 @@ namespace Session
 			}
 		}
 
-		public static async Task FollowAsync<L, R, E, P>(this Session<Follow<L, R>, E, P> session, Action<Session<L, E, P>> leftAction, Action<Session<R, E, P>> rightAction) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static async Task OfferAsync<L, R, E, P>(this Session<Offer<L, R>, E, P> session, Action<Session<L, E, P>> leftAction, Action<Session<R, E, P>> rightAction) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			if (leftAction is null) throw new ArgumentNullException(nameof(leftAction));
@@ -260,7 +260,7 @@ namespace Session
 			}
 		}
 
-		public static async Task<T> FollowAsync<L, R, E, P, T>(this Session<Follow<L, R>, E, P> session, Func<Session<L, E, P>, T> leftFunc, Func<Session<R, E, P>, T> rightFunc) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static async Task<T> OfferAsync<L, R, E, P, T>(this Session<Offer<L, R>, E, P> session, Func<Session<L, E, P>, T> leftFunc, Func<Session<R, E, P>, T> rightFunc) where L : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			if (leftFunc is null) throw new ArgumentNullException(nameof(leftFunc));
@@ -276,7 +276,7 @@ namespace Session
 			}
 		}
 
-		public static void Follow<L, C, R, E, P>(this Session<Follow<L, C, R>, E, P> session, Action<Session<L, E, P>> leftAction, Action<Session<C, E, P>> centerAction, Action<Session<R, E, P>> rightAction) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static void Offer<L, C, R, E, P>(this Session<Offer<L, C, R>, E, P> session, Action<Session<L, E, P>> leftAction, Action<Session<C, E, P>> centerAction, Action<Session<R, E, P>> rightAction) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			if (leftAction is null) throw new ArgumentNullException(nameof(leftAction));
@@ -298,7 +298,7 @@ namespace Session
 			}
 		}
 
-		public static T Follow<L, C, R, E, P, T>(this Session<Follow<L, C, R>, E, P> session, Func<Session<L, E, P>, T> leftFunc, Func<Session<C, E, P>, T> centerFunc, Func<Session<R, E, P>, T> rightFunc) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static T Offer<L, C, R, E, P, T>(this Session<Offer<L, C, R>, E, P> session, Func<Session<L, E, P>, T> leftFunc, Func<Session<C, E, P>, T> centerFunc, Func<Session<R, E, P>, T> rightFunc) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			if (leftFunc is null) throw new ArgumentNullException(nameof(leftFunc));
@@ -317,7 +317,7 @@ namespace Session
 			}
 		}
 
-		public static async Task FollowAsync<L, C, R, E, P>(this Session<Follow<L, C, R>, E, P> session, Action<Session<L, E, P>> leftAction, Action<Session<C, E, P>> centerAction, Action<Session<R, E, P>> rightAction) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static async Task OfferAsync<L, C, R, E, P>(this Session<Offer<L, C, R>, E, P> session, Action<Session<L, E, P>> leftAction, Action<Session<C, E, P>> centerAction, Action<Session<R, E, P>> rightAction) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			if (leftAction is null) throw new ArgumentNullException(nameof(leftAction));
@@ -339,7 +339,7 @@ namespace Session
 			}
 		}
 
-		public static async Task<T> FollowAsync<L, C, R, E, P, T>(this Session<Follow<L, C, R>, E, P> session, Func<Session<L, E, P>, T> leftFunc, Func<Session<C, E, P>, T> centerFunc, Func<Session<R, E, P>, T> rightFunc) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
+		public static async Task<T> OfferAsync<L, C, R, E, P, T>(this Session<Offer<L, C, R>, E, P> session, Func<Session<L, E, P>, T> leftFunc, Func<Session<C, E, P>, T> centerFunc, Func<Session<R, E, P>, T> rightFunc) where L : SessionType where C : SessionType where R : SessionType where E : SessionStack where P : ProtocolType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			if (leftFunc is null) throw new ArgumentNullException(nameof(leftFunc));
@@ -358,7 +358,7 @@ namespace Session
 			}
 		}
 
-		public static Session<S, E, P> DelegSendNew<S, E, P, X, Y>(this Session<DelegSend<X, Y, S>, E, P> session, out Session<Y, Empty, Cons<Y,Nil>> newSession) where S : SessionType where E : SessionStack where P : SessionList where X : SessionType where Y : SessionType
+		public static Session<S, E, P> DelegSendNew<S, E, P, X, Y>(this Session<DelegSend<X, Y, S>, E, P> session, out Session<Y, Empty, Cons<Y, Nil>> newSession) where S : SessionType where E : SessionStack where P : SessionList where X : SessionType where Y : SessionType
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			newSession = session.ThrowNewChannel<Y, Cons<Y, Nil>>();

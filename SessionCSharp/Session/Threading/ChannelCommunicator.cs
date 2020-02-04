@@ -49,8 +49,6 @@ namespace Session.Threading
 			return (T)await reader.ReadAsync();
 		}
 
-
-
 		public Session<S, Empty, P> ThrowNewChannel<S, P>() where S : SessionType where P : ProtocolType
 		{
 			var (c, s) = ChannelFactory.Create();

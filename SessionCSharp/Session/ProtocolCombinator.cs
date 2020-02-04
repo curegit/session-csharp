@@ -66,25 +66,6 @@ namespace Session
 
 		public static Payload<(T1, T2, T3, T4, T5)> Tuple<T1, T2, T3, T4, T5>() => new Payload<(T1, T2, T3, T4, T5)>();
 
-		/*public static Payload<Session<S, Empty, P>> Channel<S, P, Z, Q>(Protocol<S, P, Z, Q> protocol) where S : SessionType where P : ProtocolType where Z : SessionType where Q : ProtocolType
-		{
-			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
-			return new Payload<Session<S, Empty, P>>();
-		}
-
-		public static Payload<Session<S, Empty, A>> Channel<S, P, X, A, Z, Q, Y, B>(Protocol<S, P, Z, Q> session, Protocol<X, A, Y, B> protocol) where S : SessionType where P : ProtocolType where X : SessionType where A : ProtocolType where Z : SessionType where Q : ProtocolType where Y : SessionType where B : ProtocolType
-		{
-			if (session is null) throw new ArgumentNullException(nameof(session));
-			if (protocol is null) throw new ArgumentNullException(nameof(protocol));
-			return new Payload<Session<S, Empty, A>>();
-		}
-
-		public static Payload<Session<S, E, P>> Channel<S, E, P>(Session<S, E, P> session) where S : SessionType where E : SessionStack where P : ProtocolType
-		{
-			if (session is null) throw new ArgumentNullException(nameof(session));
-			return new Payload<Session<S, E, P>>();
-		}*/
-
 		public static Protocol<Send<S>, Receive<Z>> Send<S, Z>(UnitPayload unit, Protocol<S, Z> continuation) where S : SessionType where Z : SessionType
 		{
 			if (unit is null) throw new ArgumentNullException(nameof(unit));
@@ -179,34 +160,34 @@ namespace Session
 			return new Protocol<Receive<T1, Receive<T2, Receive<T3, Receive<T4, Receive<T5, S>>>>>, Send<T1, Send<T2, Send<T3, Send<T4, Send<T5, Z>>>>>>();
 		}
 
-		public static Protocol<Select<L, R>, Follow<X, Y>> Select<L, R, X, Y>(Protocol<L, X> left, Protocol<R, Y> right) where L : SessionType where R : SessionType where X : SessionType where Y : SessionType
+		public static Protocol<Select<L, R>, Offer<X, Y>> Select<L, R, X, Y>(Protocol<L, X> left, Protocol<R, Y> right) where L : SessionType where R : SessionType where X : SessionType where Y : SessionType
 		{
 			if (left is null) throw new ArgumentNullException(nameof(left));
 			if (right is null) throw new ArgumentNullException(nameof(right));
-			return new Protocol<Select<L, R>, Follow<X, Y>>();
+			return new Protocol<Select<L, R>, Offer<X, Y>>();
 		}
 
-		public static Protocol<Select<L, C, R>, Follow<X, W, Y>> Select<L, C, R, X, W, Y>(Protocol<L, X> left, Protocol<C, W> center, Protocol<R, Y> right) where L : SessionType where C : SessionType where R : SessionType where X : SessionType where W : SessionType where Y : SessionType
+		public static Protocol<Select<L, C, R>, Offer<X, W, Y>> Select<L, C, R, X, W, Y>(Protocol<L, X> left, Protocol<C, W> center, Protocol<R, Y> right) where L : SessionType where C : SessionType where R : SessionType where X : SessionType where W : SessionType where Y : SessionType
 		{
 			if (left is null) throw new ArgumentNullException(nameof(left));
 			if (center is null) throw new ArgumentNullException(nameof(center));
 			if (right is null) throw new ArgumentNullException(nameof(right));
-			return new Protocol<Select<L, C, R>, Follow<X, W, Y>>();
+			return new Protocol<Select<L, C, R>, Offer<X, W, Y>>();
 		}
 
-		public static Protocol<Follow<L, R>, Select<X, Y>> Follow<L, R, X, Y>(Protocol<L, X> left, Protocol<R, Y> right) where L : SessionType where R : SessionType where X : SessionType where Y : SessionType
+		public static Protocol<Offer<L, R>, Select<X, Y>> Follow<L, R, X, Y>(Protocol<L, X> left, Protocol<R, Y> right) where L : SessionType where R : SessionType where X : SessionType where Y : SessionType
 		{
 			if (left is null) throw new ArgumentNullException(nameof(left));
 			if (right is null) throw new ArgumentNullException(nameof(right));
-			return new Protocol<Follow<L, R>, Select<X, Y>>();
+			return new Protocol<Offer<L, R>, Select<X, Y>>();
 		}
 
-		public static Protocol<Follow<L, C, R>, Select<X, W, Y>> Follow<L, C, R, X, W, Y>(Protocol<L, X> left, Protocol<C, W> center, Protocol<R, Y> right) where L : SessionType where C : SessionType where R : SessionType where X : SessionType where W : SessionType where Y : SessionType
+		public static Protocol<Offer<L, C, R>, Select<X, W, Y>> Follow<L, C, R, X, W, Y>(Protocol<L, X> left, Protocol<C, W> center, Protocol<R, Y> right) where L : SessionType where C : SessionType where R : SessionType where X : SessionType where W : SessionType where Y : SessionType
 		{
 			if (left is null) throw new ArgumentNullException(nameof(left));
 			if (center is null) throw new ArgumentNullException(nameof(center));
 			if (right is null) throw new ArgumentNullException(nameof(right));
-			return new Protocol<Follow<L, C, R>, Select<X, W, Y>>();
+			return new Protocol<Offer<L, C, R>, Select<X, W, Y>>();
 		}
 
 		public static Protocol<Call0, Call0> Goto0 => new Protocol<Call0, Call0>();
