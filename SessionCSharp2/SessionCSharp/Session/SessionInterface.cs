@@ -298,7 +298,7 @@ namespace Session
 			}
 		}
 
-		public static T Offer<L, C, R, E, P, T>(this Offer<L, C, R> session, Func<L, T> leftFunc, Func<C, T> centerFunc, Func<R, T> rightFunc) where L : Session where C : Session where R : Session 
+		public static T Offer<L, C, R, T>(this Offer<L, C, R> session, Func<L, T> leftFunc, Func<C, T> centerFunc, Func<R, T> rightFunc) where L : Session where C : Session where R : Session 
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			if (leftFunc is null) throw new ArgumentNullException(nameof(leftFunc));
@@ -339,7 +339,7 @@ namespace Session
 			}
 		}
 
-		public static async Task<T> OfferAsync<L, C, R, E, P, T>(this Offer<L, C, R> session, Func<L, T> leftFunc, Func<C, T> centerFunc, Func<R, T> rightFunc) where L : Session where C : Session where R : Session 
+		public static async Task<T> OfferAsync<L, C, R, T>(this Offer<L, C, R> session, Func<L, T> leftFunc, Func<C, T> centerFunc, Func<R, T> rightFunc) where L : Session where C : Session where R : Session 
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			if (leftFunc is null) throw new ArgumentNullException(nameof(leftFunc));
@@ -365,7 +365,7 @@ namespace Session
 			return session.ToNextSession<S>();
 		}
 
-		public static S DelegRecv<S, E, P, X>(this DelegRecv<X, S> session, out X newSession) where S : Session where X : Session
+		public static S DelegRecv<S, X>(this DelegRecv<X, S> session, out X newSession) where S : Session where X : Session
 		{
 			if (session is null) throw new ArgumentNullException(nameof(session));
 			newSession = session.CatchNewChannel<X>();
