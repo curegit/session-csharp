@@ -12,6 +12,11 @@ namespace Session
 
 		private protected ICommunicator communicator;
 
+		private protected Session()
+		{
+
+		}
+
 		private protected Session(Session session)
 		{
 			communicator = session.communicator;
@@ -93,7 +98,7 @@ namespace Session
 
 		internal S ToNextSession<S>() where S : Session
 		{
-			var s = Activator.CreateInstance<S>();
+			var s = (S)Activator.CreateInstance(typeof(S), true);
 			s.communicator = communicator;
 			s.lastTask = lastTask;
 			return s;
@@ -106,7 +111,7 @@ namespace Session
 
 		internal static S Create<S>(ICommunicator communicator) where S : Session
 		{
-			var s = Activator.CreateInstance<S>();
+			var s = (S)Activator.CreateInstance(typeof(S), true);
 			s.communicator = communicator;
 			return s;
 		}
