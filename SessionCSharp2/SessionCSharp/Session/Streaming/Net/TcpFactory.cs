@@ -4,7 +4,7 @@ namespace Session.Streaming.Net
 {
 	public static class TcpFactory
 	{
-		public static TcpClient<S> CreateTcpClient<S, Z>(this StreamedProtocol<S, Z> protocol) where S : Session, new() where Z : Session, new()
+		public static TcpClient<S> CreateTcpClient<S, Z>(this StreamedProtocol<S, Z> protocol) where S : Session where Z : Session
 		{
 			return new TcpClient<S>(protocol.Serializer);
 		}

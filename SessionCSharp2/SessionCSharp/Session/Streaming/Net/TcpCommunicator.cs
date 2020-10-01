@@ -91,22 +91,22 @@ namespace Session.Streaming.Net
 			return buffer[0].ToSelection();
 		}
 
-		public S ThrowNewChannel<S>() where S : Session, new()
+		public S ThrowNewChannel<S>() where S : Session
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<S> ThrowNewChannelAsync<S>() where S : Session, new()
+		public Task<S> ThrowNewChannelAsync<S>() where S : Session
 		{
 			throw new NotImplementedException();
 		}
 
-		public S CatchNewChannel<S>() where S : Session, new()
+		public S CatchNewChannel<S>() where S : Session
 		{
 			throw new NotImplementedException();
 		}
 
-		public Task<S> CatchNewChannelAsync<S>() where S : Session, new()
+		public Task<S> CatchNewChannelAsync<S>() where S : Session
 		{
 			throw new NotImplementedException();
 		}

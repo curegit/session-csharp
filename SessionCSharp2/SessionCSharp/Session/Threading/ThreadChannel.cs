@@ -11,7 +11,7 @@ namespace Session.Threading
 
 	public static class ThreadChannel
 	{
-		public static S ForkThread<S, Z>(this Dual<S, Z> protocol, Action<Z> threadFunc) where S : Session, new() where Z : Session, new()
+		public static S ForkThread<S, Z>(this Dual<S, Z> protocol, Action<Z> threadFunc) where S : Session where Z : Session
 		{
 			//return ForkThread<S, Nil, Z, Nil>(Arrange<S, Z>(protocol), threadFunc);
 

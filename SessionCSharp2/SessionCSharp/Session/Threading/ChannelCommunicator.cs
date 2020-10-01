@@ -49,26 +49,26 @@ namespace Session.Threading
 			return (T)await reader.ReadAsync();
 		}
 
-		public S ThrowNewChannel<S>() where S : Session, new()
+		public S ThrowNewChannel<S>() where S : Session
 		{
 			var (c, s) = ChannelFactory.Create();
 			Send(s);
 			return Session.Create<S>(c);
 		}
 
-		public async Task<S> ThrowNewChannelAsync<S>() where S : Session, new()
+		public async Task<S> ThrowNewChannelAsync<S>() where S : Session
 		{
 			var (c, s) = ChannelFactory.Create();
 			await SendAsync(s);
 			return Session.Create<S>(c);
 		}
 
-		public S CatchNewChannel<S>() where S : Session, new()
+		public S CatchNewChannel<S>() where S : Session
 		{
 			return Session.Create<S>(Receive<ChannelCommunicator>());
 		}
 
-		public async Task<S> CatchNewChannelAsync<S>() where S : Session, new()
+		public async Task<S> CatchNewChannelAsync<S>() where S : Session
 		{
 			return Session.Create<S>(await ReceiveAsync<ChannelCommunicator>());
 		}

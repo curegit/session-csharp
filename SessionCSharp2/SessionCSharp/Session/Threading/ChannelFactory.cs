@@ -17,7 +17,7 @@ namespace Session.Threading
 			return (new ChannelCommunicator(downstream.Reader, upstream.Writer), new ChannelCommunicator(upstream.Reader, downstream.Writer));
 		}
 
-		public static (S client, Z server) CreateWithSession<S, Z>() where S : Session, new() where Z : Session, new()
+		public static (S client, Z server) CreateWithSession<S, Z>() where S : Session where Z : Session
 		{
 			var (client, server) = Create();
 			return (Session.Create<S>(client), Session.Create<Z>(server));

@@ -7,7 +7,7 @@ namespace Session.Streaming.Net
 {
 	public static class TcpServer
 	{
-		public static TcpServer<Z> ToTcpServer<S, Z>(this StreamedProtocol<S, Z> protocol, IPAddress address, int port) where S : Session where Z : Session, new()
+		public static TcpServer<Z> ToTcpServer<S, Z>(this StreamedProtocol<S, Z> protocol, IPAddress address, int port) where S : Session where Z : Session
 		{
 			return new TcpServer<Z>(address, port, protocol.Serializer);
 		}
@@ -19,7 +19,7 @@ namespace Session.Streaming.Net
 		}*/
 	}
 
-	public sealed class TcpServer<S> where S : Session, new()
+	public sealed class TcpServer<S> where S : Session
 	{
 		private readonly IPAddress address;
 

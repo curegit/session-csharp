@@ -8,7 +8,7 @@ using System.Net.Sockets;
 
 namespace Session.Streaming.Net
 {
-	public sealed class TcpClient<S> where S : Session, new()
+	public sealed class TcpClient<S> where S : Session
 	{
 		private readonly TcpClient tcpClient;
 
