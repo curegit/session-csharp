@@ -12,8 +12,6 @@ namespace PingPong
     {
         static void Main(string[] args)
         {
-            Console.WriteLine("Hello World!");
-
 			var proto = new PINGPONG();
 
 			var c = proto.ForkThread(s =>
@@ -21,14 +19,14 @@ namespace PingPong
 				while (true)
 				{
 					s = s.Receive().Send();
-					Thread.Sleep(1);
 				}
 			});
 
 			while(true)
 			{
 				c = c.Send().Receive();
-				Thread.Sleep(1);
+				Console.WriteLine("PingPong");
+				Thread.Sleep(1000);
 			}
         }
 
