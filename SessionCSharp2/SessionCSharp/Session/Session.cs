@@ -100,18 +100,26 @@ namespace Session
 		{
 			// TODO
 			var t = typeof(S);
-			if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Send<>))
+			if (t.IsGenericType)
+			{
+				var gt = t.GetGenericTypeDefinition();
+				if (
+				gt == typeof(Send<>) || gt == typeof(Send<,>) ||
+				gt == typeof(Receive<>) || gt == typeof(Receive<,>) ||
+				gt == typeof(Select<,>) || gt == typeof(Select<,,>) ||
+				gt == typeof(Offer<,>) || gt == typeof(Offer<,,>) ||
+				gt == typeof(DelegSend<,,>) || gt == typeof(DelegRecv<,>)
+				)
+				{
+					return (S)Activator.CreateInstance(t, true);
+				}
+			} else if (t == typeof(Eps))
 			{
 				return (S)Activator.CreateInstance(t, true);
 			}
-			if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Receive<>))
-			{
-				return (S)Activator.CreateInstance(t, true);
-			}
-			
-			var s = Activator.CreateInstance(t.BaseType, true);
-
-			return (S)Activator.CreateInstance(t, s);
+			// assume copy constructor
+			var super = Activator.CreateInstance(t.BaseType, true);
+			return (S)Activator.CreateInstance(t, super);
 		}
 
 		internal S ToNextSession<S>() where S : Session
