@@ -327,6 +327,11 @@ namespace Session
 		}
 		*/
 
+		public static Dual<S, T> Recur<S0, T0, S, T>(Func<Dual<S0, T0>> dual, Func<S0, S> f, Func<T0, T> g) where S : S0 where S0 : Session where T : T0 where T0 : Session
+		{
+			return new Dual<S, T>();
+		}
+
 		public static Dual<Eps, Eps> End => new Dual<Eps, Eps>();
 
 		/*

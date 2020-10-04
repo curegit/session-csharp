@@ -96,9 +96,28 @@ namespace Session
 			return base.GetHashCode();
 		}
 
+		private static S Create<S>() where S : Session
+		{
+			// TODO
+			var t = typeof(S);
+			if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Send<>))
+			{
+				return (S)Activator.CreateInstance(t, true);
+			}
+			if (t.IsGenericType && t.GetGenericTypeDefinition() == typeof(Receive<>))
+			{
+				return (S)Activator.CreateInstance(t, true);
+			}
+			
+			var s = Activator.CreateInstance(t.BaseType, true);
+
+			return (S)Activator.CreateInstance(t, s);
+		}
+
 		internal S ToNextSession<S>() where S : Session
 		{
-			var s = (S)Activator.CreateInstance(typeof(S), true);
+			var s = Create<S>();
+			//var s = (S)Activator.CreateInstance(typeof(S), true);
 			s.communicator = communicator;
 			s.lastTask = lastTask;
 			return s;
@@ -111,7 +130,8 @@ namespace Session
 
 		internal static S Create<S>(ICommunicator communicator) where S : Session
 		{
-			var s = (S)Activator.CreateInstance(typeof(S), true);
+			var s = Create<S>();
+			//var s = (S)Activator.CreateInstance(typeof(S), true);
 			s.communicator = communicator;
 			return s;
 		}
