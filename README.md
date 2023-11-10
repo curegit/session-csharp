@@ -4,6 +4,8 @@ An implementation of session types in C#.
 
 The lightweight version only including types, protocol combinators and endpoint API summarized based on the paper is available in the [SessionCSharpLight](./SessionCSharpLight/) directory.
 
+https://doi.org/10.48550/arXiv.2004.01325
+
 ## Requirements
 
 Prepare one environment below.
