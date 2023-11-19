@@ -95,7 +95,7 @@ namespace PolygonClippingPipeline
                             },
                             right =>
                             {
-                                var clipped = Clip((to, first.Value), edge);
+                                var clipped = Clip((to, first!.Value), edge);
                                 foreach (var v in clipped)
                                 {
                                     var next2 = next1.SelectLeft();
@@ -180,13 +180,13 @@ namespace PolygonClippingPipeline
             {
                 if (!IsInside(from, clipEdge))
                 {
-                    yield return IntersectionPoint(polygonEdge, clipEdge).Value;
+                    yield return IntersectionPoint(polygonEdge, clipEdge)!.Value;
                 }
                 yield return to;
             }
             else if (IsInside(from, clipEdge))
             {
-                yield return IntersectionPoint(polygonEdge, clipEdge).Value;
+                yield return IntersectionPoint(polygonEdge, clipEdge)!.Value;
             }
             else
             {
