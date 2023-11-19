@@ -1,5 +1,4 @@
 using System;
-using System.Runtime.Serialization;
 
 namespace Session
 {
@@ -11,8 +10,6 @@ namespace Session
 		internal LinearityViolationException(string message) : base(message) { }
 
 		internal LinearityViolationException(string message, Exception inner) : base(message, inner) { }
-
-		private LinearityViolationException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 
 	[Serializable]
@@ -23,7 +20,5 @@ namespace Session
 		internal InvalidSelectionException(string message) : base(message) { }
 
 		internal InvalidSelectionException(string message, Exception inner) : base(message, inner) { }
-
-		private InvalidSelectionException(SerializationInfo info, StreamingContext context) : base(info, context) { }
 	}
 }

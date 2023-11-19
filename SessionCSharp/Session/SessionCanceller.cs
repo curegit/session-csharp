@@ -7,14 +7,11 @@ namespace Session
 	{
 		private bool open = true;
 
-		private readonly List<Session> sessions = new List<Session>();
+		private readonly List<Session> sessions = new();
 
 		public void Register(Session session)
 		{
-			if (session is null)
-			{
-				throw new ArgumentNullException(nameof(session));
-			}
+			ArgumentNullException.ThrowIfNull(session);
 			if (open)
 			{
 				sessions.Add(session);

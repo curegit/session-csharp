@@ -4,6 +4,6 @@ namespace Session
 	{
 		internal Protocol() { }
 
-		public Protocol<Z, S> Swapped => new Protocol<Z, S>();
+		public Protocol<Z, S> Swapped => new();
 	}
 }

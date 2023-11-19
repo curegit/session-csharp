@@ -72,13 +72,13 @@ namespace Session
 		}
 
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override string ToString()
+		public override string? ToString()
 		{
 			return base.ToString();
 		}
 
 		[EditorBrowsable(EditorBrowsableState.Never)]
-		public override bool Equals(object obj)
+		public override bool Equals(object? obj)
 		{
 			return base.Equals(obj);
 		}
@@ -87,6 +87,12 @@ namespace Session
 		public override int GetHashCode()
 		{
 			return base.GetHashCode();
+		}
+
+		[EditorBrowsable(EditorBrowsableState.Never)]
+		public new Type GetType()
+		{
+			return base.GetType();
 		}
 	}
 

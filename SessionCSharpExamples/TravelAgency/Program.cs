@@ -7,81 +7,86 @@ using Session.Streaming.Serializers;
 
 namespace TravelAgency
 {
-	using static ProtocolCombinator;
+    using static ProtocolCombinator;
 
-	public class Program
-	{
-		public static void Main(string[] args)
-		{
-			// Travel Agency
-			var prot_C_A = Select(Send(Val<string>, Receive(Val<decimal>, Select(Receive(Val<DateTime>, End), Goto0))), End);
-			var prot_A_S = Send(Val<string>, Receive(Val<DateTime>, End));
+    public class Program
+    {
+        private static readonly int servicePort = 9991;
 
-			var sprot_C_A = prot_C_A.OnStream(new BinarySerializer());
-			var sprot_A_S = prot_A_S.OnStream(new BinarySerializer());
+        private static readonly int agencyPort = 8886;
 
-			// Service
-			sprot_A_S.ToTcpServer(IPAddress.Any, 9999).Listen(
-				ch1 => ch1.Receive(out var dest).Send(DateTime.Now).Close()
-				);
+        public static void Main(string[] args)
+        {
+            // Travel Agency
+            var prot_C_A = Select(Send(Val<string>, Receive(Val<decimal>, Select(Receive(Val<DateTime>, End), Goto0))), End);
+            var prot_A_S = Send(Val<string>, Receive(Val<DateTime>, End));
 
-			// Agency
-			sprot_C_A.ToTcpServer(IPAddress.Any, 8888).Listen(
-				ch1 =>
-				{
-					using var c = new SessionCanceller();
-					c.Register(ch1);
+            var sprot_C_A = prot_C_A.OnStream(new BasicSerializer());
+            var sprot_A_S = prot_A_S.OnStream(new BasicSerializer());
 
-					for (var loop = true; loop;)
-					{
-						ch1.Offer(
-							quote => quote.Receive(out var dest).Send(90.00m).Offer(
-								accept =>
-								{
-									var ch2 = sprot_A_S.CreateTcpClient().Connect(IPAddress.Loopback, 9999);
-									c.Register(ch2);
+            // Service
+            sprot_A_S.ToTcpServer(IPAddress.Any, servicePort).Listen(
+                ch1 => ch1.Receive(out var dest).Send(DateTime.Now).Close()
+            );
 
+            // Agency
+            sprot_C_A.ToTcpServer(IPAddress.Any, agencyPort).Listen(
+                ch1 =>
+                {
+                    using var c = new SessionCanceller();
+                    c.Register(ch1);
 
-									ch2.Send(dest).Receive(out var date).Close();
-									
+                    for (var loop = true; loop;)
+                    {
+                        ch1.Offer(
+                            quote => quote.Receive(out var dest).Send(90.00m).Offer(
+                                accept =>
+                                {
+                                    var ch2 = sprot_A_S.CreateTcpClient().Connect(IPAddress.Loopback, servicePort);
+                                    c.Register(ch2);
 
-									accept.Send(date).Close();
+                                    ch2.Send(dest).Receive(out var date).Close();
 
-									loop = false;
-								},
-								reject =>
-								{
-									ch1 = reject.Goto();
-								}
-							),
-							quit =>
-							{
-								quit.Close();
-								loop = false;
-							}
-						);
-					}
-				}
-			);
+                                    accept.Send(date).Close();
 
-			// Customer
-			var  ch1 = sprot_C_A.CreateTcpClient().Connect(IPAddress.Loopback, 8888);
+                                    loop = false;
+                                },
+                                reject =>
+                                {
+                                    ch1 = reject.Goto();
+                                }
+                            ),
+                            quit =>
+                            {
+                                quit.Close();
+                                loop = false;
+                            }
+                        );
+                    }
+                }
+            );
 
-			var ch12 = ch1.SelectLeft().Send("London").Receive(out var price);
-			if (price < 100)
-			{
-				ch12.SelectLeft().Receive(out var date).Close();
+            // Customer
+            Console.WriteLine("Connecting...");
+            var ch1 = sprot_C_A.CreateTcpClient().Connect(IPAddress.Loopback, agencyPort);
 
-				Console.WriteLine("Accepted");
-				Console.WriteLine(price);
-				Console.WriteLine(date);
-			}
-			else
-			{
-				ch12.SelectRight().Goto().SelectRight().Close();
+            Console.WriteLine("Connected");
 
-				Console.WriteLine("Too much expensive!");
-			}
-		}
-	}
+            var ch12 = ch1.SelectLeft().Send("London").Receive(out var price);
+            if (price < 100)
+            {
+                ch12.SelectLeft().Receive(out var date).Close();
+
+                Console.WriteLine("Accepted");
+                Console.WriteLine(price);
+                Console.WriteLine(date);
+            }
+            else
+            {
+                ch12.SelectRight().Goto().SelectRight().Close();
+
+                Console.WriteLine("Too much expensive!");
+            }
+        }
+    }
 }

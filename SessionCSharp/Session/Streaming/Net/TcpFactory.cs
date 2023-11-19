@@ -1,8 +1,6 @@
-using System.Net.Sockets;
-
 namespace Session.Streaming.Net
 {
-	public static class TcpFactory
+    public static class TcpFactory
 	{
 		public static TcpClient<S, Cons<S, Nil>> CreateTcpClient<S, Z>(this StreamedProtocol<S, Z> protocol) where S : SessionType where Z : SessionType
 		{
