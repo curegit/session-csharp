@@ -1,5 +1,6 @@
 using System.Threading.Tasks;
 using System.Threading.Channels;
+using static System.ArgumentNullException;
 
 namespace Session.Threading
 {
@@ -21,6 +22,7 @@ namespace Session.Threading
 
         public void Send<T>(T value)
         {
+            ThrowIfNull(value);
             writer.WriteAsync(value).AsTask().Wait();
         }
 
@@ -28,6 +30,7 @@ namespace Session.Threading
 
         public Task SendAsync<T>(T value)
         {
+            ThrowIfNull(value);
             return writer.WriteAsync(value).AsTask();
         }
 
@@ -45,7 +48,7 @@ namespace Session.Threading
 
         public async Task<T> ReceiveAsync<T>()
         {
-            return (T)await reader.ReadAsync();
+            return (T)await reader.ReadAsync().ConfigureAwait(false);
         }
 
         public Session<S, Empty, P> ThrowNewChannel<S, P>() where S : SessionType where P : ProtocolType
@@ -58,7 +61,7 @@ namespace Session.Threading
         public async Task<Session<S, Empty, P>> ThrowNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType
         {
             var (c, s) = ChannelFactory.Create();
-            await SendAsync(s);
+            await SendAsync(s).ConfigureAwait(false);
             return new Session<S, Empty, P>(c);
         }
 
@@ -69,7 +72,7 @@ namespace Session.Threading
 
         public async Task<Session<S, Empty, P>> CatchNewChannelAsync<S, P>() where S : SessionType where P : ProtocolType
         {
-            return new Session<S, Empty, P>(await ReceiveAsync<ChannelCommunicator>());
+            return new Session<S, Empty, P>(await ReceiveAsync<ChannelCommunicator>().ConfigureAwait(false));
         }
 
         public void Select(Selection direction)

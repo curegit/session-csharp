@@ -41,7 +41,7 @@ namespace Session.Streaming.Net
                 l.Start();
                 while (true)
                 {
-                    var c = await l.AcceptTcpClientAsync();
+                    var c = await l.AcceptTcpClientAsync().ConfigureAwait(false);
 
                     var t = Task.Run(() =>
                     {

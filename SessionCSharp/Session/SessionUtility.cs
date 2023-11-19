@@ -34,7 +34,7 @@ namespace Session
         {
             ArgumentNullException.ThrowIfNull(session);
             session.CallSimply();
-            await session.AwaitLastTask();
+            await session.AwaitLastTask().ConfigureAwait(false);
             return session.Duplicate();
         }
 

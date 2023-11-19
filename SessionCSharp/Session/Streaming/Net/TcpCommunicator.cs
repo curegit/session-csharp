@@ -63,9 +63,10 @@ namespace Session.Streaming.Net
             return incomingStream.ReadAsync(new byte[1], 0, 1);
         }
 
-        public async Task<T> ReceiveAsync<T>()
+        public Task<T> ReceiveAsync<T>()
         {
-            return await Task.Run(() => serializer.Deserialize<T>(incomingStream));
+            return serializer.DeserializeAsync<T>(incomingStream);
+            //return await Task.Run(() => serializer.Deserialize<T>(incomingStream)).ConfigureAwait(false);
         }
 
         public void Select(Selection selection)
@@ -87,7 +88,7 @@ namespace Session.Streaming.Net
         public async Task<Selection> FollowAsync()
         {
             var buffer = new byte[1];
-            await incomingStream.ReadAsync(buffer, 0, 1);
+            await incomingStream.ReadAsync(buffer, 0, 1).ConfigureAwait(false);
             return buffer[0].ToSelection();
         }
 
