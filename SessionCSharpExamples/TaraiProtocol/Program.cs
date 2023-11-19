@@ -27,6 +27,7 @@ namespace TaraiProtocol
                 {
                     srvCh2.SelectRight().Close();
                 }
+
                 int Tak(int x, int y, int z)
                 {
                     if (cancel.IsCompleted) throw new OperationCanceledException();

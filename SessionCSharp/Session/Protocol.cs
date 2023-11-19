@@ -1,9 +1,9 @@
 namespace Session
 {
-	public class Protocol<S, Z> where S : ProtocolType where Z : ProtocolType
-	{
-		internal Protocol() { }
+    public class Protocol<S, Z> where S : ProtocolType where Z : ProtocolType
+    {
+        internal Protocol() { }
 
-		public Protocol<Z, S> Swapped => new();
-	}
+        public Protocol<Z, S> Swapped => new();
+    }
 }
