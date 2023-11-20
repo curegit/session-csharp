@@ -4,8 +4,8 @@
 
 **Fluent Session Programming in C#** (PLACES 2020) [[Paper](https://doi.org/10.48550/arXiv.2004.01325)] - Shunsuke Kimura, Keigo Imai
 
-We propose SessionC#, a lightweight session typed library for safe concurrent/distributed programming.
-The key features are (1) the improved fluent interface which enables writing communication in chained method calls, by exploiting C#'s out variables, and (2) amalgamation of session delegation with async/await, which materialises session cancellation in a limited form, which we call session intervention.
+We propose **SessionC#**, a lightweight session typed library for safe concurrent/distributed programming.
+The key features are (1) the improved fluent interface which enables writing communication in chained method calls, by exploiting C#'s `out` variables, and (2) amalgamation of session delegation with `async`/`await`, which materialises session cancellation in a limited form, which we call session intervention.
 We show the effectiveness of our proposal via a Bitcoin miner application.
 
 ## Code
