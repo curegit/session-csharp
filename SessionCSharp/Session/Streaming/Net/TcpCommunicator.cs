@@ -66,7 +66,6 @@ namespace Session.Streaming.Net
         public Task<T> ReceiveAsync<T>()
         {
             return serializer.DeserializeAsync<T>(incomingStream);
-            //return await Task.Run(() => serializer.Deserialize<T>(incomingStream)).ConfigureAwait(false);
         }
 
         public void Select(Selection selection)
