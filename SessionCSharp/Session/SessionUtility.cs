@@ -55,7 +55,7 @@ namespace Session
             return results;
         }
 
-        public static (IEnumerable<U> ziped, IEnumerable<S> sessRest, IEnumerable<T> argRest) ZipWith<S, T, U>(this IEnumerable<S> sessions, IEnumerable<T> args, Func<S, T, U> func) where S : Session
+        public static (IEnumerable<U> zipped, IEnumerable<S> sessRest, IEnumerable<T> argRest) ZipWith<S, T, U>(this IEnumerable<S> sessions, IEnumerable<T> args, Func<S, T, U> func) where S : Session
         {
             var ss = new List<S>();
             var ts = new List<T>();
