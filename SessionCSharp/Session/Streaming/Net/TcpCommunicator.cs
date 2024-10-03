@@ -40,7 +40,7 @@ namespace Session.Streaming.Net
 
         public Task SendAsync()
         {
-            return outgoingStream.WriteAsync(new byte[] { unit }, 0, 1).ContinueWith((x) => outgoingStream.FlushAsync());
+            return outgoingStream.WriteAsync([unit], 0, 1).ContinueWith((x) => outgoingStream.FlushAsync());
         }
 
         public Task SendAsync<T>(T value)
@@ -50,7 +50,7 @@ namespace Session.Streaming.Net
 
         public void Receive()
         {
-            incomingStream.ReadByte();
+            incomingStream.ReadExactly(new byte[1], 0, 1);
         }
 
         public T Receive<T>()
@@ -60,7 +60,7 @@ namespace Session.Streaming.Net
 
         public Task ReceiveAsync()
         {
-            return incomingStream.ReadAsync(new byte[1], 0, 1);
+            return incomingStream.ReadExactlyAsync(new byte[1], 0, 1).AsTask();
         }
 
         public Task<T> ReceiveAsync<T>()
